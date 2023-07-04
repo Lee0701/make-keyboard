@@ -16,4 +16,13 @@ class IMEService: InputMethodService() {
         super.onDestroy()
     }
 
+    override fun onComputeInsets(outInsets: Insets?) {
+        super.onComputeInsets(outInsets)
+        outInsets?.contentTopInsets = outInsets?.visibleTopInsets
+    }
+
+    override fun onEvaluateFullscreenMode(): Boolean {
+        super.onEvaluateFullscreenMode()
+        return false
+    }
 }
