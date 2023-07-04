@@ -12,7 +12,7 @@ class IMEService: InputMethodService() {
     private val layout: KeyboardConfig = KeyboardConfig(
         "QWERTYUIOP".toRowConfig(),
         "ASDFGHJKL".toRowConfig(0.5f, 0.5f),
-        "ZXCVBNM".toRowConfig(1.5f) + KeyConfig("\b", "DEL", 1.5f),
+        "ZXCVBNM".toRowConfig(1.5f) + KeyConfig("\b", "DEL", width = 1.5f),
     )
 
     override fun onCreate() {

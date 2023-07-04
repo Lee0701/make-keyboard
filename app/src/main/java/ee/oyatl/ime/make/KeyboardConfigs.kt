@@ -29,6 +29,7 @@ data class RowConfig(
 data class KeyConfig(
     val output: String,
     val keyTop: String,
+    val height: Int = 60,
     val width: Float = 1f,
 )
 

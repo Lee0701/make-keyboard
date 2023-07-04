@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -42,17 +43,18 @@ fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, on
             .fillMaxWidth()
     ) {
         if(spacingLeft > 0) KeySpacer(
+            onClick = { onClick(configs.firstOrNull()?.output ?: "") },
             modifier = Modifier
                 .weight(spacingLeft)
         )
         configs.forEach { config -> Key(
-            keyTop = config.keyTop,
-            output = config.output,
+            config = config,
             onClick = { onClick(config.output) },
             modifier = Modifier
                 .weight(config.width)
         ) }
         if(spacingRight > 0) KeySpacer(
+            onClick = { onClick(configs.firstOrNull()?.output ?: "") },
             modifier = Modifier
                 .weight(spacingRight)
         )
@@ -66,22 +68,19 @@ fun BottomRow(left: List<KeyConfig>, right: List<KeyConfig>, onClick: (String) -
             .fillMaxWidth()
     ) {
         left.forEach { config -> Key(
-            keyTop = config.keyTop,
-            output = config.output,
-            onClick = { onClick(config.output) },
+            config = config,
+            onClick = onClick,
             modifier = Modifier
                 .weight(config.width)
         ) }
         Key(
-            keyTop = "",
-            output = " ",
-            onClick = { onClick(" ") },
+            config = KeyConfig(" ", "", width = 4f),
+            onClick = onClick,
             modifier = Modifier
                 .weight(4f)
         )
         right.forEach { config -> Key(
-            keyTop = config.keyTop,
-            output = config.output,
+            config = config,
             onClick = { onClick(config.output) },
             modifier = Modifier
                 .weight(config.width)
@@ -90,22 +89,23 @@ fun BottomRow(left: List<KeyConfig>, right: List<KeyConfig>, onClick: (String) -
 }
 
 @Composable
-fun Key(modifier: Modifier, keyTop: String, output: String, onClick: () -> Unit) {
+fun Key(modifier: Modifier, config: KeyConfig, onClick: (String) -> Unit) {
     return Button(
-        onClick = onClick,
+        onClick = { onClick(config.output) },
         contentPadding = PaddingValues(0.dp),
+        shape = RoundedCornerShape(16.dp),
         modifier = modifier
-            .height(60.dp)
-            .padding(2.dp, 4.dp)
+            .height(config.height.dp)
+            .padding(2.dp, 6.dp)
     ) {
-        Text(text = keyTop)
+        Text(text = config.keyTop)
     }
 }
 
 @Composable
-fun KeySpacer(modifier: Modifier) {
+fun KeySpacer(modifier: Modifier, onClick: () -> Unit) {
     return Button(
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         modifier = modifier
             .alpha(0f)
     ) {
