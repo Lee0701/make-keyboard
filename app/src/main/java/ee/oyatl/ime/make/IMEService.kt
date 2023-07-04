@@ -9,10 +9,14 @@ import androidx.compose.ui.platform.ComposeView
 class IMEService: InputMethodService() {
     private val inputViewLifecycleOwner = InputViewLifecycleOwner()
 
+    private var shiftState: Boolean = false
+
+    private val shiftKey = KeyConfig("<<SHIFT>>", "SFT", width = 1.5f)
+    private val deleteKey = KeyConfig("<<DELETE>>", "DEL", width = 1.5f)
     private val layout: KeyboardConfig = KeyboardConfig(
         "QWERTYUIOP".toRowConfig(),
         "ASDFGHJKL".toRowConfig(0.5f, 0.5f),
-        "ZXCVBNM".toRowConfig(1.5f) + KeyConfig("\b", "DEL", width = 1.5f),
+        RowConfig(shiftKey) + "ZXCVBNM".toRowConfig(1.5f) + RowConfig(deleteKey),
     )
 
     override fun onCreate() {
@@ -50,11 +54,15 @@ class IMEService: InputMethodService() {
     private fun onKeyClick(output: String) {
         val inputConnection = currentInputConnection ?: return
         when(output) {
-            "\b" -> {
+            "<<DELETE>>" -> {
                 inputConnection.deleteSurroundingText(1, 0)
             }
+            "<<SHIFT>>" -> {
+                shiftState = !shiftState
+            }
             else -> {
-                inputConnection.commitText(output, 1)
+                val shiftedOutput = if(shiftState) output.uppercase() else output.lowercase()
+                inputConnection.commitText(shiftedOutput, 1)
             }
         }
     }

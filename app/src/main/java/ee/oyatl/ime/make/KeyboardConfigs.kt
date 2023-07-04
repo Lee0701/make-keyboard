@@ -3,6 +3,8 @@ package ee.oyatl.ime.make
 
 data class KeyboardConfig(
     val rows: List<RowConfig>,
+    val bottomLeft: List<KeyConfig> = listOf(),
+    val bottomRight: List<KeyConfig> = listOf(),
 ) {
     constructor(vararg rows: RowConfig): this(rows.toList())
 }
@@ -12,6 +14,7 @@ data class RowConfig(
     val spacingLeft: Float = 0f,
     val spacingRight: Float = 0f,
 ) {
+    constructor(vararg keys: KeyConfig): this(keys.toList())
     operator fun plus(another: RowConfig): RowConfig {
         return RowConfig(
             keys = this.keys + another.keys,
