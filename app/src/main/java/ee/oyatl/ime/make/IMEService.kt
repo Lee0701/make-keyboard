@@ -1,7 +1,9 @@
 package ee.oyatl.ime.make
 
 import android.inputmethodservice.InputMethodService
+import android.media.AudioManager
 import android.os.Build
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -29,6 +31,7 @@ import ee.oyatl.ime.make.modifier.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifier.ModifierKeyHandler
 
 class IMEService: InputMethodService() {
+    private var inputView: View? = null
     private val inputViewLifecycleOwner = InputViewLifecycleOwner()
 
     private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(500)
@@ -48,11 +51,13 @@ class IMEService: InputMethodService() {
 
     override fun onCreateInputView(): View {
         inputViewLifecycleOwner.attachToDecorView(window?.window?.decorView)
-        return ComposeView(this).apply {
+        val view = ComposeView(this).apply {
             setContent {
                 InputView()
             }
         }
+        this.inputView = view
+        return view
     }
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
@@ -79,12 +84,14 @@ class IMEService: InputMethodService() {
                 shiftHandler.onUp()
             }
             else -> {
-//                val shiftedOutput = if(shiftState) output.uppercase() else output.lowercase()
-//                inputConnection.commitText(shiftedOutput, 1)
                 inputConnection.commitText(output, 1)
                 shiftHandler.autoUnlock()
                 shiftHandler.onInput()
             }
+        }
+        if(output.isNotEmpty()) {
+            performHapticFeedback(output)
+            performSoundFeedback(output)
         }
     }
 
@@ -128,6 +135,22 @@ class IMEService: InputMethodService() {
                 onKeyClick = { onKeyClick(it) },
             )
         }
+    }
+
+    private fun performHapticFeedback(output: String) {
+        val inputView = inputView ?: return
+        inputView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+    }
+
+    private fun performSoundFeedback(output: String) {
+        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        val fx = when(output) {
+            "<<DELETE>>" -> AudioManager.FX_KEYPRESS_DELETE
+            "<<RETURN>>" -> AudioManager.FX_KEYPRESS_RETURN
+            "<<SPACE>>" -> AudioManager.FX_KEYPRESS_SPACEBAR
+            else -> AudioManager.FX_KEYPRESS_STANDARD
+        }
+        audioManager.playSoundEffect(fx, 1f)
     }
 
     override fun onComputeInsets(outInsets: Insets?) {
