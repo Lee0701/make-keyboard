@@ -1,5 +1,6 @@
 package ee.oyatl.ime.make
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,45 +17,48 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Keyboard(layout: KeyboardConfig, onClick: (String) -> Unit) {
+fun Keyboard(
+    config: KeyboardConfig,
+    onKeyClick: (String) -> Unit,
+) {
     Card {
         Column(
             Modifier.padding(8.dp)
         ) {
-            layout.rows.forEachIndexed { i, row -> KeyRow(
+            config.rows.forEach { row -> KeyRow(
                 configs = row.keys,
                 spacingLeft = row.spacingLeft,
                 spacingRight = row.spacingRight,
-                onClick = onClick,
+                onKeyClick = onKeyClick,
             ) }
             BottomRow(
                 left = listOf(),
                 right = listOf(),
-                onClick = onClick
+                onKeyClick = onKeyClick
             )
         }
     }
 }
 
 @Composable
-fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, onClick: (String) -> Unit) {
+fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, onKeyClick: (String) -> Unit) {
     return Row(
         modifier = Modifier
             .fillMaxWidth()
     ) {
         if(spacingLeft > 0) KeySpacer(
-            onClick = { onClick(configs.firstOrNull()?.output ?: "") },
+            onClick = { onKeyClick(configs.firstOrNull()?.output ?: "") },
             modifier = Modifier
                 .weight(spacingLeft)
         )
         configs.forEach { config -> Key(
             config = config,
-            onClick = { onClick(config.output) },
+            onClick = onKeyClick,
             modifier = Modifier
                 .weight(config.width)
         ) }
         if(spacingRight > 0) KeySpacer(
-            onClick = { onClick(configs.firstOrNull()?.output ?: "") },
+            onClick = { onKeyClick(configs.lastOrNull()?.output ?: "") },
             modifier = Modifier
                 .weight(spacingRight)
         )
@@ -62,27 +66,29 @@ fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, on
 }
 
 @Composable
-fun BottomRow(left: List<KeyConfig>, right: List<KeyConfig>, onClick: (String) -> Unit) {
+fun BottomRow(left: List<KeyConfig>, right: List<KeyConfig>, onKeyClick: (String) -> Unit) {
     return Row(
         modifier = Modifier
             .fillMaxWidth()
     ) {
         left.forEach { config -> Key(
             config = config,
-            onClick = onClick,
+            onClick = onKeyClick,
             modifier = Modifier
+                .clickable { onKeyClick(config.output) }
                 .weight(config.width)
         ) }
         Key(
             config = KeyConfig(" ", "", width = 4f),
-            onClick = onClick,
+            onClick = onKeyClick,
             modifier = Modifier
                 .weight(4f)
         )
         right.forEach { config -> Key(
             config = config,
-            onClick = { onClick(config.output) },
+            onClick = onKeyClick,
             modifier = Modifier
+                .clickable { onKeyClick(config.output) }
                 .weight(config.width)
         ) }
     }
@@ -96,6 +102,7 @@ fun Key(modifier: Modifier, config: KeyConfig, onClick: (String) -> Unit) {
         shape = RoundedCornerShape(16.dp),
         modifier = modifier
             .height(config.height.dp)
+            .clickable { onClick(config.output) }
             .padding(2.dp, 6.dp)
     ) {
         Text(text = config.keyTop)
