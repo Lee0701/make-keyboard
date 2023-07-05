@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -93,7 +95,7 @@ fun BottomRow(left: List<KeyConfig>, right: List<KeyConfig>, onKeyClick: (String
                 .weight(config.width)
         ) }
         Key(
-            config = KeyConfig(" ", "", width = 4f),
+            config = KeyConfig(" ", KeyLabel.None, width = 4f),
             onClick = onKeyClick,
             modifier = Modifier
                 .weight(4f)
@@ -130,11 +132,15 @@ fun Key(modifier: Modifier, config: KeyConfig, onClick: (String) -> Unit) {
             .noRippleClickable() { onClick(config.output) }
             .padding(2.dp, 6.dp)
     ) {
-        Text(
-            text = config.label,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Normal,
-        )
+        when(config.label) {
+            is KeyLabel.Text -> Text(
+                text = config.label.text,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Normal,
+            )
+            is KeyLabel.Icon -> config.label.icon()
+            else -> Unit
+        }
     }
 }
 

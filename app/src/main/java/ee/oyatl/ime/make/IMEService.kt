@@ -25,8 +25,8 @@ class IMEService: InputMethodService() {
 
     private var shiftPressed = false
 
-    private val shiftKey = KeyConfig("<<SHIFT>>", "SFT", width = 1.5f, type = KeyConfig.Type.Modifier)
-    private val deleteKey = KeyConfig("<<DELETE>>", "DEL", width = 1.5f, type = KeyConfig.Type.Modifier)
+    private val shiftKey = KeyConfig("<<SHIFT>>", KeyLabel.Icon { KeyIcons.Shift() }, width = 1.5f, type = KeyConfig.Type.Modifier)
+    private val deleteKey = KeyConfig("<<DELETE>>", KeyLabel.Icon { KeyIcons.Delete() }, width = 1.5f, type = KeyConfig.Type.Modifier)
     private val initialKeyboardConfig: KeyboardConfig = KeyboardConfig(
         "QWERTYUIOP".toRowConfig(),
         "ASDFGHJKL".toRowConfig(0.5f, 0.5f),
@@ -84,7 +84,10 @@ class IMEService: InputMethodService() {
             this.onKeyClick(it)
             keyboardConfig = initialKeyboardConfig.map { key ->
                 val output = if(shiftPressed) key.output.uppercase() else key.output.lowercase()
-                val label = if(shiftPressed) key.label.uppercase() else key.label.lowercase()
+                val label =
+                    if(key.label is KeyLabel.Text && !key.isCommandOutput)
+                        if(shiftPressed) key.label.uppercase() else key.label.lowercase()
+                    else key.label
                 key.copy(output = output, label = label)
             }
         }

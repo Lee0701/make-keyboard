@@ -1,5 +1,7 @@
 package ee.oyatl.ime.make
 
+import androidx.compose.runtime.Composable
+
 data class KeyboardConfig(
     val rows: List<RowConfig>,
     val bottomLeft: List<KeyConfig> = listOf(),
@@ -33,11 +35,12 @@ data class RowConfig(
 
 data class KeyConfig(
     val output: String,
-    val label: String,
+    val label: KeyLabel,
     val height: Int = 60,
     val width: Float = 1f,
     val type: Type = Type.Alphanumeric,
 ) {
+    val isCommandOutput = output.startsWith("<<") && output.endsWith(">>")
     enum class Type {
         Alphanumeric,
         Modifier,
@@ -45,11 +48,24 @@ data class KeyConfig(
     }
 }
 
+sealed interface KeyLabel {
+    object None: KeyLabel
+    data class Icon(
+        val icon: @Composable () -> Unit,
+    ): KeyLabel
+    data class Text(
+        val text: String,
+    ): KeyLabel {
+        fun uppercase(): Text = Text(text.uppercase())
+        fun lowercase(): Text = Text(text.lowercase())
+    }
+}
+
 fun String.toRowConfig(
     spacingLeft: Float = 0f,
     spacingRight: Float = 0f,
 ): RowConfig {
-    val keys = this.map { KeyConfig(it.toString(), it.toString()) }
+    val keys = this.map { KeyConfig(it.toString(), KeyLabel.Text(it.toString())) }
     return RowConfig(
         keys = keys,
         spacingLeft = spacingLeft,
