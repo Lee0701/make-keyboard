@@ -1,6 +1,6 @@
-package ee.oyatl.ime.make
+package ee.oyatl.ime.make.modifier
 
-class DefaultModifierKeyHandler(
+class DefaultShiftKeyHandler(
     private val doubleTapGap: Int,
 ): ModifierKeyHandler {
 

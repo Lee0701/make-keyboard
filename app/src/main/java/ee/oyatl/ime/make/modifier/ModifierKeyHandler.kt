@@ -1,4 +1,4 @@
-package ee.oyatl.ime.make
+package ee.oyatl.ime.make.modifier
 
 interface ModifierKeyHandler {
     fun onDown()

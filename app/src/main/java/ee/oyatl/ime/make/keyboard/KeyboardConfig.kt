@@ -1,4 +1,4 @@
-package ee.oyatl.ime.make
+package ee.oyatl.ime.make.keyboard
 
 import androidx.compose.runtime.Composable
 
