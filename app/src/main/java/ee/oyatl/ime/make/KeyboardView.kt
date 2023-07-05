@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -109,13 +110,20 @@ fun BottomRow(left: List<KeyConfig>, right: List<KeyConfig>, onKeyClick: (String
 
 @Composable
 fun Key(modifier: Modifier, config: KeyConfig, onClick: (String) -> Unit) {
+    val containerColor = when(config.type) {
+        KeyConfig.Type.Alphanumeric -> MaterialTheme.colorScheme.surface
+        KeyConfig.Type.Modifier -> MaterialTheme.colorScheme.primaryContainer
+        KeyConfig.Type.Space -> MaterialTheme.colorScheme.surface
+        else -> Color.Transparent
+    }
+    val contentColor = MaterialTheme.colorScheme.onSurface
     return Button(
         onClick = { onClick(config.output) },
         contentPadding = PaddingValues(0.dp),
         shape = MaterialTheme.shapes.medium,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface,
+            containerColor = containerColor,
+            contentColor = contentColor,
         ),
         modifier = modifier
             .height(config.height.dp)
@@ -123,7 +131,7 @@ fun Key(modifier: Modifier, config: KeyConfig, onClick: (String) -> Unit) {
             .padding(2.dp, 6.dp)
     ) {
         Text(
-            text = config.keyTop,
+            text = config.label,
             fontSize = 24.sp,
             fontWeight = FontWeight.Normal,
         )

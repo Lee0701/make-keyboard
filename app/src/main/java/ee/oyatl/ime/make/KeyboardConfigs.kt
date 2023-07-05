@@ -33,10 +33,17 @@ data class RowConfig(
 
 data class KeyConfig(
     val output: String,
-    val keyTop: String,
+    val label: String,
     val height: Int = 60,
     val width: Float = 1f,
-)
+    val type: Type = Type.Alphanumeric,
+) {
+    enum class Type {
+        Alphanumeric,
+        Modifier,
+        Space,
+    }
+}
 
 fun String.toRowConfig(
     spacingLeft: Float = 0f,
