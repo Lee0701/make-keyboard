@@ -13,6 +13,9 @@ import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 
+/*
+ * https://stackoverflow.com/a/66958772
+ */
 class InputViewLifecycleOwner:
 LifecycleOwner, ViewModelStoreOwner, SavedStateRegistryOwner {
 

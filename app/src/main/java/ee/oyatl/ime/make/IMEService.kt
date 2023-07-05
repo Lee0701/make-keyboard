@@ -1,15 +1,24 @@
 package ee.oyatl.ime.make
 
 import android.inputmethodservice.InputMethodService
+import android.os.Build
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 
 class IMEService: InputMethodService() {
     private val inputViewLifecycleOwner = InputViewLifecycleOwner()
@@ -80,7 +89,25 @@ class IMEService: InputMethodService() {
             }
         }
         onKeyClick("")
-        MaterialTheme {
+        val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+        val darkTheme = isSystemInDarkTheme()
+        val colorScheme = when {
+            dynamicColor && darkTheme -> dynamicDarkColorScheme(this)
+            dynamicColor && !darkTheme -> dynamicLightColorScheme(this)
+            darkTheme -> darkColorScheme()
+            else -> lightColorScheme()
+        }
+        val shapes = Shapes(
+            extraSmall = RoundedCornerShape(4.dp),
+            small = RoundedCornerShape(8.dp),
+            medium = RoundedCornerShape(12.dp),
+            large = RoundedCornerShape(16.dp),
+            extraLarge = RoundedCornerShape(24.dp),
+        )
+        MaterialTheme(
+            colorScheme = colorScheme,
+            shapes = shapes,
+        ) {
             Keyboard(
                 config = keyboardConfig,
                 onKeyClick = { onKeyClick(it) },

@@ -1,6 +1,5 @@
 package ee.oyatl.ime.make
 
-
 data class KeyboardConfig(
     val rows: List<RowConfig>,
     val bottomLeft: List<KeyConfig> = listOf(),

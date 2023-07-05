@@ -1,29 +1,42 @@
 package ee.oyatl.ime.make
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun Keyboard(
     config: KeyboardConfig,
     onKeyClick: (String) -> Unit,
 ) {
-    Card {
+    Card(
+        shape = MaterialTheme.shapes.extraLarge,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        ),
+    ) {
         Column(
-            Modifier.padding(8.dp)
+            Modifier
+                .padding(8.dp)
         ) {
             config.rows.forEach { row -> KeyRow(
                 configs = row.keys,
@@ -99,13 +112,21 @@ fun Key(modifier: Modifier, config: KeyConfig, onClick: (String) -> Unit) {
     return Button(
         onClick = { onClick(config.output) },
         contentPadding = PaddingValues(0.dp),
-        shape = RoundedCornerShape(16.dp),
+        shape = MaterialTheme.shapes.medium,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+        ),
         modifier = modifier
             .height(config.height.dp)
-            .clickable { onClick(config.output) }
+            .noRippleClickable() { onClick(config.output) }
             .padding(2.dp, 6.dp)
     ) {
-        Text(text = config.keyTop)
+        Text(
+            text = config.keyTop,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Normal,
+        )
     }
 }
 
@@ -116,5 +137,12 @@ fun KeySpacer(modifier: Modifier, onClick: () -> Unit) {
         modifier = modifier
             .alpha(0f)
     ) {
+    }
+}
+
+fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
+    clickable(indication = null,
+        interactionSource = remember { MutableInteractionSource() }) {
+        onClick()
     }
 }
