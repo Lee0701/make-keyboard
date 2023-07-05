@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 class IMEService: InputMethodService() {
     private val inputViewLifecycleOwner = InputViewLifecycleOwner()
 
-    private var shiftPressed = false
+    private val shiftHandler: ModifierKeyHandler = DefaultModifierKeyHandler(500)
 
     private val shiftKey = KeyConfig("<<SHIFT>>", KeyLabel.Icon { KeyIcons.Shift() }, width = 1.5f, type = KeyConfig.Type.Modifier)
     private val deleteKey = KeyConfig("<<DELETE>>", KeyLabel.Icon { KeyIcons.Delete() }, width = 1.5f, type = KeyConfig.Type.Modifier)
@@ -67,12 +67,15 @@ class IMEService: InputMethodService() {
                 inputConnection.deleteSurroundingText(1, 0)
             }
             "<<SHIFT>>" -> {
-                shiftPressed = !shiftPressed
+                shiftHandler.onDown()
+                shiftHandler.onUp()
             }
             else -> {
 //                val shiftedOutput = if(shiftState) output.uppercase() else output.lowercase()
 //                inputConnection.commitText(shiftedOutput, 1)
                 inputConnection.commitText(output, 1)
+                shiftHandler.autoUnlock()
+                shiftHandler.onInput()
             }
         }
     }
@@ -82,6 +85,7 @@ class IMEService: InputMethodService() {
         var keyboardConfig by remember { mutableStateOf(initialKeyboardConfig) }
         val onKeyClick: (String) -> Unit = {
             this.onKeyClick(it)
+            val shiftPressed = shiftHandler.isActive()
             keyboardConfig = initialKeyboardConfig.map { key ->
                 val output = if(shiftPressed) key.output.uppercase() else key.output.lowercase()
                 val label =
