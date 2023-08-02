@@ -4,10 +4,9 @@ import androidx.compose.runtime.Composable
 
 data class KeyboardConfig(
     val rows: List<RowConfig>,
-    val bottomLeft: List<KeyConfig> = listOf(),
-    val bottomRight: List<KeyConfig> = listOf(),
+    val bottomRow: BottomRowConfig,
 ) {
-    constructor(vararg rows: RowConfig): this(rows.toList())
+    constructor(vararg rows: RowConfig): this(rows.toList(), BottomRowConfig())
 
     fun map(transform: (KeyConfig) -> KeyConfig): KeyboardConfig = this.copy(
         rows = this.rows.map { row -> row.copy(keys = row.keys.map(transform)) })
@@ -32,6 +31,13 @@ data class RowConfig(
         )
     }
 }
+
+data class BottomRowConfig(
+    val height: Int = 50,
+    val spaceWidth: Float = 4f,
+    val leftKeys: List<KeyConfig> = listOf(),
+    val rightKeys: List<KeyConfig> = listOf(),
+)
 
 data class KeyConfig(
     val output: String,

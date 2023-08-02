@@ -45,8 +45,7 @@ fun Keyboard(
                 onKeyClick = onKeyClick,
             ) }
             BottomRow(
-                left = listOf(),
-                right = listOf(),
+                config = config.bottomRow,
                 onKeyClick = onKeyClick,
             )
         }
@@ -79,30 +78,33 @@ fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, on
 }
 
 @Composable
-fun BottomRow(left: List<KeyConfig>, right: List<KeyConfig>, onKeyClick: (String) -> Unit) {
+fun BottomRow(config: BottomRowConfig, onKeyClick: (String) -> Unit) {
     return Row(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        left.forEach { config -> Key(
+        config.leftKeys.forEach { config -> Key(
             config = config,
             onClick = onKeyClick,
             modifier = Modifier
                 .clickable { onKeyClick(config.output) }
                 .weight(config.width)
+                .height(config.height.dp)
         ) }
         Key(
             config = KeyConfig(" ", KeyLabel.None, width = 4f),
             onClick = onKeyClick,
             modifier = Modifier
-                .weight(4f)
+                .weight(config.spaceWidth)
+                .height(config.height.dp)
         )
-        right.forEach { config -> Key(
+        config.rightKeys.forEach { config -> Key(
             config = config,
             onClick = onKeyClick,
             modifier = Modifier
                 .clickable { onKeyClick(config.output) }
                 .weight(config.width)
+                .height(config.height.dp)
         ) }
     }
 }
