@@ -28,6 +28,8 @@ import ee.oyatl.ime.make.keyboard.KeyLabel
 import ee.oyatl.ime.make.keyboard.Keyboard
 import ee.oyatl.ime.make.keyboard.KeyboardConfig
 import ee.oyatl.ime.make.keyboard.RowConfig
+import ee.oyatl.ime.make.keyboard.commandOutput
+import ee.oyatl.ime.make.keyboard.isCommandOutput
 import ee.oyatl.ime.make.keyboard.toRowConfig
 import ee.oyatl.ime.make.modifier.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifier.ModifierKeyHandler
@@ -85,7 +87,7 @@ class IMEService: InputMethodService() {
 
     private fun onKeyClick(output: String) {
         val inputConnection = currentInputConnection ?: return
-        if(isFunctionalKeyOutput(output)) {
+        if(output.isCommandOutput) {
             val actionId = output.uppercase().substring(2, output.length - 2)
             when(actionId) {
                 "DELETE" -> {
@@ -119,10 +121,10 @@ class IMEService: InputMethodService() {
             keyboardConfig = initialKeyboardConfig.map { key ->
                 val output = if(shiftPressed) key.output.uppercase() else key.output.lowercase()
                 val label = when {
-                    key.commandOutput == "SHIFT" && key.label is KeyLabel.Icon -> {
+                    key.output.commandOutput == "SHIFT" && key.label is KeyLabel.Icon -> {
                         KeyLabel.Icon { KeyIcons.Shift(shiftHandler.state) }
                     }
-                    key.label is KeyLabel.Text && key.commandOutput == null -> {
+                    key.label is KeyLabel.Text && key.output.commandOutput == null -> {
                         if(shiftPressed) key.label.uppercase() else key.label.lowercase()
                     }
                     else -> key.label
@@ -155,10 +157,6 @@ class IMEService: InputMethodService() {
                 onKeyClick = { onKeyClick(it) },
             )
         }
-    }
-
-    private fun isFunctionalKeyOutput(output: String): Boolean {
-        return output.startsWith("<<") && output.endsWith(">>")
     }
 
     private fun performHapticFeedback(output: String) {

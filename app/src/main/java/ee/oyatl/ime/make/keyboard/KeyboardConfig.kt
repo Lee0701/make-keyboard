@@ -44,10 +44,6 @@ data class KeyConfig(
     val width: Float = 1f,
     val type: Type = Type.Alphanumeric,
 ) {
-    val commandOutput: String? =
-        if(output.startsWith("<<") && output.endsWith(">>"))
-            output.uppercase().substring(2, output.length - 2)
-        else null
     enum class Type {
         Alphanumeric,
         Modifier,
@@ -79,3 +75,10 @@ fun String.toRowConfig(
         spacingRight = spacingRight,
     )
 }
+
+typealias KeyOutput = String
+val KeyOutput.isCommandOutput: Boolean get() = commandOutput != null
+val KeyOutput.commandOutput: String? get() =
+    if(this.startsWith("<<") && this.endsWith(">>"))
+        this.uppercase().substring(2, this.length - 2)
+    else null
