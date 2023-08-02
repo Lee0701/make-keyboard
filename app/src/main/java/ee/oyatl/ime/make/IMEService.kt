@@ -85,19 +85,24 @@ class IMEService: InputMethodService() {
 
     private fun onKeyClick(output: String) {
         val inputConnection = currentInputConnection ?: return
-        when(output.uppercase()) {
-            "<<DELETE>>" -> {
-                inputConnection.deleteSurroundingText(1, 0)
+        if(isFunctionalKeyOutput(output)) {
+            val actionId = output.uppercase().substring(2, output.length - 2)
+            when(actionId) {
+                "DELETE" -> {
+                    inputConnection.deleteSurroundingText(1, 0)
+                }
+                "SHIFT" -> {
+                    shiftHandler.onDown()
+                    shiftHandler.onUp()
+                }
+                "RETURN" -> {
+                    sendDefaultEditorAction(true)
+                }
             }
-            "<<SHIFT>>" -> {
-                shiftHandler.onDown()
-                shiftHandler.onUp()
-            }
-            else -> {
-                inputConnection.commitText(output, 1)
-                shiftHandler.autoUnlock()
-                shiftHandler.onInput()
-            }
+        } else {
+            inputConnection.commitText(output, 1)
+            shiftHandler.autoUnlock()
+            shiftHandler.onInput()
         }
         if(output.isNotEmpty()) {
             performHapticFeedback(output)
@@ -150,6 +155,10 @@ class IMEService: InputMethodService() {
                 onKeyClick = { onKeyClick(it) },
             )
         }
+    }
+
+    private fun isFunctionalKeyOutput(output: String): Boolean {
+        return output.startsWith("<<") && output.endsWith(">>")
     }
 
     private fun performHapticFeedback(output: String) {
