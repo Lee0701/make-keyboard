@@ -42,6 +42,12 @@ object KeyIcons {
     )
 
     @Composable
+    fun Symbol() = Icon(
+        painter = painterResource(id = R.drawable.keyic_option),
+        contentDescription = stringResource(id = R.string.key_desc_symbol),
+    )
+
+    @Composable
     fun Return() = Icon(
         painter = painterResource(id = R.drawable.keyic_return),
         contentDescription = stringResource(id = R.string.key_desc_return),
