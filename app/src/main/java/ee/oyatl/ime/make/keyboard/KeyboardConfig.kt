@@ -44,7 +44,10 @@ data class KeyConfig(
     val width: Float = 1f,
     val type: Type = Type.Alphanumeric,
 ) {
-    val isCommandOutput = output.startsWith("<<") && output.endsWith(">>")
+    val commandOutput: String? =
+        if(output.startsWith("<<") && output.endsWith(">>"))
+            output.uppercase().substring(2, output.length - 2)
+        else null
     enum class Type {
         Alphanumeric,
         Modifier,

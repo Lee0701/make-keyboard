@@ -4,7 +4,7 @@ class DefaultShiftKeyHandler(
     private val doubleTapGap: Int,
 ): ModifierKeyHandler {
 
-    private var state: ModifierKeyState = ModifierKeyState()
+    override var state: ModifierKeyState = ModifierKeyState()
     private var clickedTime: Long = 0L
     private var inputEvent: Boolean = false
 
@@ -52,9 +52,5 @@ class DefaultShiftKeyHandler(
         if(state.pressing && inputEvent) return
         val lastState = state
         if(!lastState.locked && !lastState.pressing) state = ModifierKeyState()
-    }
-
-    override fun isActive(): Boolean {
-        return state.pressed
     }
 }

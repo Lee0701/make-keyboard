@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import ee.oyatl.ime.make.keyboard.BottomRowConfig
 import ee.oyatl.ime.make.keyboard.KeyConfig
+import ee.oyatl.ime.make.keyboard.KeyIcons
 import ee.oyatl.ime.make.keyboard.KeyLabel
 import ee.oyatl.ime.make.keyboard.Keyboard
 import ee.oyatl.ime.make.keyboard.KeyboardConfig
@@ -37,7 +38,7 @@ class IMEService: InputMethodService() {
 
     private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(500)
 
-    private val shiftKey = KeyConfig("<<SHIFT>>", KeyLabel.Icon { KeyIcons.Shift() }, width = 1.5f, type = KeyConfig.Type.Modifier)
+    private val shiftKey = KeyConfig("<<SHIFT>>", KeyLabel.Icon { KeyIcons.Shift(shiftHandler.state) }, width = 1.5f, type = KeyConfig.Type.Modifier)
     private val deleteKey = KeyConfig("<<DELETE>>", KeyLabel.Icon { KeyIcons.Delete() }, width = 1.5f, type = KeyConfig.Type.Modifier)
     private val returnKey = KeyConfig("<<RETURN>>", KeyLabel.Icon { KeyIcons.Return()}, width = 2f, type = KeyConfig.Type.Modifier)
     private val initialKeyboardConfig: KeyboardConfig = KeyboardConfig(
@@ -109,13 +110,18 @@ class IMEService: InputMethodService() {
         var keyboardConfig by remember { mutableStateOf(initialKeyboardConfig) }
         val onKeyClick: (String) -> Unit = {
             this.onKeyClick(it)
-            val shiftPressed = shiftHandler.isActive()
+            val shiftPressed = shiftHandler.state.active
             keyboardConfig = initialKeyboardConfig.map { key ->
                 val output = if(shiftPressed) key.output.uppercase() else key.output.lowercase()
-                val label =
-                    if(key.label is KeyLabel.Text && !key.isCommandOutput)
+                val label = when {
+                    key.commandOutput == "SHIFT" && key.label is KeyLabel.Icon -> {
+                        KeyLabel.Icon { KeyIcons.Shift(shiftHandler.state) }
+                    }
+                    key.label is KeyLabel.Text && key.commandOutput == null -> {
                         if(shiftPressed) key.label.uppercase() else key.label.lowercase()
-                    else key.label
+                    }
+                    else -> key.label
+                }
                 key.copy(output = output, label = label)
             }
         }

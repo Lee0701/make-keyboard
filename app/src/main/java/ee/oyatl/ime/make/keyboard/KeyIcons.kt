@@ -1,14 +1,30 @@
-package ee.oyatl.ime.make
+package ee.oyatl.ime.make.keyboard
 
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import ee.oyatl.ime.make.R
+import ee.oyatl.ime.make.modifier.ModifierKeyState
 
 object KeyIcons {
+
     @Composable
-    fun Shift() = Icon(
+    fun Shift(state: ModifierKeyState) = when {
+        state.locked -> ShiftLocked()
+        state.active -> ShiftPressed()
+        else -> ShiftReleased()
+    }
+
+    @Composable
+    fun ShiftReleased() = Icon(
         painter = painterResource(id = R.drawable.keyic_shift),
+        contentDescription = stringResource(id = R.string.key_desc_shift)
+    )
+
+    @Composable
+    fun ShiftPressed() = Icon(
+        painter = painterResource(id = R.drawable.keyic_shift_pressed),
         contentDescription = stringResource(id = R.string.key_desc_shift)
     )
 
@@ -31,8 +47,9 @@ object KeyIcons {
     )
 
     @Composable
-    fun of(output: String) = when(output) {
-        "<<SHIFT>>" -> Shift()
+    fun OfOutput(output: String) = when(output) {
+        "<<SHIFT>>" -> Shift(ModifierKeyState())
+        "<<SHIFT:PRESSED>>" -> ShiftPressed()
         "<<SHIFT:LOCKED>>" -> ShiftLocked()
         "<<DELETE>>" -> Delete()
         "<<RETURN>>" -> Return()
