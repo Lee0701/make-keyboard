@@ -42,7 +42,7 @@ class IMEService: InputMethodService() {
 
     private val shiftKey = KeyConfig("<<SHIFT>>", KeyLabel.Icon { KeyIcons.Shift(shiftHandler.state) }, width = 1.5f, type = KeyConfig.Type.Modifier)
     private val deleteKey = KeyConfig("<<DELETE>>", KeyLabel.Icon { KeyIcons.Delete() }, width = 1.5f, type = KeyConfig.Type.Modifier)
-    private val returnKey = KeyConfig("<<RETURN>>", KeyLabel.Icon { KeyIcons.Return()}, width = 2f, type = KeyConfig.Type.Modifier)
+    private val returnKey = KeyConfig("<<RETURN>>", KeyLabel.Icon { KeyIcons.Return() }, width = 2f, type = KeyConfig.Type.Return)
     private val initialKeyboardConfig: KeyboardConfig = KeyboardConfig(
         listOf(
             "QWERTYUIOP".toRowConfig(),

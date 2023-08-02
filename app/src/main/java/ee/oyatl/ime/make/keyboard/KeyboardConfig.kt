@@ -47,6 +47,7 @@ data class KeyConfig(
     enum class Type {
         Alphanumeric,
         Modifier,
+        Return,
         Space,
     }
 }
