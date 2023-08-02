@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
+import ee.oyatl.ime.make.keyboard.BottomRowConfig
 import ee.oyatl.ime.make.keyboard.KeyConfig
 import ee.oyatl.ime.make.keyboard.KeyLabel
 import ee.oyatl.ime.make.keyboard.Keyboard
@@ -38,10 +39,18 @@ class IMEService: InputMethodService() {
 
     private val shiftKey = KeyConfig("<<SHIFT>>", KeyLabel.Icon { KeyIcons.Shift() }, width = 1.5f, type = KeyConfig.Type.Modifier)
     private val deleteKey = KeyConfig("<<DELETE>>", KeyLabel.Icon { KeyIcons.Delete() }, width = 1.5f, type = KeyConfig.Type.Modifier)
+    private val returnKey = KeyConfig("<<RETURN>>", KeyLabel.Icon { KeyIcons.Return()}, width = 2f, type = KeyConfig.Type.Modifier)
     private val initialKeyboardConfig: KeyboardConfig = KeyboardConfig(
-        "QWERTYUIOP".toRowConfig(),
-        "ASDFGHJKL".toRowConfig(0.5f, 0.5f),
-        RowConfig(shiftKey) + "ZXCVBNM".toRowConfig(1.5f) + RowConfig(deleteKey),
+        listOf(
+            "QWERTYUIOP".toRowConfig(),
+            "ASDFGHJKL".toRowConfig(0.5f, 0.5f),
+            RowConfig(shiftKey) + "ZXCVBNM".toRowConfig(1.5f) + RowConfig(deleteKey),
+        ),
+        BottomRowConfig(
+            spaceWidth = 8f,
+            leftKeys = listOf(),
+            rightKeys = listOf(returnKey),
+        )
     )
 
     override fun onCreate() {

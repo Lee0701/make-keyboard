@@ -6,8 +6,6 @@ data class KeyboardConfig(
     val rows: List<RowConfig>,
     val bottomRow: BottomRowConfig,
 ) {
-    constructor(vararg rows: RowConfig): this(rows.toList(), BottomRowConfig())
-
     fun map(transform: (KeyConfig) -> KeyConfig): KeyboardConfig = this.copy(
         rows = this.rows.map { row -> row.copy(keys = row.keys.map(transform)) })
 }
