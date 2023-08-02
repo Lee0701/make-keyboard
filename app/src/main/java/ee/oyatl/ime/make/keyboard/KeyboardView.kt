@@ -36,8 +36,7 @@ fun Keyboard(
         ),
     ) {
         Column(
-            Modifier
-                .padding(8.dp)
+            Modifier.padding(8.dp)
         ) {
             config.rows.forEach { row -> KeyRow(
                 configs = row.keys,
@@ -48,7 +47,7 @@ fun Keyboard(
             BottomRow(
                 left = listOf(),
                 right = listOf(),
-                onKeyClick = onKeyClick
+                onKeyClick = onKeyClick,
             )
         }
     }
@@ -128,7 +127,7 @@ fun Key(modifier: Modifier, config: KeyConfig, onClick: (String) -> Unit) {
         modifier = modifier
             .height(config.height.dp)
             .noRippleClickable() { onClick(config.output) }
-            .padding(2.dp, 6.dp)
+            .padding(2.dp, 4.dp)
     ) {
         when(config.label) {
             is KeyLabel.Text -> Text(

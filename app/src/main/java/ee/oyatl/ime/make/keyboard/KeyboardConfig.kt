@@ -36,7 +36,7 @@ data class RowConfig(
 data class KeyConfig(
     val output: String,
     val label: KeyLabel,
-    val height: Int = 60,
+    val height: Int = 55,
     val width: Float = 1f,
     val type: Type = Type.Alphanumeric,
 ) {
