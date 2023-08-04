@@ -3,6 +3,8 @@ package ee.oyatl.ime.make
 import android.inputmethodservice.InputMethodService
 import android.media.AudioManager
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -23,18 +25,20 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import ee.oyatl.ime.make.keyboard.BottomRowConfig
 import ee.oyatl.ime.make.keyboard.KeyConfig
+import ee.oyatl.ime.make.keyboard.KeyEvent
 import ee.oyatl.ime.make.keyboard.KeyIcons
 import ee.oyatl.ime.make.keyboard.KeyLabel
 import ee.oyatl.ime.make.keyboard.Keyboard
 import ee.oyatl.ime.make.keyboard.KeyboardConfig
 import ee.oyatl.ime.make.keyboard.RowConfig
 import ee.oyatl.ime.make.keyboard.commandOutput
-import ee.oyatl.ime.make.keyboard.isCommandOutput
 import ee.oyatl.ime.make.keyboard.toRowConfig
 import ee.oyatl.ime.make.modifier.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifier.ModifierKeyHandler
 
 class IMEService: InputMethodService() {
+    private val handler: Handler = Handler(Looper.getMainLooper())
+
     private var inputView: View? = null
     private val inputViewLifecycleOwner = InputViewLifecycleOwner()
 
@@ -63,13 +67,12 @@ class IMEService: InputMethodService() {
 
     override fun onCreateInputView(): View {
         inputViewLifecycleOwner.attachToDecorView(window?.window?.decorView)
-        val view = ComposeView(this).apply {
+        return ComposeView(this).apply {
             setContent {
                 InputView()
             }
+            this@IMEService.inputView = this
         }
-        this.inputView = view
-        return view
     }
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
@@ -85,54 +88,86 @@ class IMEService: InputMethodService() {
         inputViewLifecycleOwner.onDestroy()
     }
 
-    private fun onKeyClick(output: String) {
+    private fun onKeyEvent(event: KeyEvent) {
         val inputConnection = currentInputConnection ?: return
-        if(output.isCommandOutput) {
-            val actionId = output.uppercase().substring(2, output.length - 2)
-            when(actionId) {
-                "DELETE" -> {
-                    inputConnection.deleteSurroundingText(1, 0)
+        val shiftPressed = shiftHandler.state.active
+        val commandOutput = event.output.commandOutput
+        when(event.action) {
+            KeyEvent.Action.Press -> {
+                if(commandOutput != null) {
+                    onCommandPress(commandOutput)
+                } else {
+                    val output =
+                        if(shiftPressed) event.output.uppercase()
+                        else event.output.lowercase()
+                    inputConnection.commitText(output, 1)
+                    shiftHandler.autoUnlock()
+                    shiftHandler.onInput()
                 }
-                "SHIFT" -> {
-                    shiftHandler.onDown()
-                    shiftHandler.onUp()
-                }
-                "RETURN" -> {
-                    sendDefaultEditorAction(true)
+                performKeyFeedback(event.output)
+            }
+            KeyEvent.Action.Release -> {
+                if(commandOutput != null) {
+                    onCommandRelease(commandOutput)
                 }
             }
-        } else {
-            inputConnection.commitText(output, 1)
-            shiftHandler.autoUnlock()
-            shiftHandler.onInput()
+            KeyEvent.Action.Repeat -> {
+                if(commandOutput != null) {
+                    onCommandRepeat(commandOutput)
+                }
+            }
         }
-        if(output.isNotEmpty()) {
-            performHapticFeedback(output)
-            performSoundFeedback(output)
+    }
+
+    private fun onCommandPress(actionId: String) {
+        val inputConnection = currentInputConnection ?: return
+        when(actionId) {
+            "DELETE" -> {
+                inputConnection.deleteSurroundingText(1, 0)
+                fun repeat() {
+                    this.onKeyEvent(KeyEvent(KeyEvent.Action.Repeat, "<<DELETE>>"))
+                    handler.postDelayed({ repeat() }, 50)
+                }
+                handler.postDelayed({ repeat() }, 500)
+            }
+            "SHIFT" -> {
+                shiftHandler.onPress()
+            }
+            "RETURN" -> {
+                sendDefaultEditorAction(true)
+            }
+        }
+    }
+
+    private fun onCommandRelease(actionId: String) {
+        val inputConnection = currentInputConnection ?: return
+        when(actionId) {
+            "DELETE" -> {
+                handler.removeCallbacksAndMessages(null)
+            }
+            "SHIFT" -> {
+                shiftHandler.onRelease()
+            }
+        }
+    }
+
+    private fun onCommandRepeat(actionId: String) {
+        val inputConnection = currentInputConnection ?: return
+        when(actionId) {
+            "DELETE" -> {
+                inputConnection.deleteSurroundingText(1, 0)
+            }
         }
     }
 
     @Composable
     private fun InputView() {
         var keyboardConfig by remember { mutableStateOf(initialKeyboardConfig) }
-        val onKeyClick: (String) -> Unit = {
-            this.onKeyClick(it)
-            val shiftPressed = shiftHandler.state.active
-            keyboardConfig = initialKeyboardConfig.map { key ->
-                val output = if(shiftPressed) key.output.uppercase() else key.output.lowercase()
-                val label = when {
-                    key.output.commandOutput == "SHIFT" && key.label is KeyLabel.Icon -> {
-                        KeyLabel.Icon { KeyIcons.Shift(shiftHandler.state) }
-                    }
-                    key.label is KeyLabel.Text && key.output.commandOutput == null -> {
-                        if(shiftPressed) key.label.uppercase() else key.label.lowercase()
-                    }
-                    else -> key.label
-                }
-                key.copy(output = output, label = label)
-            }
+        keyboardConfig = updatedLabels(initialKeyboardConfig)
+        val onKeyEvent: (KeyEvent) -> Unit = { event ->
+            this.onKeyEvent(event)
+            keyboardConfig = updatedLabels(initialKeyboardConfig)
         }
-        onKeyClick("")
         val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
         val darkTheme = isSystemInDarkTheme()
         val colorScheme = when {
@@ -154,8 +189,32 @@ class IMEService: InputMethodService() {
         ) {
             Keyboard(
                 config = keyboardConfig,
-                onKeyClick = { onKeyClick(it) },
+                onKeyEvent = onKeyEvent,
             )
+        }
+    }
+
+    private fun updatedLabels(originalConfig: KeyboardConfig): KeyboardConfig {
+        val shiftPressed = shiftHandler.state.active
+        return originalConfig.map { key ->
+            val output = if(shiftPressed) key.output.uppercase() else key.output.lowercase()
+            val label = when {
+                key.output.commandOutput == "SHIFT" && key.label is KeyLabel.Icon -> {
+                    KeyLabel.Icon { KeyIcons.Shift(shiftHandler.state) }
+                }
+                key.label is KeyLabel.Text && key.output.commandOutput == null -> {
+                    if(shiftPressed) key.label.uppercase() else key.label.lowercase()
+                }
+                else -> key.label
+            }
+            key.copy(output = output, label = label)
+        }
+    }
+
+    private fun performKeyFeedback(output: String) {
+        if(output.isNotEmpty()) {
+            performHapticFeedback(output)
+            performSoundFeedback(output)
         }
     }
 
@@ -166,10 +225,10 @@ class IMEService: InputMethodService() {
 
     private fun performSoundFeedback(output: String) {
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        val fx = when(output) {
-            "<<DELETE>>" -> AudioManager.FX_KEYPRESS_DELETE
-            "<<RETURN>>" -> AudioManager.FX_KEYPRESS_RETURN
-            "<<SPACE>>" -> AudioManager.FX_KEYPRESS_SPACEBAR
+        val fx = when(output.commandOutput) {
+            "DELETE" -> AudioManager.FX_KEYPRESS_DELETE
+            "RETURN" -> AudioManager.FX_KEYPRESS_RETURN
+            "SPACE" -> AudioManager.FX_KEYPRESS_SPACEBAR
             else -> AudioManager.FX_KEYPRESS_STANDARD
         }
         audioManager.playSoundEffect(fx, 1f)

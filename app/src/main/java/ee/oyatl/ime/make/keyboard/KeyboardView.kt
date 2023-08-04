@@ -1,6 +1,8 @@
 package ee.oyatl.ime.make.keyboard
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +30,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun Keyboard(
     config: KeyboardConfig,
-    onKeyClick: (String) -> Unit,
+    onKeyEvent: (KeyEvent) -> Unit,
 ) {
     Card(
         shape = MaterialTheme.shapes.extraLarge,
@@ -42,67 +45,65 @@ fun Keyboard(
                 configs = row.keys,
                 spacingLeft = row.spacingLeft,
                 spacingRight = row.spacingRight,
-                onKeyClick = onKeyClick,
+                onKeyEvent = onKeyEvent,
             ) }
             BottomRow(
                 bottomRowConfig = config.bottomRow,
-                onKeyClick = onKeyClick,
+                onKeyEvent = onKeyEvent,
             )
         }
     }
 }
 
 @Composable
-fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, onKeyClick: (String) -> Unit) {
+fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, onKeyEvent: (KeyEvent) -> Unit) {
     return Row(
         modifier = Modifier
             .fillMaxWidth()
     ) {
         if(spacingLeft > 0) KeySpacer(
-            onClick = { onKeyClick(configs.firstOrNull()?.output ?: "") },
             modifier = Modifier
                 .weight(spacingLeft)
+                .pressAndRelease(configs.firstOrNull() ?: return@Row, onKeyEvent)
         )
         configs.forEach { config -> Key(
             config = config,
-            onClick = onKeyClick,
+            onKeyEvent = onKeyEvent,
             modifier = Modifier
                 .weight(config.width)
         ) }
         if(spacingRight > 0) KeySpacer(
-            onClick = { onKeyClick(configs.lastOrNull()?.output ?: "") },
             modifier = Modifier
                 .weight(spacingRight)
+                .pressAndRelease(configs.lastOrNull() ?: return@Row, onKeyEvent)
         )
     }
 }
 
 @Composable
-fun BottomRow(bottomRowConfig: BottomRowConfig, onKeyClick: (String) -> Unit) {
+fun BottomRow(bottomRowConfig: BottomRowConfig, onKeyEvent: (KeyEvent) -> Unit) {
     return Row(
         modifier = Modifier
             .fillMaxWidth()
     ) {
         bottomRowConfig.leftKeys.forEach { config -> Key(
             config = config,
-            onClick = onKeyClick,
+            onKeyEvent = onKeyEvent,
             modifier = Modifier
-                .clickable { onKeyClick(config.output) }
                 .weight(config.width)
                 .height(bottomRowConfig.height.dp)
         ) }
         Key(
             config = KeyConfig(" ", KeyLabel.None, width = 4f),
-            onClick = onKeyClick,
+            onKeyEvent = onKeyEvent,
             modifier = Modifier
                 .weight(bottomRowConfig.spaceWidth)
                 .height(bottomRowConfig.height.dp)
         )
         bottomRowConfig.rightKeys.forEach { config -> Key(
             config = config,
-            onClick = onKeyClick,
+            onKeyEvent = onKeyEvent,
             modifier = Modifier
-                .clickable { onKeyClick(config.output) }
                 .weight(config.width)
                 .height(bottomRowConfig.height.dp)
         ) }
@@ -110,7 +111,7 @@ fun BottomRow(bottomRowConfig: BottomRowConfig, onKeyClick: (String) -> Unit) {
 }
 
 @Composable
-fun Key(modifier: Modifier, config: KeyConfig, onClick: (String) -> Unit) {
+fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
     val containerColor = when(config.type) {
         KeyConfig.Type.Alphanumeric -> MaterialTheme.colorScheme.surface
         KeyConfig.Type.Modifier -> MaterialTheme.colorScheme.primaryContainer
@@ -119,7 +120,7 @@ fun Key(modifier: Modifier, config: KeyConfig, onClick: (String) -> Unit) {
     }
     val contentColor = MaterialTheme.colorScheme.onSurface
     return Button(
-        onClick = { onClick(config.output) },
+        onClick = { },
         contentPadding = PaddingValues(0.dp),
         shape = MaterialTheme.shapes.medium,
         colors = ButtonDefaults.buttonColors(
@@ -128,8 +129,8 @@ fun Key(modifier: Modifier, config: KeyConfig, onClick: (String) -> Unit) {
         ),
         modifier = modifier
             .height(config.height.dp)
-            .noRippleClickable() { onClick(config.output) }
             .padding(2.dp, 4.dp)
+            .pressAndRelease(config, onKeyEvent)
     ) {
         when(config.label) {
             is KeyLabel.Text -> Text(
@@ -144,12 +145,27 @@ fun Key(modifier: Modifier, config: KeyConfig, onClick: (String) -> Unit) {
 }
 
 @Composable
-fun KeySpacer(modifier: Modifier, onClick: () -> Unit) {
+fun KeySpacer(modifier: Modifier) {
     return Button(
-        onClick = onClick,
+        onClick = { },
         modifier = modifier
             .alpha(0f)
     ) {
+    }
+}
+
+fun Modifier.pressAndRelease(config: KeyConfig, onKeyEvent: (KeyEvent) -> Unit): Modifier {
+    return this.pointerInput(Unit) {
+        awaitEachGesture {
+            awaitFirstDown(requireUnconsumed = false)
+            // Press
+            onKeyEvent(KeyEvent(KeyEvent.Action.Press, config.output))
+            do {
+                val event = awaitPointerEvent()
+            } while(event.changes.any { it.pressed })
+            // Release
+            onKeyEvent(KeyEvent(KeyEvent.Action.Release, config.output))
+        }
     }
 }
 
