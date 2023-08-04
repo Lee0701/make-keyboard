@@ -7,24 +7,29 @@ import ee.oyatl.ime.make.keyboard.KeyLabel
 import ee.oyatl.ime.make.keyboard.KeyboardConfig
 import ee.oyatl.ime.make.keyboard.RowConfig
 import ee.oyatl.ime.make.keyboard.toRowConfig
-import ee.oyatl.ime.make.modifier.ModifierKeyState
 
 object KeyboardConfigs {
 
-    fun generate(shiftState: ModifierKeyState): KeyboardConfig {
-        val commaKey = KeyConfig(",", KeyLabel.Text(","), type = KeyConfig.Type.Modifier)
-        val periodKey = KeyConfig(".", KeyLabel.Text("."), type = KeyConfig.Type.Modifier)
+    private val commaKey = KeyConfig(",", KeyLabel.Text(","), type = KeyConfig.Type.Modifier)
+    private val periodKey = KeyConfig(".", KeyLabel.Text("."), type = KeyConfig.Type.Modifier)
 
-        val shiftKey = KeyConfig("<<SHIFT>>", KeyLabel.Icon { KeyIcons.Shift(shiftState) }, width = 1.5f, type = KeyConfig.Type.Modifier)
-        val deleteKey = KeyConfig("<<DELETE>>", KeyLabel.Icon { KeyIcons.Delete() }, width = 1.5f, type = KeyConfig.Type.Modifier)
-        val symbolKey = KeyConfig("<<SYMBOL>>", KeyLabel.Icon { KeyIcons.Symbol() }, width = 2f, type = KeyConfig.Type.Symbol)
-        val returnKey = KeyConfig("<<RETURN>>", KeyLabel.Icon { KeyIcons.Return() }, width = 2f, type = KeyConfig.Type.Return)
+    private val shiftKey = KeyConfig("<<SHIFT>>", KeyLabel.Icon { KeyIcons.Shift() }, type = KeyConfig.Type.Modifier)
+    private val deleteKey = KeyConfig("<<DELETE>>", KeyLabel.Icon { KeyIcons.Delete() }, type = KeyConfig.Type.Modifier)
+    private val symbolKey = KeyConfig("<<SYMBOL>>", KeyLabel.Icon { KeyIcons.Symbol() }, type = KeyConfig.Type.Symbol)
+    private val returnKey = KeyConfig("<<RETURN>>", KeyLabel.Icon { KeyIcons.Return() }, type = KeyConfig.Type.Return)
 
+    fun defaultQwerty(): KeyboardConfig {
+        val symbolKey = symbolKey.copy(width = 2.0f)
+        val returnKey = returnKey.copy(width = 2.0f)
+        val commaKey = commaKey
+        val periodKey = periodKey
+        val shiftKey = shiftKey.copy(width = 1.5f)
+        val deleteKey = deleteKey.copy(width = 1.5f)
         return KeyboardConfig(
             listOf(
                 "QWERTYUIOP".toRowConfig(),
                 "ASDFGHJKL".toRowConfig(0.5f, 0.5f),
-                RowConfig(shiftKey) + "ZXCVBNM".toRowConfig(1.5f) + RowConfig(deleteKey),
+                RowConfig(shiftKey) + "ZXCVBNM".toRowConfig() + RowConfig(deleteKey),
             ),
             BottomRowConfig(
                 spaceWidth = 4f,

@@ -23,16 +23,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
-import ee.oyatl.ime.make.keyboard.BottomRowConfig
-import ee.oyatl.ime.make.keyboard.KeyConfig
 import ee.oyatl.ime.make.keyboard.KeyEvent
 import ee.oyatl.ime.make.keyboard.KeyIcons
 import ee.oyatl.ime.make.keyboard.KeyLabel
 import ee.oyatl.ime.make.keyboard.Keyboard
 import ee.oyatl.ime.make.keyboard.KeyboardConfig
-import ee.oyatl.ime.make.keyboard.RowConfig
 import ee.oyatl.ime.make.keyboard.commandOutput
-import ee.oyatl.ime.make.keyboard.toRowConfig
 import ee.oyatl.ime.make.modifier.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifier.ModifierKeyHandler
 
@@ -44,7 +40,7 @@ class IMEService: InputMethodService() {
 
     private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(500)
 
-    private val initialKeyboardConfig = KeyboardConfigs.generate(shiftHandler.state)
+    private val initialKeyboardConfig = KeyboardConfigs.defaultQwerty()
 
     override fun onCreate() {
         super.onCreate()

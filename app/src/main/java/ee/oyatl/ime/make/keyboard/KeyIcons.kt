@@ -11,7 +11,7 @@ import ee.oyatl.ime.make.modifier.ModifierKeyState
 object KeyIcons {
 
     @Composable
-    fun Shift(state: ModifierKeyState) = when {
+    fun Shift(state: ModifierKeyState = ModifierKeyState()) = when {
         state.locked -> ShiftLocked()
         state.active -> ShiftPressed()
         else -> ShiftReleased()
@@ -57,8 +57,6 @@ object KeyIcons {
     @Composable
     fun OfOutput(output: String) = when(output) {
         "<<SHIFT>>" -> Shift(ModifierKeyState())
-        "<<SHIFT:PRESSED>>" -> ShiftPressed()
-        "<<SHIFT:LOCKED>>" -> ShiftLocked()
         "<<DELETE>>" -> Delete()
         "<<RETURN>>" -> Return()
         else -> Unit
