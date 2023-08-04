@@ -28,11 +28,6 @@ data class RowConfig(
             spacingRight = another.spacingRight,
         )
     }
-    operator fun plus(key: KeyConfig): RowConfig {
-        return this.copy(
-            keys = this.keys + key,
-        )
-    }
 }
 
 data class BottomRowConfig(
@@ -80,6 +75,18 @@ fun String.toRowConfig(
         keys = keys,
         spacingLeft = spacingLeft,
         spacingRight = spacingRight,
+    )
+}
+
+operator fun RowConfig.plus(key: KeyConfig): RowConfig {
+    return this.copy(
+        keys = this.keys + key,
+    )
+}
+
+operator fun KeyConfig.plus(row: RowConfig): RowConfig {
+    return row.copy(
+        keys = listOf(this) + row.keys,
     )
 }
 

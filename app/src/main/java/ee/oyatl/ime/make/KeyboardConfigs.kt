@@ -6,6 +6,7 @@ import ee.oyatl.ime.make.keyboard.KeyIcons
 import ee.oyatl.ime.make.keyboard.KeyLabel
 import ee.oyatl.ime.make.keyboard.KeyboardConfig
 import ee.oyatl.ime.make.keyboard.RowConfig
+import ee.oyatl.ime.make.keyboard.plus
 import ee.oyatl.ime.make.keyboard.toRowConfig
 
 object KeyboardConfigs {
@@ -17,7 +18,7 @@ object KeyboardConfigs {
             listOf(
                 "QWERTYUIOP".toRowConfig(),
                 "ASDFGHJKL".toRowConfig(0.5f, 0.5f),
-                RowConfig(shiftKey) + "ZXCVBNM".toRowConfig() + RowConfig(deleteKey),
+                shiftKey + "ZXCVBNM".toRowConfig() + deleteKey,
             ),
             defaultBottomRow(),
         )
