@@ -5,5 +5,5 @@ data class ModifierKeyState(
     val locked: Boolean = false,
     val pressing: Boolean = pressed,
 ) {
-    val active: Boolean = pressed || locked
+    val active: Boolean = pressing || pressed || locked
 }
