@@ -63,13 +63,12 @@ class IMEService: InputMethodService() {
 
     override fun onCreateInputView(): View {
         inputViewLifecycleOwner.attachToDecorView(window?.window?.decorView)
-        val view = ComposeView(this).apply {
+        return ComposeView(this).apply {
             setContent {
                 InputView()
             }
+            this@IMEService.inputView = this
         }
-        this.inputView = view
-        return view
     }
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
@@ -138,22 +137,10 @@ class IMEService: InputMethodService() {
     @Composable
     private fun InputView() {
         var keyboardConfig by remember { mutableStateOf(initialKeyboardConfig) }
+        keyboardConfig = updatedLabels(initialKeyboardConfig)
         val onKeyEvent: (KeyEvent) -> Unit = { event ->
             this.onKeyEvent(event)
-            val shiftPressed = shiftHandler.state.active
-            keyboardConfig = initialKeyboardConfig.map { key ->
-                val output = if(shiftPressed) key.output.uppercase() else key.output.lowercase()
-                val label = when {
-                    key.output.commandOutput == "SHIFT" && key.label is KeyLabel.Icon -> {
-                        KeyLabel.Icon { KeyIcons.Shift(shiftHandler.state) }
-                    }
-                    key.label is KeyLabel.Text && key.output.commandOutput == null -> {
-                        if(shiftPressed) key.label.uppercase() else key.label.lowercase()
-                    }
-                    else -> key.label
-                }
-                key.copy(output = output, label = label)
-            }
+            keyboardConfig = updatedLabels(initialKeyboardConfig)
         }
         val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
         val darkTheme = isSystemInDarkTheme()
@@ -178,6 +165,23 @@ class IMEService: InputMethodService() {
                 config = keyboardConfig,
                 onKeyEvent = onKeyEvent,
             )
+        }
+    }
+
+    private fun updatedLabels(originalConfig: KeyboardConfig): KeyboardConfig {
+        val shiftPressed = shiftHandler.state.active
+        return originalConfig.map { key ->
+            val output = if(shiftPressed) key.output.uppercase() else key.output.lowercase()
+            val label = when {
+                key.output.commandOutput == "SHIFT" && key.label is KeyLabel.Icon -> {
+                    KeyLabel.Icon { KeyIcons.Shift(shiftHandler.state) }
+                }
+                key.label is KeyLabel.Text && key.output.commandOutput == null -> {
+                    if(shiftPressed) key.label.uppercase() else key.label.lowercase()
+                }
+                else -> key.label
+            }
+            key.copy(output = output, label = label)
         }
     }
 
