@@ -5,6 +5,6 @@ data class KeyEvent(
     val output: String,
 ) {
     enum class Action {
-        Press, Release,
+        Press, Release, Repeat,
     }
 }

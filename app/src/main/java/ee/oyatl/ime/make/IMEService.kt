@@ -3,6 +3,8 @@ package ee.oyatl.ime.make
 import android.inputmethodservice.InputMethodService
 import android.media.AudioManager
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -35,6 +37,8 @@ import ee.oyatl.ime.make.modifier.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifier.ModifierKeyHandler
 
 class IMEService: InputMethodService() {
+    private val handler: Handler = Handler(Looper.getMainLooper())
+
     private var inputView: View? = null
     private val inputViewLifecycleOwner = InputViewLifecycleOwner()
 
@@ -107,6 +111,11 @@ class IMEService: InputMethodService() {
                     onCommandRelease(commandOutput)
                 }
             }
+            KeyEvent.Action.Repeat -> {
+                if(commandOutput != null) {
+                    onCommandRepeat(commandOutput)
+                }
+            }
         }
     }
 
@@ -115,6 +124,11 @@ class IMEService: InputMethodService() {
         when(actionId) {
             "DELETE" -> {
                 inputConnection.deleteSurroundingText(1, 0)
+                fun repeat() {
+                    this.onKeyEvent(KeyEvent(KeyEvent.Action.Repeat, "<<DELETE>>"))
+                    handler.postDelayed({ repeat() }, 50)
+                }
+                handler.postDelayed({ repeat() }, 500)
             }
             "SHIFT" -> {
                 shiftHandler.onPress()
@@ -128,8 +142,20 @@ class IMEService: InputMethodService() {
     private fun onCommandRelease(actionId: String) {
         val inputConnection = currentInputConnection ?: return
         when(actionId) {
+            "DELETE" -> {
+                handler.removeCallbacksAndMessages(null)
+            }
             "SHIFT" -> {
                 shiftHandler.onRelease()
+            }
+        }
+    }
+
+    private fun onCommandRepeat(actionId: String) {
+        val inputConnection = currentInputConnection ?: return
+        when(actionId) {
+            "DELETE" -> {
+                inputConnection.deleteSurroundingText(1, 0)
             }
         }
     }
