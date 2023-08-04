@@ -19,10 +19,6 @@ object KeyboardConfigs {
     private val returnKey = KeyConfig("<<RETURN>>", KeyLabel.Icon { KeyIcons.Return() }, type = KeyConfig.Type.Return)
 
     fun defaultQwerty(): KeyboardConfig {
-        val symbolKey = symbolKey.copy(width = 2.0f)
-        val returnKey = returnKey.copy(width = 2.0f)
-        val commaKey = commaKey
-        val periodKey = periodKey
         val shiftKey = shiftKey.copy(width = 1.5f)
         val deleteKey = deleteKey.copy(width = 1.5f)
         return KeyboardConfig(
@@ -31,11 +27,17 @@ object KeyboardConfigs {
                 "ASDFGHJKL".toRowConfig(0.5f, 0.5f),
                 RowConfig(shiftKey) + "ZXCVBNM".toRowConfig() + RowConfig(deleteKey),
             ),
-            BottomRowConfig(
-                spaceWidth = 4f,
-                leftKeys = listOf(symbolKey, commaKey),
-                rightKeys = listOf(periodKey, returnKey),
-            )
+            defaultBottomRow(),
+        )
+    }
+
+    private fun defaultBottomRow(): BottomRowConfig {
+        val symbolKey = symbolKey.copy(width = 2.0f)
+        val returnKey = returnKey.copy(width = 2.0f)
+        return BottomRowConfig(
+            spaceWidth = 4f,
+            leftKeys = listOf(symbolKey, commaKey),
+            rightKeys = listOf(periodKey, returnKey),
         )
     }
 
