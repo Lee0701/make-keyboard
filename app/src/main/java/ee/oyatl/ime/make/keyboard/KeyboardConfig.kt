@@ -7,7 +7,12 @@ data class KeyboardConfig(
     val bottomRow: BottomRowConfig,
 ) {
     fun map(transform: (KeyConfig) -> KeyConfig): KeyboardConfig = this.copy(
-        rows = this.rows.map { row -> row.copy(keys = row.keys.map(transform)) })
+        rows = this.rows.map { row -> row.copy(keys = row.keys.map(transform)) },
+        bottomRow = this.bottomRow.run { this.copy(
+            leftKeys = this.leftKeys.map(transform),
+            rightKeys = this.rightKeys.map(transform),
+        ) },
+    )
 }
 
 data class RowConfig(
