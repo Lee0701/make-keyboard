@@ -131,8 +131,8 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
         ),
         modifier = modifier
             .height(config.height.dp)
-            .padding(2.dp, 4.dp)
             .pressAndRelease(config, onKeyEvent)
+            .padding(2.dp, 4.dp)
     ) {
         when(config.label) {
             is KeyLabel.Text -> Text(
