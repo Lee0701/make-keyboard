@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import ee.oyatl.ime.make.keyboard.BottomRowConfig
 import ee.oyatl.ime.make.keyboard.KeyConfig
+import ee.oyatl.ime.make.keyboard.KeyEvent
 import ee.oyatl.ime.make.keyboard.KeyIcons
 import ee.oyatl.ime.make.keyboard.KeyLabel
 import ee.oyatl.ime.make.keyboard.Keyboard
@@ -85,38 +86,62 @@ class IMEService: InputMethodService() {
         inputViewLifecycleOwner.onDestroy()
     }
 
-    private fun onKeyClick(output: String) {
+    private fun onKeyEvent(event: KeyEvent) {
         val inputConnection = currentInputConnection ?: return
-        if(output.isCommandOutput) {
-            val actionId = output.uppercase().substring(2, output.length - 2)
-            when(actionId) {
-                "DELETE" -> {
-                    inputConnection.deleteSurroundingText(1, 0)
+        val shiftPressed = shiftHandler.state.active
+        when(event.action) {
+            KeyEvent.Action.Press -> {
+                if(event.output.isCommandOutput) {
+                    onCommandPress(event.output)
+                } else {
+                    val output =
+                        if(shiftPressed) event.output.uppercase()
+                        else event.output.lowercase()
+                    inputConnection.commitText(output, 1)
+                    shiftHandler.autoUnlock()
+                    shiftHandler.onInput()
                 }
-                "SHIFT" -> {
-                    shiftHandler.onDown()
-                    shiftHandler.onUp()
-                }
-                "RETURN" -> {
-                    sendDefaultEditorAction(true)
+                performKeyFeedback(event.output)
+            }
+            KeyEvent.Action.Release -> {
+                if(event.output.isCommandOutput) {
+                    onCommandRelease(event.output)
                 }
             }
-        } else {
-            inputConnection.commitText(output, 1)
-            shiftHandler.autoUnlock()
-            shiftHandler.onInput()
         }
-        if(output.isNotEmpty()) {
-            performHapticFeedback(output)
-            performSoundFeedback(output)
+    }
+
+    private fun onCommandPress(output: String) {
+        val inputConnection = currentInputConnection ?: return
+        val actionId = output.uppercase().substring(2, output.length - 2)
+        when(actionId) {
+            "DELETE" -> {
+                inputConnection.deleteSurroundingText(1, 0)
+            }
+            "SHIFT" -> {
+                shiftHandler.onPress()
+            }
+            "RETURN" -> {
+                sendDefaultEditorAction(true)
+            }
+        }
+    }
+
+    private fun onCommandRelease(output: String) {
+        val inputConnection = currentInputConnection ?: return
+        val actionId = output.uppercase().substring(2, output.length - 2)
+        when(actionId) {
+            "SHIFT" -> {
+                shiftHandler.onRelease()
+            }
         }
     }
 
     @Composable
     private fun InputView() {
         var keyboardConfig by remember { mutableStateOf(initialKeyboardConfig) }
-        val onKeyClick: (String) -> Unit = {
-            this.onKeyClick(it)
+        val onKeyEvent: (KeyEvent) -> Unit = { event ->
+            this.onKeyEvent(event)
             val shiftPressed = shiftHandler.state.active
             keyboardConfig = initialKeyboardConfig.map { key ->
                 val output = if(shiftPressed) key.output.uppercase() else key.output.lowercase()
@@ -132,7 +157,6 @@ class IMEService: InputMethodService() {
                 key.copy(output = output, label = label)
             }
         }
-        onKeyClick("")
         val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
         val darkTheme = isSystemInDarkTheme()
         val colorScheme = when {
@@ -154,8 +178,15 @@ class IMEService: InputMethodService() {
         ) {
             Keyboard(
                 config = keyboardConfig,
-                onKeyClick = { onKeyClick(it) },
+                onKeyEvent = onKeyEvent,
             )
+        }
+    }
+
+    private fun performKeyFeedback(output: String) {
+        if(output.isNotEmpty()) {
+            performHapticFeedback(output)
+            performSoundFeedback(output)
         }
     }
 

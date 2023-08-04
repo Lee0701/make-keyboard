@@ -8,7 +8,7 @@ class DefaultShiftKeyHandler(
     private var clickedTime: Long = 0L
     private var inputEvent: Boolean = false
 
-    override fun onDown() {
+    override fun onPress() {
         val lastState = state
         val newState = lastState.copy(
             pressing = true
@@ -17,7 +17,7 @@ class DefaultShiftKeyHandler(
         inputEvent = false
     }
 
-    override fun onUp() {
+    override fun onRelease() {
         val lastState = state
         val currentState = lastState.copy(pressing = false)
 
