@@ -44,21 +44,7 @@ class IMEService: InputMethodService() {
 
     private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(500)
 
-    private val shiftKey = KeyConfig("<<SHIFT>>", KeyLabel.Icon { KeyIcons.Shift(shiftHandler.state) }, width = 1.5f, type = KeyConfig.Type.Modifier)
-    private val deleteKey = KeyConfig("<<DELETE>>", KeyLabel.Icon { KeyIcons.Delete() }, width = 1.5f, type = KeyConfig.Type.Modifier)
-    private val returnKey = KeyConfig("<<RETURN>>", KeyLabel.Icon { KeyIcons.Return()}, width = 2f, type = KeyConfig.Type.Modifier)
-    private val initialKeyboardConfig: KeyboardConfig = KeyboardConfig(
-        listOf(
-            "QWERTYUIOP".toRowConfig(),
-            "ASDFGHJKL".toRowConfig(0.5f, 0.5f),
-            RowConfig(shiftKey) + "ZXCVBNM".toRowConfig(1.5f) + RowConfig(deleteKey),
-        ),
-        BottomRowConfig(
-            spaceWidth = 8f,
-            leftKeys = listOf(),
-            rightKeys = listOf(returnKey),
-        )
-    )
+    private val initialKeyboardConfig = KeyboardConfigs.generate(shiftHandler.state)
 
     override fun onCreate() {
         super.onCreate()

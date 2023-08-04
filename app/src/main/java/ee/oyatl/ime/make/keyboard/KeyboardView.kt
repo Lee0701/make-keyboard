@@ -114,8 +114,10 @@ fun BottomRow(bottomRowConfig: BottomRowConfig, onKeyEvent: (KeyEvent) -> Unit) 
 fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
     val containerColor = when(config.type) {
         KeyConfig.Type.Alphanumeric -> MaterialTheme.colorScheme.surface
-        KeyConfig.Type.Modifier -> MaterialTheme.colorScheme.primaryContainer
         KeyConfig.Type.Space -> MaterialTheme.colorScheme.surface
+        KeyConfig.Type.Modifier -> MaterialTheme.colorScheme.secondaryContainer
+        KeyConfig.Type.Symbol -> MaterialTheme.colorScheme.primaryContainer
+        KeyConfig.Type.Return -> MaterialTheme.colorScheme.primary
         else -> Color.Transparent
     }
     val contentColor = MaterialTheme.colorScheme.onSurface
