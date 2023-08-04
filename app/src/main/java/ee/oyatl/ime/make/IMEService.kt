@@ -195,10 +195,10 @@ class IMEService: InputMethodService() {
 
     private fun performSoundFeedback(output: String) {
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        val fx = when(output) {
-            "<<DELETE>>" -> AudioManager.FX_KEYPRESS_DELETE
-            "<<RETURN>>" -> AudioManager.FX_KEYPRESS_RETURN
-            "<<SPACE>>" -> AudioManager.FX_KEYPRESS_SPACEBAR
+        val fx = when(output.commandOutput) {
+            "DELETE" -> AudioManager.FX_KEYPRESS_DELETE
+            "RETURN" -> AudioManager.FX_KEYPRESS_RETURN
+            "SPACE" -> AudioManager.FX_KEYPRESS_SPACEBAR
             else -> AudioManager.FX_KEYPRESS_STANDARD
         }
         audioManager.playSoundEffect(fx, 1f)
