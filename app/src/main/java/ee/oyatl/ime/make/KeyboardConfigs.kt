@@ -10,14 +10,6 @@ import ee.oyatl.ime.make.keyboard.toRowConfig
 
 object KeyboardConfigs {
 
-    private val commaKey = KeyConfig(",", KeyLabel.Text(","), type = KeyConfig.Type.Modifier)
-    private val periodKey = KeyConfig(".", KeyLabel.Text("."), type = KeyConfig.Type.Modifier)
-
-    private val shiftKey = KeyConfig("<<SHIFT>>", KeyLabel.Icon { KeyIcons.Shift() }, type = KeyConfig.Type.Modifier)
-    private val deleteKey = KeyConfig("<<DELETE>>", KeyLabel.Icon { KeyIcons.Delete() }, type = KeyConfig.Type.Modifier)
-    private val symbolKey = KeyConfig("<<SYMBOL>>", KeyLabel.Icon { KeyIcons.Symbol() }, type = KeyConfig.Type.Symbol)
-    private val returnKey = KeyConfig("<<RETURN>>", KeyLabel.Icon { KeyIcons.Return() }, type = KeyConfig.Type.Return)
-
     fun defaultQwerty(): KeyboardConfig {
         val shiftKey = shiftKey.copy(width = 1.5f)
         val deleteKey = deleteKey.copy(width = 1.5f)
@@ -31,6 +23,27 @@ object KeyboardConfigs {
         )
     }
 
+    fun defaultDvorak(): KeyboardConfig {
+        val shiftKey = shiftKey.copy(width = 1.5f)
+        val deleteKey = deleteKey.copy(width = 1.5f)
+        return KeyboardConfig(
+            listOf(
+                "'.,PYFGCRL".toRowConfig(),
+                "AOEUIDHTNS".toRowConfig(),
+                RowConfig(shiftKey) + "QJKXBMZ".toRowConfig() + RowConfig(deleteKey),
+            ),
+            dvorakBottomRow(),
+        )
+    }
+
+    private val commaKey = KeyConfig(",", type = KeyConfig.Type.Modifier)
+    private val periodKey = KeyConfig(".", type = KeyConfig.Type.Modifier)
+
+    private val shiftKey = KeyConfig("<<SHIFT>>", KeyLabel.Icon { KeyIcons.Shift() }, type = KeyConfig.Type.Modifier)
+    private val deleteKey = KeyConfig("<<DELETE>>", KeyLabel.Icon { KeyIcons.Delete() }, type = KeyConfig.Type.Modifier)
+    private val symbolKey = KeyConfig("<<SYMBOL>>", KeyLabel.Icon { KeyIcons.Symbol() }, type = KeyConfig.Type.Symbol)
+    private val returnKey = KeyConfig("<<RETURN>>", KeyLabel.Icon { KeyIcons.Return() }, type = KeyConfig.Type.Return)
+
     private fun defaultBottomRow(): BottomRowConfig {
         val symbolKey = symbolKey.copy(width = 2.0f)
         val returnKey = returnKey.copy(width = 2.0f)
@@ -38,6 +51,18 @@ object KeyboardConfigs {
             spaceWidth = 4f,
             leftKeys = listOf(symbolKey, commaKey),
             rightKeys = listOf(periodKey, returnKey),
+        )
+    }
+
+    private fun dvorakBottomRow(): BottomRowConfig {
+        val symbolKey = symbolKey.copy(width = 2.0f)
+        val returnKey = returnKey.copy(width = 2.0f)
+        val wKey = KeyConfig("W", type = KeyConfig.Type.Modifier)
+        val vKey = KeyConfig("V", type = KeyConfig.Type.Modifier)
+        return BottomRowConfig(
+            spaceWidth = 4f,
+            leftKeys = listOf(symbolKey, wKey),
+            rightKeys = listOf(vKey, returnKey),
         )
     }
 

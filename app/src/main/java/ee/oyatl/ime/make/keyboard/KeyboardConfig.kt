@@ -39,7 +39,7 @@ data class BottomRowConfig(
 
 data class KeyConfig(
     val output: String,
-    val label: KeyLabel,
+    val label: KeyLabel = KeyLabel.Text(output),
     val height: Int = 55,
     val width: Float = 1f,
     val type: Type = Type.Alphanumeric,

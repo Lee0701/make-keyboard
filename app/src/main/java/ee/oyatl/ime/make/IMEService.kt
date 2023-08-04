@@ -40,7 +40,7 @@ class IMEService: InputMethodService() {
 
     private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(500)
 
-    private val initialKeyboardConfig = KeyboardConfigs.defaultQwerty()
+    private val initialKeyboardConfig = KeyboardConfigs.defaultDvorak()
 
     override fun onCreate() {
         super.onCreate()
@@ -145,10 +145,10 @@ class IMEService: InputMethodService() {
     @Composable
     private fun InputView() {
         var keyboardConfig by remember { mutableStateOf(initialKeyboardConfig) }
-        keyboardConfig = updatedLabels(initialKeyboardConfig)
+        keyboardConfig = labelsUpdated(initialKeyboardConfig)
         val onKeyEvent: (KeyEvent) -> Unit = { event ->
             this.onKeyEvent(event)
-            keyboardConfig = updatedLabels(initialKeyboardConfig)
+            keyboardConfig = labelsUpdated(initialKeyboardConfig)
         }
         val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
         val darkTheme = isSystemInDarkTheme()
@@ -176,7 +176,7 @@ class IMEService: InputMethodService() {
         }
     }
 
-    private fun updatedLabels(originalConfig: KeyboardConfig): KeyboardConfig {
+    private fun labelsUpdated(originalConfig: KeyboardConfig): KeyboardConfig {
         val shiftPressed = shiftHandler.state.active
         return originalConfig.map { key ->
             val output = if(shiftPressed) key.output.uppercase() else key.output.lowercase()
