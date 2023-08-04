@@ -35,7 +35,7 @@ fun Keyboard(
     Card(
         shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            containerColor = MaterialTheme.colorScheme.inverseOnSurface,
         ),
     ) {
         Column(
@@ -120,7 +120,10 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
         KeyConfig.Type.Return -> MaterialTheme.colorScheme.primary
         else -> Color.Transparent
     }
-    val contentColor = MaterialTheme.colorScheme.onSurface
+    val contentColor = when(config.type) {
+        KeyConfig.Type.Return -> MaterialTheme.colorScheme.onPrimary
+        else -> MaterialTheme.colorScheme.onSurface
+    }
     return Button(
         onClick = { },
         contentPadding = PaddingValues(0.dp),

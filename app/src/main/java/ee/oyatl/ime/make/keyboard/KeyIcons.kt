@@ -51,7 +51,6 @@ object KeyIcons {
     fun Return() = Icon(
         painter = painterResource(id = R.drawable.keyic_return),
         contentDescription = stringResource(id = R.string.key_desc_return),
-        tint = Color.White,
     )
 
     @Composable
