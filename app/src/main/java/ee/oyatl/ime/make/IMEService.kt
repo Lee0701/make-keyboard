@@ -30,7 +30,6 @@ import ee.oyatl.ime.make.keyboard.Keyboard
 import ee.oyatl.ime.make.keyboard.KeyboardConfig
 import ee.oyatl.ime.make.keyboard.RowConfig
 import ee.oyatl.ime.make.keyboard.commandOutput
-import ee.oyatl.ime.make.keyboard.isCommandOutput
 import ee.oyatl.ime.make.keyboard.toRowConfig
 import ee.oyatl.ime.make.modifier.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifier.ModifierKeyHandler
@@ -89,10 +88,11 @@ class IMEService: InputMethodService() {
     private fun onKeyEvent(event: KeyEvent) {
         val inputConnection = currentInputConnection ?: return
         val shiftPressed = shiftHandler.state.active
+        val commandOutput = event.output.commandOutput
         when(event.action) {
             KeyEvent.Action.Press -> {
-                if(event.output.isCommandOutput) {
-                    onCommandPress(event.output)
+                if(commandOutput != null) {
+                    onCommandPress(commandOutput)
                 } else {
                     val output =
                         if(shiftPressed) event.output.uppercase()
@@ -104,16 +104,15 @@ class IMEService: InputMethodService() {
                 performKeyFeedback(event.output)
             }
             KeyEvent.Action.Release -> {
-                if(event.output.isCommandOutput) {
-                    onCommandRelease(event.output)
+                if(commandOutput != null) {
+                    onCommandRelease(commandOutput)
                 }
             }
         }
     }
 
-    private fun onCommandPress(output: String) {
+    private fun onCommandPress(actionId: String) {
         val inputConnection = currentInputConnection ?: return
-        val actionId = output.uppercase().substring(2, output.length - 2)
         when(actionId) {
             "DELETE" -> {
                 inputConnection.deleteSurroundingText(1, 0)
@@ -127,9 +126,8 @@ class IMEService: InputMethodService() {
         }
     }
 
-    private fun onCommandRelease(output: String) {
+    private fun onCommandRelease(actionId: String) {
         val inputConnection = currentInputConnection ?: return
-        val actionId = output.uppercase().substring(2, output.length - 2)
         when(actionId) {
             "SHIFT" -> {
                 shiftHandler.onRelease()

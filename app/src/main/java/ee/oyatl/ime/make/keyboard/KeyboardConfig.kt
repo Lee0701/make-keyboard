@@ -77,7 +77,6 @@ fun String.toRowConfig(
 }
 
 typealias KeyOutput = String
-val KeyOutput.isCommandOutput: Boolean get() = commandOutput != null
 val KeyOutput.commandOutput: String? get() =
     if(this.startsWith("<<") && this.endsWith(">>"))
         this.uppercase().substring(2, this.length - 2)
