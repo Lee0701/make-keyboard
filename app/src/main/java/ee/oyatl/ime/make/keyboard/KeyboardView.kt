@@ -5,9 +5,12 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -15,15 +18,22 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 
 @Composable
 fun Keyboard(
@@ -104,11 +114,17 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
         KeyConfig.Type.Modifier -> MaterialTheme.colorScheme.secondaryContainer
         KeyConfig.Type.Symbol -> MaterialTheme.colorScheme.primaryContainer
         KeyConfig.Type.Return -> MaterialTheme.colorScheme.primary
-        else -> Color.Transparent
     }
     val contentColor = when(config.type) {
         KeyConfig.Type.Return -> MaterialTheme.colorScheme.onPrimary
         else -> MaterialTheme.colorScheme.onSurface
+    }
+    var popupControl by remember { mutableStateOf(false) }
+    var popupParams by remember(config) {
+        mutableStateOf(PopupParams())
+    }
+    if(popupControl) {
+        PreviewPopup(popupParams)
     }
     Button(
         onClick = { },
@@ -119,7 +135,23 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
             contentColor = contentColor,
         ),
         modifier = modifier
-            .pressAndRelease(config, onKeyEvent)
+            .onGloballyPositioned {
+                val rect = it.boundsInParent()
+                val width = rect.width * 1.5f
+                val height = rect.height * 2f
+                val x = rect.center.x
+                val y = rect.bottom
+                val position = x to y
+                val size = width to height
+                popupParams = PopupParams(position, size, config)
+            }
+            .pressAndRelease(config) {
+                onKeyEvent(it)
+                if(it.output is KeyOutput.Text) {
+                    if(it.action == KeyEvent.Action.Press) popupControl = true
+                    else if(it.action == KeyEvent.Action.Release) popupControl = false
+                }
+            }
             .height(config.height.dp)
             .padding(2.dp, 4.dp)
     ) {
@@ -144,6 +176,48 @@ fun KeySpacer(modifier: Modifier) {
     ) {
     }
 }
+
+@Composable
+fun PreviewPopup(params: PopupParams) {
+    val output = params.config.output
+    if(output !is KeyOutput.Text) return
+    val (x, y) = params.position
+    val (width, height) = params.size
+    with(LocalDensity.current) {
+        Popup(
+            offset = IntOffset((x - width/2).toInt(), (y - height).toInt()),
+            alignment = Alignment.TopStart,
+        ) {
+            Card(
+                modifier = Modifier
+                    .size(width.toDp(), height.toDp())
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(4.dp)
+                ) {
+                    Text(
+                        text = output.text,
+                        fontSize = 32.sp,
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                    Spacer(modifier = Modifier
+                        .weight(1f)
+                    )
+                }
+            }
+        }
+    }
+}
+
+data class PopupParams(
+    val position: Pair<Float, Float> = 0f to 0f,
+    val size: Pair<Float, Float> = 0f to 0f,
+    val config: KeyConfig = KeyConfig(KeyOutput.None),
+)
 
 fun Modifier.pressAndRelease(config: KeyConfig, onKeyEvent: (KeyEvent) -> Unit): Modifier {
     return this.pointerInput(Unit) {
