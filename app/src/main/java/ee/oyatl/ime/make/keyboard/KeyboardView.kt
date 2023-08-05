@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,19 +59,21 @@ fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, on
         modifier = Modifier
             .fillMaxWidth()
     ) {
+        val modifier = Modifier
         if(spacingLeft > 0) KeySpacer(
-            modifier = Modifier
+            modifier = modifier
                 .weight(spacingLeft)
                 .pressAndRelease(configs.firstOrNull() ?: return@Row, onKeyEvent)
         )
         configs.forEach { config -> Key(
             config = config,
             onKeyEvent = onKeyEvent,
-            modifier = Modifier
+            modifier = modifier
                 .weight(config.width)
+                .pressAndRelease(config, onKeyEvent)
         ) }
         if(spacingRight > 0) KeySpacer(
-            modifier = Modifier
+            modifier = modifier
                 .weight(spacingRight)
                 .pressAndRelease(configs.lastOrNull() ?: return@Row, onKeyEvent)
         )
@@ -82,24 +86,14 @@ fun BottomRow(bottomRowConfig: BottomRowConfig, onKeyEvent: (KeyEvent) -> Unit) 
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        bottomRowConfig.leftKeys.forEach { config -> Key(
+        val modifier = Modifier
+        val spaceKey = KeyConfig(" ", KeyLabel.None, width = bottomRowConfig.spaceWidth)
+        val keys = bottomRowConfig.leftKeys + listOf(spaceKey) + bottomRowConfig.rightKeys
+        keys.forEach { config -> Key(
             config = config,
             onKeyEvent = onKeyEvent,
-            modifier = Modifier
-                .weight(config.width)
-                .height(bottomRowConfig.height.dp)
-        ) }
-        Key(
-            config = KeyConfig(" ", KeyLabel.None, width = 4f),
-            onKeyEvent = onKeyEvent,
-            modifier = Modifier
-                .weight(bottomRowConfig.spaceWidth)
-                .height(bottomRowConfig.height.dp)
-        )
-        bottomRowConfig.rightKeys.forEach { config -> Key(
-            config = config,
-            onKeyEvent = onKeyEvent,
-            modifier = Modifier
+            modifier = modifier
+                .pressAndRelease(config, onKeyEvent)
                 .weight(config.width)
                 .height(bottomRowConfig.height.dp)
         ) }
@@ -129,7 +123,6 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
             contentColor = contentColor,
         ),
         modifier = modifier
-            .pressAndRelease(config, onKeyEvent)
             .height(config.height.dp)
             .padding(2.dp, 4.dp)
     ) {
