@@ -84,7 +84,7 @@ fun BottomRow(bottomRowConfig: BottomRowConfig, onKeyEvent: (KeyEvent) -> Unit) 
             .fillMaxWidth()
     ) {
         val modifier = Modifier
-        val spaceKey = KeyConfig(" ", KeyLabel.None, width = bottomRowConfig.spaceWidth)
+        val spaceKey = KeyConfig(KeyOutput.Special.Space, KeyLabel.None, width = bottomRowConfig.spaceWidth)
         val keys = bottomRowConfig.leftKeys + listOf(spaceKey) + bottomRowConfig.rightKeys
         keys.forEach { config -> Key(
             config = config,
