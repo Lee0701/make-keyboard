@@ -1,9 +1,7 @@
 package ee.oyatl.ime.make.keyboard
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -17,9 +15,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -57,7 +53,7 @@ fun Keyboard(
 
 @Composable
 fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, onKeyEvent: (KeyEvent) -> Unit) {
-    return Row(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -82,7 +78,7 @@ fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, on
 
 @Composable
 fun BottomRow(bottomRowConfig: BottomRowConfig, onKeyEvent: (KeyEvent) -> Unit) {
-    return Row(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -120,8 +116,11 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
         KeyConfig.Type.Return -> MaterialTheme.colorScheme.primary
         else -> Color.Transparent
     }
-    val contentColor = MaterialTheme.colorScheme.onSurface
-    return Button(
+    val contentColor = when(config.type) {
+        KeyConfig.Type.Return -> MaterialTheme.colorScheme.onPrimary
+        else -> MaterialTheme.colorScheme.onSurface
+    }
+    Button(
         onClick = { },
         contentPadding = PaddingValues(0.dp),
         shape = MaterialTheme.shapes.medium,
@@ -130,8 +129,8 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
             contentColor = contentColor,
         ),
         modifier = modifier
-            .height(config.height.dp)
             .pressAndRelease(config, onKeyEvent)
+            .height(config.height.dp)
             .padding(2.dp, 4.dp)
     ) {
         when(config.label) {
@@ -148,7 +147,7 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
 
 @Composable
 fun KeySpacer(modifier: Modifier) {
-    return Button(
+    Button(
         onClick = { },
         modifier = modifier
             .alpha(0f)
@@ -168,12 +167,5 @@ fun Modifier.pressAndRelease(config: KeyConfig, onKeyEvent: (KeyEvent) -> Unit):
             // Release
             onKeyEvent(KeyEvent(KeyEvent.Action.Release, config.output))
         }
-    }
-}
-
-fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
-    clickable(indication = null,
-        interactionSource = remember { MutableInteractionSource() }) {
-        onClick()
     }
 }
