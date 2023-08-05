@@ -22,11 +22,13 @@ fun KeyPreviewPopup(visible: Boolean, params: PopupParams) {
     if(output !is KeyOutput.Text) return
     val (x, y) = params.position
     val (width, height) = params.size
-    Popup(
-        offset = IntOffset((x - width/2).toInt(), (y - height).toInt()),
-        alignment = Alignment.TopStart,
-    ) {
-        KeyPreviewPopupContent(params, output.text)
+    if(visible) {
+        Popup(
+            offset = IntOffset((x - width/2).toInt(), (y - height).toInt()),
+            alignment = Alignment.TopStart,
+        ) {
+            KeyPreviewPopupContent(params, output.text)
+        }
     }
 }
 

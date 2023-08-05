@@ -22,6 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInParent
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -123,6 +125,16 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
             contentColor = contentColor,
         ),
         modifier = modifier
+            .onGloballyPositioned {
+                val rect = it.boundsInParent()
+                val width = rect.width * 1.4f
+                val height = rect.height * 2f
+                val x = rect.center.x
+                val y = rect.bottom
+                val position = x to y
+                val size = width to height
+                popupParams = PopupParams(position, size, config)
+            }
             .pressAndRelease(config) {
                 onKeyEvent(it)
                 if(it.output is KeyOutput.Text) {
