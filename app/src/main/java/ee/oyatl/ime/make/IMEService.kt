@@ -38,7 +38,8 @@ class IMEService: InputMethodService() {
     private val inputViewLifecycleOwner = InputViewLifecycleOwner()
 
     private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(500)
-    private val initialKeyboardConfig = KeyboardConfigs.generate(ModifierKeyState())
+
+    private val initialKeyboardConfig = KeyboardConfigs.defaultDvorak()
 
     override fun onCreate() {
         super.onCreate()

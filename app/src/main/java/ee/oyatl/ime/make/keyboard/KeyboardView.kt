@@ -31,7 +31,7 @@ fun Keyboard(
     Card(
         shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            containerColor = MaterialTheme.colorScheme.inverseOnSurface,
         ),
     ) {
         Column(

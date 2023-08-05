@@ -16,7 +16,12 @@ data class KeyboardConfig(
     }
 
     fun map(transform: (KeyConfig) -> KeyConfig): KeyboardConfig = this.copy(
-        rows = this.rows.map { row -> row.copy(keys = row.keys.map(transform)) })
+        rows = this.rows.map { row -> row.copy(keys = row.keys.map(transform)) },
+        bottomRow = this.bottomRow.run { this.copy(
+            leftKeys = this.leftKeys.map(transform),
+            rightKeys = this.rightKeys.map(transform),
+        ) },
+    )
 }
 
 data class RowConfig(
@@ -32,11 +37,6 @@ data class RowConfig(
             spacingRight = another.spacingRight,
         )
     }
-    operator fun plus(key: KeyConfig): RowConfig {
-        return this.copy(
-            keys = this.keys + key,
-        )
-    }
 }
 
 data class BottomRowConfig(
@@ -48,7 +48,7 @@ data class BottomRowConfig(
 
 data class KeyConfig(
     val output: String,
-    val label: KeyLabel,
+    val label: KeyLabel = KeyLabel.Text(output),
     val height: Int = 55,
     val width: Float = 1f,
     val type: Type = Type.Alphanumeric,
@@ -84,6 +84,18 @@ fun String.toRowConfig(
         keys = keys,
         spacingLeft = spacingLeft,
         spacingRight = spacingRight,
+    )
+}
+
+operator fun RowConfig.plus(key: KeyConfig): RowConfig {
+    return this.copy(
+        keys = this.keys + key,
+    )
+}
+
+operator fun KeyConfig.plus(row: RowConfig): RowConfig {
+    return row.copy(
+        keys = listOf(this) + row.keys,
     )
 }
 
