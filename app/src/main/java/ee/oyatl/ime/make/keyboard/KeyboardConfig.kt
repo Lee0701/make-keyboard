@@ -47,8 +47,10 @@ data class BottomRowConfig(
 )
 
 data class KeyConfig(
-    val output: String,
-    val label: KeyLabel = KeyLabel.Text(output),
+    val output: KeyOutput,
+    val label: KeyLabel =
+        if(output is KeyOutput.Text) KeyLabel.Text(output.text)
+        else KeyLabel.None,
     val height: Int = 55,
     val width: Float = 1f,
     val type: Type = Type.Alphanumeric,
@@ -69,9 +71,30 @@ sealed interface KeyLabel {
     ): KeyLabel
     data class Text(
         val text: String,
-    ): KeyLabel {
-        fun uppercase(): Text = Text(text.uppercase())
-        fun lowercase(): Text = Text(text.lowercase())
+    ): KeyLabel
+}
+
+sealed interface KeyOutput {
+    object None: KeyOutput
+    data class Text(
+        val text: String,
+    ): KeyOutput
+    sealed interface Special: KeyOutput {
+        data class Delete(
+            val beforeLength: Int,
+            val afterLength: Int,
+        ): Special
+        data class Shift(
+            val side: Side = Side.Any,
+        ): Special {
+            enum class Side {
+                Left, Right, Any, Both
+            }
+        }
+        object Space: Special
+        object Return: Special
+        object Symbol: Special
+        object Language: Special
     }
 }
 
@@ -79,7 +102,7 @@ fun String.toRowConfig(
     spacingLeft: Float = 0f,
     spacingRight: Float = 0f,
 ): RowConfig {
-    val keys = this.map { KeyConfig(it.toString(), KeyLabel.Text(it.toString())) }
+    val keys = this.map { KeyConfig(KeyOutput.Text(it.toString()), KeyLabel.Text(it.toString())) }
     return RowConfig(
         keys = keys,
         spacingLeft = spacingLeft,
@@ -98,9 +121,3 @@ operator fun KeyConfig.plus(row: RowConfig): RowConfig {
         keys = listOf(this) + row.keys,
     )
 }
-
-typealias KeyOutput = String
-val KeyOutput.commandOutput: String? get() =
-    if(this.startsWith("<<") && this.endsWith(">>"))
-        this.uppercase().substring(2, this.length - 2)
-    else null

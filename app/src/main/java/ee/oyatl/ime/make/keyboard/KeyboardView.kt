@@ -90,7 +90,7 @@ fun BottomRow(bottomRowConfig: BottomRowConfig, onKeyEvent: (KeyEvent) -> Unit) 
                 .height(bottomRowConfig.height.dp)
         ) }
         Key(
-            config = KeyConfig(" ", KeyLabel.None, width = 4f),
+            config = KeyConfig(KeyOutput.Special.Space, KeyLabel.None, width = 4f),
             onKeyEvent = onKeyEvent,
             modifier = Modifier
                 .weight(bottomRowConfig.spaceWidth)
