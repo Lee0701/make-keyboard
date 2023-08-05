@@ -63,19 +63,16 @@ fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, on
         if(spacingLeft > 0) KeySpacer(
             modifier = modifier
                 .weight(spacingLeft)
-                .pressAndRelease(configs.firstOrNull() ?: return@Row, onKeyEvent)
         )
         configs.forEach { config -> Key(
             config = config,
             onKeyEvent = onKeyEvent,
             modifier = modifier
                 .weight(config.width)
-                .pressAndRelease(config, onKeyEvent)
         ) }
         if(spacingRight > 0) KeySpacer(
             modifier = modifier
                 .weight(spacingRight)
-                .pressAndRelease(configs.lastOrNull() ?: return@Row, onKeyEvent)
         )
     }
 }
@@ -93,7 +90,6 @@ fun BottomRow(bottomRowConfig: BottomRowConfig, onKeyEvent: (KeyEvent) -> Unit) 
             config = config,
             onKeyEvent = onKeyEvent,
             modifier = modifier
-                .pressAndRelease(config, onKeyEvent)
                 .weight(config.width)
                 .height(bottomRowConfig.height.dp)
         ) }
@@ -123,6 +119,7 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
             contentColor = contentColor,
         ),
         modifier = modifier
+            .pressAndRelease(config, onKeyEvent)
             .height(config.height.dp)
             .padding(2.dp, 4.dp)
     ) {
