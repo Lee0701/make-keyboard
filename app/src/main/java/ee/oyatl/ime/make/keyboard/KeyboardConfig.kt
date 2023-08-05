@@ -6,6 +6,15 @@ data class KeyboardConfig(
     val rows: List<RowConfig>,
     val bottomRow: BottomRowConfig,
 ) {
+    fun mapTextLabels(transform: (String) -> String): KeyboardConfig = this.mapLabels {
+        if(it is KeyLabel.Text) KeyLabel.Text(transform(it.text))
+        else it
+    }
+
+    fun mapLabels(transform: (KeyLabel) -> KeyLabel): KeyboardConfig = this.map {
+        it.copy(label = transform(it.label))
+    }
+
     fun map(transform: (KeyConfig) -> KeyConfig): KeyboardConfig = this.copy(
         rows = this.rows.map { row -> row.copy(keys = row.keys.map(transform)) },
         bottomRow = this.bottomRow.run { this.copy(
