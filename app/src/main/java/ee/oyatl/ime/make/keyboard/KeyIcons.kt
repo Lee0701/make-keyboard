@@ -52,12 +52,4 @@ object KeyIcons {
         painter = painterResource(id = R.drawable.keyic_return),
         contentDescription = stringResource(id = R.string.key_desc_return),
     )
-
-    @Composable
-    fun OfOutput(output: String) = when(output) {
-        "<<SHIFT>>" -> Shift(ModifierKeyState())
-        "<<DELETE>>" -> Delete()
-        "<<RETURN>>" -> Return()
-        else -> Unit
-    }
 }
