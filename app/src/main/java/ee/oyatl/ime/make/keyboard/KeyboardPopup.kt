@@ -14,6 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -32,8 +36,12 @@ fun KeyPreviewPopup(visible: Boolean, params: PopupParams) {
         offset = IntOffset((x - width/2).toInt(), (y - height).toInt()),
         alignment = Alignment.TopStart,
     ) {
-        val enter = slideInVertically(initialOffsetY = { it / 16 }, animationSpec = tween(100)) + fadeIn(initialAlpha = 0f)
-        val exit = slideOutVertically(targetOffsetY = { it / 16 }, animationSpec = tween(100)) + fadeOut(targetAlpha = 0f)
+        val enter =
+            slideInVertically(initialOffsetY = { it / 16 }, animationSpec = tween(80)) +
+                    fadeIn(initialAlpha = 0f, animationSpec = tween(40))
+        val exit =
+            slideOutVertically(targetOffsetY = { it / 16 }, animationSpec = tween(80)) +
+                    fadeOut(targetAlpha = 0f, animationSpec = tween(40))
         AnimatedVisibility(
             visible = visible,
             enter = enter,

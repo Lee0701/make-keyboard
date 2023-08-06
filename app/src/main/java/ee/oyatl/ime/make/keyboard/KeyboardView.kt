@@ -1,5 +1,7 @@
 package ee.oyatl.ime.make.keyboard
 
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+private val handler = Handler(Looper.getMainLooper())
 
 @Composable
 fun Keyboard(
@@ -139,7 +143,9 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
                 onKeyEvent(it)
                 if(it.output is KeyOutput.Text) {
                     if(it.action == KeyEvent.Action.Press) popupControl = true
-                    else if(it.action == KeyEvent.Action.Release) popupControl = false
+                    else if(it.action == KeyEvent.Action.Release) handler.postDelayed({
+                        popupControl = false
+                    }, 160)
                 }
             }
             .height(config.height.dp)
