@@ -119,7 +119,7 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
     var popupParams by remember(config) {
         mutableStateOf(PopupParams())
     }
-    KeyPreviewPopup(popupControl, popupParams)
+    KeyPreviewPopup(popupControl, popupParams, onKeyEvent)
     Button(
         onClick = { },
         contentPadding = PaddingValues(0.dp),

@@ -14,10 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -27,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 
 @Composable
-fun KeyPreviewPopup(visible: Boolean, params: PopupParams) {
+fun KeyPreviewPopup(visible: Boolean, params: PopupParams, onKeyEvent: (KeyEvent) -> Unit) {
     val output = params.config.output
     if(output !is KeyOutput.Text) return
     val (x, y) = params.position
@@ -46,6 +42,10 @@ fun KeyPreviewPopup(visible: Boolean, params: PopupParams) {
             visible = visible,
             enter = enter,
             exit = exit,
+            modifier = Modifier
+                // Pass through touch events on this popup to the keyboard view below,
+                // so that touches while the popup is being shown are not ignored.
+                .pressAndRelease(params.config, onKeyEvent)
         ) {
             KeyPreviewPopupContent(params, output.text)
         }
