@@ -24,6 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import ee.oyatl.ime.make.keyboard.KeyEvent
+import ee.oyatl.ime.make.keyboard.KeyIcons
+import ee.oyatl.ime.make.keyboard.KeyLabel
 import ee.oyatl.ime.make.keyboard.KeyOutput
 import ee.oyatl.ime.make.keyboard.Keyboard
 import ee.oyatl.ime.make.keyboard.KeyboardConfig
@@ -173,6 +175,12 @@ class IMEService: InputMethodService() {
                 config = keyboardConfig.mapTextLabels {
                     if(shiftState.active) it.uppercase()
                     else it.lowercase()
+                }.map { key ->
+                      if(key.output is KeyOutput.Special.Shift) {
+                          key.copy(label = KeyLabel.Icon { KeyIcons.Shift(shiftState) })
+                      } else {
+                          key
+                      }
                 },
                 onKeyEvent = {
                     this.onKeyEvent(it)
