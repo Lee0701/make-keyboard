@@ -46,12 +46,14 @@ fun Keyboard(
         Column(
             Modifier.padding(8.dp)
         ) {
-            config.rows.forEach { row -> KeyRow(
-                configs = row.keys,
-                spacingLeft = row.spacingLeft,
-                spacingRight = row.spacingRight,
-                onKeyEvent = onKeyEvent,
-            ) }
+            config.rows.forEach { row ->
+                KeyRow(
+                    keyConfigs = row.keys,
+                    spacingLeft = row.spacingLeft,
+                    spacingRight = row.spacingRight,
+                    onKeyEvent = onKeyEvent,
+                )
+            }
             BottomRow(
                 bottomRowConfig = config.bottomRow,
                 onKeyEvent = onKeyEvent,
@@ -61,7 +63,7 @@ fun Keyboard(
 }
 
 @Composable
-fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, onKeyEvent: (KeyEvent) -> Unit) {
+fun KeyRow(keyConfigs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, onKeyEvent: (KeyEvent) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,8 +73,8 @@ fun KeyRow(configs: List<KeyConfig>, spacingLeft: Float, spacingRight: Float, on
             modifier = modifier
                 .weight(spacingLeft)
         )
-        configs.forEach { config -> Key(
-            config = config,
+        keyConfigs.forEach { config -> Key(
+            keyConfig = config,
             onKeyEvent = onKeyEvent,
             modifier = modifier
                 .weight(config.width)
@@ -93,7 +95,7 @@ fun BottomRow(bottomRowConfig: BottomRowConfig, onKeyEvent: (KeyEvent) -> Unit) 
         val spaceKey = KeyConfig(KeyOutput.Special.Space, KeyLabel.None, width = bottomRowConfig.spaceWidth)
         val keys = bottomRowConfig.leftKeys + listOf(spaceKey) + bottomRowConfig.rightKeys
         keys.forEach { config -> Key(
-            config = config,
+            keyConfig = config,
             onKeyEvent = onKeyEvent,
             modifier = modifier
                 .weight(config.width)
@@ -103,22 +105,21 @@ fun BottomRow(bottomRowConfig: BottomRowConfig, onKeyEvent: (KeyEvent) -> Unit) 
 }
 
 @Composable
-fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
-    val containerColor = when(config.type) {
+fun Key(keyConfig: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
+    val keyConfigState by remember(keyConfig) { mutableStateOf(keyConfig) }
+    val containerColor = when(keyConfigState.type) {
         KeyConfig.Type.Alphanumeric -> MaterialTheme.colorScheme.surface
         KeyConfig.Type.Space -> MaterialTheme.colorScheme.surface
         KeyConfig.Type.Modifier -> MaterialTheme.colorScheme.secondaryContainer
         KeyConfig.Type.Symbol -> MaterialTheme.colorScheme.primaryContainer
         KeyConfig.Type.Return -> MaterialTheme.colorScheme.primary
     }
-    val contentColor = when(config.type) {
+    val contentColor = when(keyConfigState.type) {
         KeyConfig.Type.Return -> MaterialTheme.colorScheme.onPrimary
         else -> MaterialTheme.colorScheme.onSurface
     }
     var popupControl by remember { mutableStateOf(false) }
-    var popupParams by remember(config) {
-        mutableStateOf(PopupParams())
-    }
+    var popupParams by remember { mutableStateOf(PopupParams()) }
     KeyPreviewPopup(popupControl, popupParams, onKeyEvent)
     Button(
         onClick = { },
@@ -137,27 +138,27 @@ fun Key(config: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit) {
                 val y = rect.bottom
                 val position = x to y
                 val size = width to height
-                popupParams = PopupParams(position, size, config)
+                popupParams = PopupParams(position, size, keyConfigState)
             }
-            .pressAndRelease(config) {
-                onKeyEvent(it)
-                if(it.output is KeyOutput.Text) {
-                    if(it.action == KeyEvent.Action.Press) popupControl = true
-                    else if(it.action == KeyEvent.Action.Release) handler.postDelayed({
+            .pressAndRelease(keyConfigState) { event ->
+                onKeyEvent(event)
+                if(event.output is KeyOutput.Text) {
+                    if(event.action == KeyEvent.Action.Press) popupControl = true
+                    else if(event.action == KeyEvent.Action.Release) handler.postDelayed({
                         popupControl = false
                     }, 160)
                 }
             }
-            .height(config.height.dp)
+            .height(keyConfigState.height.dp)
             .padding(2.dp, 4.dp)
     ) {
-        when(config.label) {
+        when(val label = keyConfigState.label) {
             is KeyLabel.Text -> Text(
-                text = config.label.text,
+                text = label.text,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Normal,
             )
-            is KeyLabel.Icon -> config.label.icon()
+            is KeyLabel.Icon -> label.icon()
             else -> Unit
         }
     }
