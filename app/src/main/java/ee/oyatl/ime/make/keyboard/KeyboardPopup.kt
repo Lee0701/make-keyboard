@@ -14,8 +14,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.boundsInParent
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -23,30 +32,29 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 
 @Composable
-fun KeyPreviewPopup(visible: Boolean, params: PopupParams, onKeyEvent: (KeyEvent) -> Unit) {
+fun KeyPreviewPopup(visible: Boolean, params: PopupParams) {
     val output = params.config.output
     if(output !is KeyOutput.Text) return
     val (x, y) = params.position
     val (width, height) = params.size
 
+    var bounds by remember { mutableStateOf(params.position) }
+
     Popup(
         offset = IntOffset((x - width/2).toInt(), (y - height).toInt()),
         alignment = Alignment.TopStart,
     ) {
-        val enter =
+        val enterAnim =
             slideInVertically(initialOffsetY = { it / 16 }, animationSpec = tween(80)) +
                     fadeIn(initialAlpha = 0f, animationSpec = tween(40))
-        val exit =
+        val exitAnim =
             slideOutVertically(targetOffsetY = { it / 16 }, animationSpec = tween(80)) +
                     fadeOut(targetAlpha = 0f, animationSpec = tween(40))
         AnimatedVisibility(
             visible = visible,
-            enter = enter,
-            exit = exit,
+            enter = enterAnim,
+            exit = exitAnim,
             modifier = Modifier
-                // Pass through touch events on this popup to the keyboard view below,
-                // so that touches while the popup is being shown are not ignored.
-                .pressAndRelease(params.config, onKeyEvent)
         ) {
             KeyPreviewPopupContent(params, output.text)
         }
@@ -60,6 +68,9 @@ fun KeyPreviewPopupContent(params: PopupParams, text: String) {
         Card(
             modifier = Modifier
                 .size(width.toDp(), height.toDp())
+                .onGloballyPositioned {
+                    val position = it.positionInParent()
+                }
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -82,7 +93,7 @@ fun KeyPreviewPopupContent(params: PopupParams, text: String) {
 }
 
 data class PopupParams(
-    val position: Pair<Float, Float> = 0f to 0f,
-    val size: Pair<Float, Float> = 0f to 0f,
+    val position: Offset = Offset.Unspecified,
+    val size: Size = Size.Unspecified,
     val config: KeyConfig = KeyConfig(KeyOutput.None),
 )

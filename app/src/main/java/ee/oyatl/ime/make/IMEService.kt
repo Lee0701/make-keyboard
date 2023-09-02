@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import ee.oyatl.ime.make.keyboard.KeyEvent
@@ -107,7 +108,7 @@ class IMEService: InputMethodService() {
             is KeyOutput.Special.Delete -> {
                 inputConnection.deleteSurroundingText(1, 0)
                 fun repeat() {
-                    this.onKeyEvent(KeyEvent(KeyEvent.Action.Repeat, output))
+                    this.onKeyEvent(KeyEvent(KeyEvent.Action.Repeat, output, Offset.Unspecified))
                     handler.postDelayed({ repeat() }, 50)
                 }
                 handler.postDelayed({ repeat() }, 500)

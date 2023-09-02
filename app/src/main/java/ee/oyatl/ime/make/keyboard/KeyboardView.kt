@@ -23,12 +23,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ee.oyatl.ime.make.modifier.ModifierKeyState
 
 private val handler = Handler(Looper.getMainLooper())
 
@@ -118,9 +121,11 @@ fun Key(keyConfig: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit
         KeyConfig.Type.Return -> MaterialTheme.colorScheme.onPrimary
         else -> MaterialTheme.colorScheme.onSurface
     }
+
     var popupControl by remember { mutableStateOf(false) }
     var popupParams by remember { mutableStateOf(PopupParams()) }
-    KeyPreviewPopup(popupControl, popupParams, onKeyEvent)
+    KeyPreviewPopup(popupControl, popupParams)
+
     Button(
         onClick = { },
         contentPadding = PaddingValues(0.dp),
@@ -136,8 +141,8 @@ fun Key(keyConfig: KeyConfig, modifier: Modifier, onKeyEvent: (KeyEvent) -> Unit
                 val height = rect.height * 2f
                 val x = rect.center.x
                 val y = rect.bottom
-                val position = x to y
-                val size = width to height
+                val position = Offset(x, y)
+                val size = Size(width, height)
                 popupParams = PopupParams(position, size, keyConfigState)
             }
             .pressAndRelease(keyConfigState) { event ->
@@ -179,12 +184,16 @@ fun Modifier.pressAndRelease(config: KeyConfig, onKeyEvent: (KeyEvent) -> Unit):
         awaitEachGesture {
             awaitFirstDown(requireUnconsumed = false)
             // Press
-            onKeyEvent(KeyEvent(KeyEvent.Action.Press, config.output))
+            currentEvent.changes.forEach {
+                onKeyEvent(KeyEvent(KeyEvent.Action.Press, config.output, it.position))
+            }
             do {
                 val event = awaitPointerEvent()
             } while(event.changes.any { it.pressed })
             // Release
-            onKeyEvent(KeyEvent(KeyEvent.Action.Release, config.output))
+            currentEvent.changes.forEach {
+                onKeyEvent(KeyEvent(KeyEvent.Action.Release, config.output, it.position))
+            }
         }
     }
 }
