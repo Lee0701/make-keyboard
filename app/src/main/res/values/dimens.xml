@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="key_bg_radius">6dp</dimen>
+    <dimen name="key_bg_radius">12dp</dimen>
     <dimen name="key_text_size">24sp</dimen>
-    <dimen name="key_margin_vertical">6dp</dimen>
+    <dimen name="key_margin_vertical">4dp</dimen>
     <dimen name="key_margin_horizontal">2dp</dimen>
 
     <dimen name="key_popup_radius">12dp</dimen>
