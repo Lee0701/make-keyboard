@@ -34,7 +34,6 @@ import ee.oyatl.ime.make.view.keyboard.Themes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 class IMEService: InputMethodService(), KeyboardListener {
     private val handler: Handler = Handler(Looper.getMainLooper())
@@ -45,12 +44,9 @@ class IMEService: InputMethodService(), KeyboardListener {
     private var mainView: View? = null
     private var inputView: View? = null
     private var keyboardView: KeyboardView? = null
-    private var candidatesViewManager: CandidatesViewManager? = null
 
     private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(500)
 
-    private val composing: MutableList<String> = mutableListOf()
-    private var candidates: List<String> = listOf()
     private var modifierState: ModifierKeyStateSet = ModifierKeyStateSet()
     private var shiftClickedTime: Long = 0
     private var inputRecorded: Boolean = false
@@ -80,13 +76,13 @@ class IMEService: InputMethodService(), KeyboardListener {
         }
         val candidatesViewManager = CandidatesViewManager(object: CandidatesViewManager.Listener {
             override fun onCandidateClick(position: Int) {
-                commitCandidate(candidates[position])
                 updateInput()
             }
 
             val mainViewHeight by lazy { mainView.height }
             val inputViewHeight by lazy { inputView.height }
-            val candidatesViewHeight by lazy { candidatesViewManager?.getView()?.height ?: 0 }
+//            val candidatesViewHeight by lazy { candidatesViewManager?.getView()?.height ?: 0 }
+            val candidatesViewHeight by lazy { 0 }
             fun getAnimator(inputView: View, candidatesView: View): ValueAnimator {
                 return ValueAnimator.ofInt(0, inputViewHeight).apply {
                     this.duration = 200
@@ -122,7 +118,6 @@ class IMEService: InputMethodService(), KeyboardListener {
         mainView.addView(candidatesViewManager.initView(this))
         mainView.addView(inputView)
 
-        this.candidatesViewManager = candidatesViewManager
         this.keyboardView = keyboardView
         this.inputView = inputView
         this.mainView = mainView
@@ -162,13 +157,6 @@ class IMEService: InputMethodService(), KeyboardListener {
             }
         }
         autoUnshift()
-        this.job?.cancel()
-        this.job = ioScope.launch {
-            this@IMEService.candidates = convert()
-            mainScope.launch {
-                updateInput()
-            }
-        }
     }
 
     override fun onKeyLongClick(code: Int, output: String?) {
@@ -195,8 +183,6 @@ class IMEService: InputMethodService(), KeyboardListener {
 
     private fun updateInput() {
         val inputConnection = currentInputConnection ?: return
-        candidatesViewManager?.showCandidates(candidates)
-        inputConnection.setComposingText(candidates.firstOrNull().orEmpty(), 1)
         updateLabelsAndIcons()
         updateMoreKeys()
     }
@@ -273,8 +259,6 @@ class IMEService: InputMethodService(), KeyboardListener {
     private fun resetInput() {
         val inputConnection = currentInputConnection ?: return
         inputConnection.finishComposingText()
-        candidates = emptyList()
-        composing.clear()
         updateInput()
     }
 
@@ -286,33 +270,20 @@ class IMEService: InputMethodService(), KeyboardListener {
 
     private fun commitCandidate(text: String) {
         val inputConnection = currentInputConnection ?: return
-        candidates = candidates.drop(1)
-        composing.clear()
         inputConnection.commitText(text, 1)
     }
 
     private fun onDeleteKey(): Boolean {
         val inputConnection = currentInputConnection ?: return false
-        if(composing.isNotEmpty()) {
-            composing.removeLast()
-        } else {
-            resetInput()
-            inputConnection.deleteSurroundingText(1, 0)
-        }
+        resetInput()
+        inputConnection.deleteSurroundingText(1, 0)
         return true
     }
 
     private fun onSpace(): Boolean {
         val inputConnection = currentInputConnection ?: return false
-        if(composing.isNotEmpty()) {
-            candidates = emptyList()
-            composing.clear()
-            inputConnection.finishComposingText()
-            resetInput()
-        } else {
-            resetInput()
-            inputConnection.commitText(" ", 1)
-        }
+        resetInput()
+        inputConnection.commitText(" ", 1)
         return true
     }
 
@@ -331,7 +302,8 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun onKeyText(text: String) {
-        composing += text
+        val inputConnection = currentInputConnection ?: return
+        inputConnection.commitText(text, 1)
     }
 
     private fun onKeyEvent(event: KeyEvent) {
