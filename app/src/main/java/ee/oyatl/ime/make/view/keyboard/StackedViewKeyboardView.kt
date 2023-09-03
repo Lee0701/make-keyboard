@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.google.android.material.color.DynamicColors
+import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.databinding.KeyboardBinding
 import ee.oyatl.ime.make.databinding.KeyboardKeyBinding
 import ee.oyatl.ime.make.databinding.KeyboardRowBinding
@@ -45,7 +46,6 @@ class StackedViewKeyboardView(
         )
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun initKeyboardView(keyboard: KeyboardLayout, theme: Theme, listener: KeyboardListener): KeyboardViewWrapper {
         val wrappedContext = DynamicColors.wrapContextIfAvailable(context, theme.keyboardBackground)
 
@@ -54,6 +54,12 @@ class StackedViewKeyboardView(
             root.layoutParams = LayoutParams(
                 LayoutParams.MATCH_PARENT, keyboardHeight
             )
+
+            val sidePadding = context.resources.getDimensionPixelSize(R.dimen.keyboard_padding_side)
+            val topPadding = context.resources.getDimensionPixelSize(R.dimen.keyboard_padding_top)
+            val bottomPadding = context.resources.getDimensionPixelSize(R.dimen.keyboard_padding_bottom)
+            root.setPadding(sidePadding, topPadding, sidePadding, bottomPadding)
+
             keyboard.rows.forEach { row ->
                 val rowViewBinding = initRowView(row, theme)
                 rowViewWrappers += rowViewBinding
