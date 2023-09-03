@@ -1,4 +1,6 @@
-package ee.oyatl.ime.make.keyboard
+package ee.oyatl.ime.make.view
+
+import ee.oyatl.ime.make.model.KeyOutput
 
 data class KeyEvent(
     val action: Action,

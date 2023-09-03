@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="key_bg_radius">10dp</dimen>
+    <dimen name="key_text_size">28sp</dimen>
+    <dimen name="key_margin_vertical">5dp</dimen>
+    <dimen name="key_margin_horizontal">5dp</dimen>
+
+    <dimen name="key_popup_text_size">32sp</dimen>
+    <dimen name="key_popup_preview_width">80dp</dimen>
+    <dimen name="key_popup_preview_height">90dp</dimen>
+    <dimen name="key_popup_morekeys_width">50dp</dimen>
+    <dimen name="key_popup_morekeys_height">60dp</dimen>
+
+    <dimen name="pref_appearance_keyboard_height_default">65dp</dimen>
+    <dimen name="pref_layout_row_gap">16dp</dimen>
+</resources>

@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">make keyboard</string>
 
+    <string name="close">Close</string>
+    <string name="expand">Expand</string>
+
     <string name="key_desc_shift">Shift Key</string>
     <string name="key_desc_shift_locked">Locked Shift Key</string>
     <string name="key_desc_delete">Delete Key</string>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="background" format="reference" />
+    <attr name="backgroundTint" format="color" />
+
+    <declare-styleable name="Keyboard">
+        <attr name="background" />
+        <attr name="backgroundTint" />
+    </declare-styleable>
+
+    <declare-styleable name="Keyboard.Key">
+        <attr name="marginHorizontal" format="dimension" />
+        <attr name="marginVertical" format="dimension" />
+        <attr name="background" />
+        <attr name="backgroundTint" />
+        <attr name="iconTint" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="Keyboard.KeyPopup">
+        <attr name="background" />
+        <attr name="backgroundTint" />
+    </declare-styleable>
+
+    <declare-styleable name="Preference">
+        <attr name="android:textSize" format="dimension" />
+        <attr name="android:textColor" format="color" />
+        <attr name="titleTextAppearance" format="reference" />
+        <attr name="summaryTextAppearance" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="SliderPreference">
+        <attr name="valueFrom" format="float" />
+        <attr name="stepSize" format="float" />
+        <attr name="valueTo" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="EnterKeyboardSettingsPreference">
+        <attr name="fileName" format="string" />
+        <attr name="template" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="TouchInterceptingFrameLayout">
+        <attr name="intercept" format="boolean" />
+    </declare-styleable>
+</resources>

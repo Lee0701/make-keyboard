@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="key_bg_radius">6dp</dimen>
+    <dimen name="key_text_size">24sp</dimen>
+    <dimen name="key_margin_vertical">6dp</dimen>
+    <dimen name="key_margin_horizontal">2dp</dimen>
+
+    <dimen name="key_popup_radius">12dp</dimen>
+    <dimen name="key_popup_elevation">4dp</dimen>
+    <dimen name="key_popup_text_size">28sp</dimen>
+    <dimen name="key_popup_preview_width">60dp</dimen>
+    <dimen name="key_popup_preview_height">70dp</dimen>
+    <dimen name="key_popup_morekeys_width">40dp</dimen>
+    <dimen name="key_popup_morekeys_height">48dp</dimen>
+
+    <dimen name="candidates_view_height">48dp</dimen>
+    <dimen name="candidates_text_size">22sp</dimen>
+
+    <dimen name="pref_appearance_keyboard_height_default">50dp</dimen>
+    <dimen name="pref_layout_row_gap">8dp</dimen>
+
+    <dimen name="icon_button_width">48dp</dimen>
+    <dimen name="icon_button_height">48dp</dimen>
+
+    <dimen name="margin_smaller">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_fab_space">64dp</dimen>
+
+</resources>
