@@ -115,7 +115,7 @@ class IMEService: InputMethodService(), KeyboardListener {
         )
         inputView.addView(keyboardView)
 
-        mainView.addView(candidatesViewManager.initView(this))
+//        mainView.addView(candidatesViewManager.initView(this))
         mainView.addView(inputView)
 
         this.keyboardView = keyboardView
