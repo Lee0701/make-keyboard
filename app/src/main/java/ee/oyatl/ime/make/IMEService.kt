@@ -37,9 +37,9 @@ import kotlinx.coroutines.Job
 
 class IMEService: InputMethodService(), KeyboardListener {
     private val handler: Handler = Handler(Looper.getMainLooper())
-    private val ioScope: CoroutineScope = CoroutineScope(Job() + Dispatchers.IO)
-    private val mainScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
-    var job: Job? = null
+//    private val ioScope: CoroutineScope = CoroutineScope(Job() + Dispatchers.IO)
+//    private val mainScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+//    var job: Job? = null
 
     private var mainView: View? = null
     private var inputView: View? = null
@@ -56,9 +56,9 @@ class IMEService: InputMethodService(), KeyboardListener {
     private val convertTable: CodeConvertTable = Layouts.CONVERT_QWERTY
     private val moreKeysTable: MoreKeysTable = MoreKeysTables.MORE_KEYS_TABLE_M_R
 
-    val mainViewHeight by lazy { mainView?.height ?: 0 }
-    val inputViewHeight by lazy { inputView?.height ?: 0 }
-    val candidatesViewHeight by lazy { candidatesView?.getView()?.height ?: 0 }
+    private val mainViewHeight by lazy { mainView?.height ?: 0 }
+    private val inputViewHeight by lazy { inputView?.height ?: 0 }
+    private val candidatesViewHeight by lazy { candidatesView?.getView()?.height ?: 0 }
 
     override fun onCreate() {
         super.onCreate()

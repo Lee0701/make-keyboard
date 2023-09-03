@@ -2,11 +2,12 @@ package ee.oyatl.ime.make.modifier
 
 class DefaultShiftKeyHandler(
     private val doubleTapGap: Int,
+    private val autoUnlock: Boolean = true,
 ): ModifierKeyHandler {
 
     override var state: ModifierKeyState = ModifierKeyState()
     private var clickedTime: Long = 0L
-    private var inputEvent: Boolean = false
+    private var inputEventExists: Boolean = false
 
     override fun onPress() {
         val lastState = state
@@ -14,7 +15,7 @@ class DefaultShiftKeyHandler(
             pressing = true
         )
         state = newState
-        inputEvent = false
+        inputEventExists = false
     }
 
     override fun onRelease() {
@@ -33,7 +34,7 @@ class DefaultShiftKeyHandler(
                 } else {
                     ModifierKeyState()
                 }
-            } else if(inputEvent) {
+            } else if(inputEventExists) {
                 ModifierKeyState()
             } else {
                 ModifierKeyState(pressed = true)
@@ -41,16 +42,17 @@ class DefaultShiftKeyHandler(
 
         state = newState.copy(pressing = false)
         clickedTime = currentTime
-        inputEvent = false
+        inputEventExists = false
     }
 
     override fun onInput() {
         autoUnlock()
-        inputEvent = true
+        inputEventExists = true
     }
 
     private fun autoUnlock() {
-        if(state.pressing && inputEvent) return
+        if(!autoUnlock) return
+        if(state.pressing && inputEventExists) return
         val lastState = state
         if(!lastState.locked && !lastState.pressing) state = ModifierKeyState()
     }

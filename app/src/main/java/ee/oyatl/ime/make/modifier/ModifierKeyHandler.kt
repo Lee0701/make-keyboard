@@ -1,7 +1,7 @@
 package ee.oyatl.ime.make.modifier
 
 interface ModifierKeyHandler {
-    var state: ModifierKeyState
+    val state: ModifierKeyState
     fun onPress()
     fun onRelease()
     fun onInput()
