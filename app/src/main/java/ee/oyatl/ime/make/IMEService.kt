@@ -48,11 +48,9 @@ class IMEService: InputMethodService(), KeyboardListener {
 
     private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(500)
 
-    private var modifierState: ModifierKeyStateSet = ModifierKeyStateSet()
-    private var shiftClickedTime: Long = 0
-    private var inputRecorded: Boolean = false
-
-    private val doubleTapGap = 500
+    private val modifierState: ModifierKeyStateSet get() = ModifierKeyStateSet(
+        shift = shiftHandler.state,
+    )
 
     private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
     private val convertTable: CodeConvertTable = Layouts.CONVERT_QWERTY
@@ -157,10 +155,10 @@ class IMEService: InputMethodService(), KeyboardListener {
                 sendDownUpKeyEvents(code)
             } else if(isPrintingKey) {
                 onKeyText(char.toChar().toString())
-                inputRecorded = true
             }
+            shiftHandler.onInput()
+            updateInput()
         }
-        autoUnshift()
     }
 
     override fun onKeyLongClick(code: Int, output: String?) {
@@ -168,7 +166,8 @@ class IMEService: InputMethodService(), KeyboardListener {
 
     override fun onKeyDown(code: Int, output: String?) {
         when(code) {
-            android.view.KeyEvent.KEYCODE_SHIFT_LEFT, android.view.KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftKeyDown()
+            android.view.KeyEvent.KEYCODE_SHIFT_LEFT,
+            android.view.KeyEvent.KEYCODE_SHIFT_RIGHT -> shiftHandler.onPress()
             else -> return
         }
         updateInput()
@@ -176,7 +175,8 @@ class IMEService: InputMethodService(), KeyboardListener {
 
     override fun onKeyUp(code: Int, output: String?) {
         when(code) {
-            android.view.KeyEvent.KEYCODE_SHIFT_LEFT, android.view.KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftKeyUp()
+            android.view.KeyEvent.KEYCODE_SHIFT_LEFT,
+            android.view.KeyEvent.KEYCODE_SHIFT_RIGHT -> shiftHandler.onRelease()
             else -> return
         }
         updateInput()
@@ -186,54 +186,6 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun updateInput() {
-        updateLabelsAndIcons()
-        updateMoreKeys()
-    }
-
-    private fun onShiftKeyDown() {
-        val lastState = modifierState
-        val lastShiftState = lastState.shift
-        val currentShiftState = lastShiftState.copy()
-        val newShiftState = currentShiftState.copy()
-
-        modifierState = lastState.copy(shift = newShiftState.copy(pressing = true))
-        inputRecorded = false
-    }
-
-    private fun onShiftKeyUp() {
-        val lastState = modifierState
-        val lastShiftState = lastState.shift
-        val currentShiftState = lastShiftState.copy(pressing = false)
-
-        val currentTime = System.currentTimeMillis()
-        val timeDiff = currentTime - shiftClickedTime
-
-        val newShiftState = if(currentShiftState.locked) {
-            ModifierKeyState()
-        } else if(currentShiftState.pressed) {
-            if(timeDiff < doubleTapGap) {
-                ModifierKeyState(pressed = true, locked = true)
-            } else {
-                ModifierKeyState()
-            }
-        } else if(inputRecorded) {
-            ModifierKeyState()
-        } else {
-            ModifierKeyState(pressed = true)
-        }
-
-        modifierState = lastState.copy(shift = newShiftState.copy(pressing = false))
-        shiftClickedTime = currentTime
-        inputRecorded = false
-    }
-
-    private fun autoUnshift() {
-        if(modifierState.shift.pressing && inputRecorded) return
-        val lastState = modifierState
-        val lastshift = lastState.shift
-        if(!lastshift.locked && !lastshift.pressing) {
-            modifierState = lastState.copy(shift = ModifierKeyState())
-        }
         updateLabelsAndIcons()
         updateMoreKeys()
     }
@@ -311,22 +263,13 @@ class IMEService: InputMethodService(), KeyboardListener {
         inputConnection.commitText(text, 1)
     }
 
-    private fun onKeyEvent(event: KeyEvent) {
-        val inputConnection = currentInputConnection ?: return
+    private fun onSpecialKey(event: KeyEvent) {
         when(event.action) {
             KeyEvent.Action.Press -> {
-                when(event.output) {
-                    is KeyOutput.Special -> onSpecialKeyPress(event.output)
-                    is KeyOutput.Text -> {
-                        val output = if(shiftHandler.state.active) event.output.text.uppercase()
-                        else event.output.text.lowercase()
-                        inputConnection.commitText(output, 1)
-                        shiftHandler.autoUnlock()
-                        shiftHandler.onInput()
-                    }
-                    else -> Unit
+                if(event.output is KeyOutput.Special) {
+                    onSpecialKeyPress(event.output)
+                    performKeyFeedback(event.output)
                 }
-                performKeyFeedback(event.output)
             }
             KeyEvent.Action.Release -> {
                 if(event.output is KeyOutput.Special) {
@@ -339,6 +282,7 @@ class IMEService: InputMethodService(), KeyboardListener {
                 }
             }
         }
+        updateInput()
     }
 
     private fun onSpecialKeyPress(output: KeyOutput.Special) {
@@ -347,7 +291,7 @@ class IMEService: InputMethodService(), KeyboardListener {
             is KeyOutput.Special.Delete -> {
                 inputConnection.deleteSurroundingText(1, 0)
                 fun repeat() {
-                    this.onKeyEvent(KeyEvent(KeyEvent.Action.Repeat, output))
+                    this.onSpecialKey(KeyEvent(KeyEvent.Action.Repeat, output))
                     handler.postDelayed({ repeat() }, 50)
                 }
                 handler.postDelayed({ repeat() }, 500)

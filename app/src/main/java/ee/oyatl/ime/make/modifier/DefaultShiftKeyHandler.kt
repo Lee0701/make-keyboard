@@ -45,12 +45,14 @@ class DefaultShiftKeyHandler(
     }
 
     override fun onInput() {
+        autoUnlock()
         inputEvent = true
     }
 
-    override fun autoUnlock() {
+    private fun autoUnlock() {
         if(state.pressing && inputEvent) return
         val lastState = state
         if(!lastState.locked && !lastState.pressing) state = ModifierKeyState()
     }
+
 }

@@ -5,5 +5,4 @@ interface ModifierKeyHandler {
     fun onPress()
     fun onRelease()
     fun onInput()
-    fun autoUnlock()
 }
