@@ -18,17 +18,18 @@ import androidx.core.content.ContextCompat
 import ee.oyatl.ime.make.data.Layouts
 import ee.oyatl.ime.make.data.MoreKeysTables
 import ee.oyatl.ime.make.data.SoftKeyboardLayouts
+import ee.oyatl.ime.make.data.SymbolTables
 import ee.oyatl.ime.make.model.KeyOutput
 import ee.oyatl.ime.make.modifier.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifier.ModifierKeyHandler
 import ee.oyatl.ime.make.modifier.ModifierKeyStateSet
+import ee.oyatl.ime.make.preset.KeyboardPreset
 import ee.oyatl.ime.make.table.CodeConvertTable
 import ee.oyatl.ime.make.table.MoreKeysTable
 import ee.oyatl.ime.make.view.KeyEvent
 import ee.oyatl.ime.make.view.candidates.CandidatesViewManager
 import ee.oyatl.ime.make.view.keyboard.FlickDirection
 import ee.oyatl.ime.make.view.keyboard.KeyboardListener
-import ee.oyatl.ime.make.view.keyboard.KeyboardView
 import ee.oyatl.ime.make.view.keyboard.StackedViewKeyboardView
 import ee.oyatl.ime.make.view.keyboard.Themes
 
@@ -37,26 +38,6 @@ class IMEService: InputMethodService(), KeyboardListener {
 //    private val ioScope: CoroutineScope = CoroutineScope(Job() + Dispatchers.IO)
 //    private val mainScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
 //    var job: Job? = null
-
-    private val rowHeight by lazy {
-        TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, 55f, resources.displayMetrics,).toInt()
-    }
-
-    private val keyboardViews: List<KeyboardView> by lazy { listOf(
-        StackedViewKeyboardView(
-            context = this,
-            attrs = null,
-            listener = this,
-            keyboard = SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE_SEMICOLON,
-            theme = Themes.Dynamic,
-            popupOffsetY = candidatesViewHeight,
-            unifyHeight = true,
-            rowHeight = rowHeight,
-        )
-    ) }
-
-    private val currentKeyboardView: KeyboardView get() = keyboardViews[0]
 
     private var mainView: ViewGroup? = null
     private var inputView: ViewGroup? = null
@@ -72,8 +53,9 @@ class IMEService: InputMethodService(), KeyboardListener {
     )
 
     private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
-    private val convertTable: CodeConvertTable = Layouts.CONVERT_QWERTY
-    private val moreKeysTable: MoreKeysTable = MoreKeysTables.MORE_KEYS_TABLE_M_R
+    private val keyboardPresets: MutableList<KeyboardPreset> = mutableListOf()
+    private var currentKeyboardPresetIndex = 0
+    private val currentKeyboardPreset: KeyboardPreset? get() = keyboardPresets.getOrNull(currentKeyboardPresetIndex)
 
     private val mainViewHeight by lazy { mainView?.height ?: 0 }
     private val inputViewHeight by lazy { inputView?.height ?: 0 }
@@ -81,6 +63,41 @@ class IMEService: InputMethodService(), KeyboardListener {
 
     override fun onCreate() {
         super.onCreate()
+        val rowHeight = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, 55f, resources.displayMetrics,).toInt()
+
+        run {
+            val keyboard = StackedViewKeyboardView(
+                context = this,
+                attrs = null,
+                listener = this,
+                keyboard = SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE,
+                theme = Themes.Dynamic,
+                popupOffsetY = candidatesViewHeight,
+                unifyHeight = true,
+                rowHeight = rowHeight,
+            )
+            val convertTable: CodeConvertTable = Layouts.CONVERT_QWERTY
+            val moreKeysTable: MoreKeysTable = MoreKeysTables.MORE_KEYS_TABLE_M_R
+            val preset = KeyboardPreset(keyboard, convertTable, moreKeysTable)
+            keyboardPresets += preset
+        }
+        run {
+            val keyboard = StackedViewKeyboardView(
+                context = this,
+                attrs = null,
+                listener = this,
+                keyboard = SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE_SEMICOLON,
+                theme = Themes.Dynamic,
+                popupOffsetY = candidatesViewHeight,
+                unifyHeight = true,
+                rowHeight = rowHeight,
+            )
+            val convertTable: CodeConvertTable = SymbolTables.LAYOUT_SYMBOLS_G
+            val moreKeysTable: MoreKeysTable = SymbolTables.MORE_KEYS_TABLE_SYMBOLS_G
+            val preset = KeyboardPreset(keyboard, convertTable, moreKeysTable)
+            keyboardPresets += preset
+        }
     }
 
     override fun onCreateInputView(): View {
@@ -118,7 +135,7 @@ class IMEService: InputMethodService(), KeyboardListener {
         })
 
         inputView.removeAllViews()
-        inputView.addView(currentKeyboardView)
+        inputView.addView(currentKeyboardPreset?.keyboardView)
 
 //        mainView.addView(candidatesViewManager.initView(this))
         mainView.addView(inputView)
@@ -195,7 +212,7 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun updateLabelsAndIcons() {
-        val keyboardView = currentKeyboardView
+        val keyboardView = currentKeyboardPreset?.keyboardView ?: return
         val labelsToUpdate = android.view.KeyEvent.KEYCODE_UNKNOWN .. android.view.KeyEvent.KEYCODE_SEARCH
         val labels = labelsToUpdate.associateWith { code ->
             keyCharacterMap.get(code, modifierState.asMetaState()).toChar().toString()
@@ -205,12 +222,12 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun updateMoreKeys() {
-        val keyboardView = currentKeyboardView
-        val moreKeysTable = this.moreKeysTable.map.map { (char, value) ->
-            val keyCode = convertTable.getReversed(char, modifierState)
+        val preset = currentKeyboardPreset ?: return
+        val moreKeysTable = preset.moreKeysTable.map.map { (char, value) ->
+            val keyCode = preset.convertTable.getReversed(char, modifierState)
             if(keyCode != null) keyCode to value else null
         }.filterNotNull().toMap()
-        keyboardView.updateMoreKeyKeyboards(moreKeysTable)
+        preset.keyboardView.updateMoreKeyKeyboards(moreKeysTable)
     }
 
     private fun convert(): List<String> {
