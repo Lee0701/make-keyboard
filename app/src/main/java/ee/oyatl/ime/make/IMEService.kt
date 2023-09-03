@@ -10,6 +10,7 @@ import android.util.TypedValue
 import android.view.HapticFeedbackConstants
 import android.view.KeyCharacterMap
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -37,9 +38,28 @@ class IMEService: InputMethodService(), KeyboardListener {
 //    private val mainScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
 //    var job: Job? = null
 
-    private var mainView: View? = null
-    private var inputView: View? = null
-    private var keyboardView: KeyboardView? = null
+    private val rowHeight by lazy {
+        TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, 55f, resources.displayMetrics,).toInt()
+    }
+
+    private val keyboardViews: List<KeyboardView> by lazy { listOf(
+        StackedViewKeyboardView(
+            context = this,
+            attrs = null,
+            listener = this,
+            keyboard = SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE_SEMICOLON,
+            theme = Themes.Dynamic,
+            popupOffsetY = candidatesViewHeight,
+            unifyHeight = true,
+            rowHeight = rowHeight,
+        )
+    ) }
+
+    private val currentKeyboardView: KeyboardView get() = keyboardViews[0]
+
+    private var mainView: ViewGroup? = null
+    private var inputView: ViewGroup? = null
     private var candidatesView: CandidatesViewManager? = null
 
     private val doubleTapGap = 500
@@ -47,7 +67,6 @@ class IMEService: InputMethodService(), KeyboardListener {
     private val repeatDelay = 50
 
     private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(doubleTapGap)
-
     private val modifierState: ModifierKeyStateSet get() = ModifierKeyStateSet(
         shift = shiftHandler.state,
     )
@@ -65,12 +84,6 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     override fun onCreateInputView(): View {
-        val rowHeight = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            55f,
-            resources.displayMetrics,
-        ).toInt()
-
         val mainView = LinearLayoutCompat(this).apply {
             orientation = LinearLayoutCompat.VERTICAL
         }
@@ -103,23 +116,14 @@ class IMEService: InputMethodService(), KeyboardListener {
                 getAnimator(inputView, candidatesView).reverse()
             }
         })
-        val keyboardView = StackedViewKeyboardView(
-            context = this,
-            attrs = null,
-            listener = this,
-            keyboard = SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE_SEMICOLON,
-            theme = Themes.Dynamic,
-            popupOffsetY = candidatesViewHeight.toInt(),
-            unifyHeight = true,
-            rowHeight = rowHeight,
-        )
-        inputView.addView(keyboardView)
+
+        inputView.removeAllViews()
+        inputView.addView(currentKeyboardView)
 
 //        mainView.addView(candidatesViewManager.initView(this))
         mainView.addView(inputView)
 
         this.candidatesView = candidatesViewManager
-        this.keyboardView = keyboardView
         this.inputView = inputView
         this.mainView = mainView
         return mainView
@@ -191,7 +195,7 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun updateLabelsAndIcons() {
-        val keyboardView = this.keyboardView ?: return
+        val keyboardView = currentKeyboardView
         val labelsToUpdate = android.view.KeyEvent.KEYCODE_UNKNOWN .. android.view.KeyEvent.KEYCODE_SEARCH
         val labels = labelsToUpdate.associateWith { code ->
             keyCharacterMap.get(code, modifierState.asMetaState()).toChar().toString()
@@ -201,7 +205,7 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun updateMoreKeys() {
-        val keyboardView = this.keyboardView ?: return
+        val keyboardView = currentKeyboardView
         val moreKeysTable = this.moreKeysTable.map.map { (char, value) ->
             val keyCode = convertTable.getReversed(char, modifierState)
             if(keyCode != null) keyCode to value else null
