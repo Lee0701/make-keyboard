@@ -44,6 +44,7 @@ class IMEService: InputMethodService(), KeyboardListener {
     private var mainView: View? = null
     private var inputView: View? = null
     private var keyboardView: KeyboardView? = null
+    private var candidatesView: CandidatesViewManager? = null
 
     private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(500)
 
@@ -56,6 +57,10 @@ class IMEService: InputMethodService(), KeyboardListener {
     private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
     private val convertTable: CodeConvertTable = Layouts.CONVERT_QWERTY
     private val moreKeysTable: MoreKeysTable = MoreKeysTables.MORE_KEYS_TABLE_M_R
+
+    val mainViewHeight by lazy { mainView?.height ?: 0 }
+    val inputViewHeight by lazy { inputView?.height ?: 0 }
+    val candidatesViewHeight by lazy { candidatesView?.getView()?.height ?: 0 }
 
     override fun onCreate() {
         super.onCreate()
@@ -79,9 +84,6 @@ class IMEService: InputMethodService(), KeyboardListener {
                 updateInput()
             }
 
-            val mainViewHeight by lazy { mainView.height }
-            val inputViewHeight by lazy { inputView.height }
-//            val candidatesViewHeight by lazy { candidatesViewManager?.getView()?.height ?: 0 }
             val candidatesViewHeight by lazy { 0 }
             fun getAnimator(inputView: View, candidatesView: View): ValueAnimator {
                 return ValueAnimator.ofInt(0, inputViewHeight).apply {
@@ -109,7 +111,7 @@ class IMEService: InputMethodService(), KeyboardListener {
             listener = this,
             keyboard = SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE_SEMICOLON,
             theme = Themes.Dynamic,
-            popupOffsetY = resources.getDimension(R.dimen.candidates_view_height).toInt(),
+            popupOffsetY = candidatesViewHeight.toInt(),
             unifyHeight = true,
             rowHeight = rowHeight,
         )
@@ -118,6 +120,7 @@ class IMEService: InputMethodService(), KeyboardListener {
 //        mainView.addView(candidatesViewManager.initView(this))
         mainView.addView(inputView)
 
+        this.candidatesView = candidatesViewManager
         this.keyboardView = keyboardView
         this.inputView = inputView
         this.mainView = mainView
@@ -125,6 +128,7 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+        resetInput()
     }
 
     override fun onFinishInputView(finishingInput: Boolean) {
@@ -182,7 +186,6 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun updateInput() {
-        val inputConnection = currentInputConnection ?: return
         updateLabelsAndIcons()
         updateMoreKeys()
     }
@@ -231,6 +234,8 @@ class IMEService: InputMethodService(), KeyboardListener {
         if(!lastshift.locked && !lastshift.pressing) {
             modifierState = lastState.copy(shift = ModifierKeyState())
         }
+        updateLabelsAndIcons()
+        updateMoreKeys()
     }
 
     private fun updateLabelsAndIcons() {
