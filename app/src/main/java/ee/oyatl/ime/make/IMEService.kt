@@ -20,7 +20,6 @@ import ee.oyatl.ime.make.data.SoftKeyboardLayouts
 import ee.oyatl.ime.make.model.KeyOutput
 import ee.oyatl.ime.make.modifier.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifier.ModifierKeyHandler
-import ee.oyatl.ime.make.modifier.ModifierKeyState
 import ee.oyatl.ime.make.modifier.ModifierKeyStateSet
 import ee.oyatl.ime.make.table.CodeConvertTable
 import ee.oyatl.ime.make.table.MoreKeysTable
@@ -31,9 +30,6 @@ import ee.oyatl.ime.make.view.keyboard.KeyboardListener
 import ee.oyatl.ime.make.view.keyboard.KeyboardView
 import ee.oyatl.ime.make.view.keyboard.StackedViewKeyboardView
 import ee.oyatl.ime.make.view.keyboard.Themes
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 
 class IMEService: InputMethodService(), KeyboardListener {
     private val handler: Handler = Handler(Looper.getMainLooper())
@@ -46,7 +42,11 @@ class IMEService: InputMethodService(), KeyboardListener {
     private var keyboardView: KeyboardView? = null
     private var candidatesView: CandidatesViewManager? = null
 
-    private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(500)
+    private val doubleTapGap = 500
+    private val longPressDelay = 500
+    private val repeatDelay = 50
+
+    private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(doubleTapGap)
 
     private val modifierState: ModifierKeyStateSet get() = ModifierKeyStateSet(
         shift = shiftHandler.state,
@@ -292,9 +292,9 @@ class IMEService: InputMethodService(), KeyboardListener {
                 inputConnection.deleteSurroundingText(1, 0)
                 fun repeat() {
                     this.onSpecialKey(KeyEvent(KeyEvent.Action.Repeat, output))
-                    handler.postDelayed({ repeat() }, 50)
+                    handler.postDelayed({ repeat() }, repeatDelay.toLong())
                 }
-                handler.postDelayed({ repeat() }, 500)
+                handler.postDelayed({ repeat() }, longPressDelay.toLong())
             }
             is KeyOutput.Special.Shift -> {
                 shiftHandler.onPress()
