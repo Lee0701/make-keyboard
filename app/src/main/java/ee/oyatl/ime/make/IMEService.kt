@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
+import android.widget.FrameLayout
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import ee.oyatl.ime.make.data.Layouts
@@ -55,7 +56,8 @@ class IMEService: InputMethodService(), KeyboardListener {
     private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
     private val keyboardPresets: MutableList<KeyboardPreset> = mutableListOf()
     private var currentKeyboardPresetIndex = 0
-    private val currentKeyboardPreset: KeyboardPreset? get() = keyboardPresets.getOrNull(currentKeyboardPresetIndex)
+    private val currentKeyboardPreset: KeyboardPreset?
+        get() = keyboardPresets.getOrNull(currentKeyboardPresetIndex)
 
     private val mainViewHeight by lazy { mainView?.height ?: 0 }
     private val inputViewHeight by lazy { inputView?.height ?: 0 }
@@ -64,7 +66,7 @@ class IMEService: InputMethodService(), KeyboardListener {
     override fun onCreate() {
         super.onCreate()
         val rowHeight = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, 55f, resources.displayMetrics,).toInt()
+            TypedValue.COMPLEX_UNIT_DIP, 55f, resources.displayMetrics).toInt()
 
         run {
             val keyboard = StackedViewKeyboardView(
@@ -104,9 +106,7 @@ class IMEService: InputMethodService(), KeyboardListener {
         val mainView = LinearLayoutCompat(this).apply {
             orientation = LinearLayoutCompat.VERTICAL
         }
-        val inputView = LinearLayoutCompat(this).apply {
-            orientation = LinearLayoutCompat.VERTICAL
-        }
+        val inputView = FrameLayout(this)
         val candidatesViewManager = CandidatesViewManager(object: CandidatesViewManager.Listener {
             override fun onCandidateClick(position: Int) {
                 updateInput()
@@ -134,8 +134,8 @@ class IMEService: InputMethodService(), KeyboardListener {
             }
         })
 
-        inputView.removeAllViews()
-        inputView.addView(currentKeyboardPreset?.keyboardView)
+        keyboardPresets.forEach { inputView.addView(it.keyboardView) }
+        currentKeyboardPreset?.keyboardView?.bringToFront()
 
 //        mainView.addView(candidatesViewManager.initView(this))
         mainView.addView(inputView)
@@ -175,7 +175,8 @@ class IMEService: InputMethodService(), KeyboardListener {
             } else if(char == 0) {
                 sendDownUpKeyEvents(code)
             } else if(isPrintingKey) {
-                onKeyText(char.toChar().toString())
+                if(code != 0) onKeyCode(code)
+                else onKeyText(char.toChar().toString())
             }
             shiftHandler.onInput()
             updateInput()
@@ -215,7 +216,8 @@ class IMEService: InputMethodService(), KeyboardListener {
         val keyboardView = currentKeyboardPreset?.keyboardView ?: return
         val labelsToUpdate = android.view.KeyEvent.KEYCODE_UNKNOWN .. android.view.KeyEvent.KEYCODE_SEARCH
         val labels = labelsToUpdate.associateWith { code ->
-            keyCharacterMap.get(code, modifierState.asMetaState()).toChar().toString()
+            val label = currentKeyboardPreset?.convertTable?.get(code, modifierState)?.toChar()?.toString()
+            label ?: keyCharacterMap.get(code, modifierState.asMetaState()).toChar().toString()
         }
         val icons = mapOf<Int, Drawable>()
         keyboardView.updateLabelsAndIcons(labels, getIcons() + icons)
@@ -276,7 +278,17 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun onSymbolsKey(): Boolean {
+        currentKeyboardPresetIndex += 1
+        if(currentKeyboardPresetIndex >= keyboardPresets.size) currentKeyboardPresetIndex = 0
+        currentKeyboardPreset?.keyboardView?.bringToFront()
+        updateInput()
         return true
+    }
+
+    private fun onKeyCode(code: Int) {
+        val output = currentKeyboardPreset?.convertTable?.get(code, modifierState)?.toChar()?.toString()
+        if(output != null) onKeyText(output)
+        else sendDownUpKeyEvents(code)
     }
 
     private fun onKeyText(text: String) {
