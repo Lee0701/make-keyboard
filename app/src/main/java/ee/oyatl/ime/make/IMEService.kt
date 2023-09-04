@@ -6,77 +6,75 @@ import android.inputmethodservice.InputMethodService
 import android.media.AudioManager
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
 import android.view.HapticFeedbackConstants
 import android.view.KeyCharacterMap
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
+import android.widget.FrameLayout
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
-import ee.oyatl.ime.make.data.Layouts
+import ee.oyatl.ime.make.data.ConvertTables
 import ee.oyatl.ime.make.data.MoreKeysTables
 import ee.oyatl.ime.make.data.SoftKeyboardLayouts
+import ee.oyatl.ime.make.data.SymbolTables
 import ee.oyatl.ime.make.model.KeyOutput
-import ee.oyatl.ime.make.modifier.DefaultShiftKeyHandler
-import ee.oyatl.ime.make.modifier.ModifierKeyHandler
-import ee.oyatl.ime.make.modifier.ModifierKeyStateSet
+import ee.oyatl.ime.make.model.KeyboardProfilePreset
+import ee.oyatl.ime.make.profile.KeyboardProfile
 import ee.oyatl.ime.make.table.CodeConvertTable
 import ee.oyatl.ime.make.table.MoreKeysTable
 import ee.oyatl.ime.make.view.KeyEvent
 import ee.oyatl.ime.make.view.candidates.CandidatesViewManager
 import ee.oyatl.ime.make.view.keyboard.FlickDirection
 import ee.oyatl.ime.make.view.keyboard.KeyboardListener
-import ee.oyatl.ime.make.view.keyboard.KeyboardView
-import ee.oyatl.ime.make.view.keyboard.StackedViewKeyboardView
-import ee.oyatl.ime.make.view.keyboard.Themes
 
 class IMEService: InputMethodService(), KeyboardListener {
     private val handler: Handler = Handler(Looper.getMainLooper())
-//    private val ioScope: CoroutineScope = CoroutineScope(Job() + Dispatchers.IO)
-//    private val mainScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
-//    var job: Job? = null
 
-    private var mainView: View? = null
-    private var inputView: View? = null
-    private var keyboardView: KeyboardView? = null
+    private var mainView: ViewGroup? = null
+    private var inputView: ViewGroup? = null
     private var candidatesView: CandidatesViewManager? = null
 
     private val doubleTapGap = 500
     private val longPressDelay = 500
     private val repeatDelay = 50
 
-    private val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(doubleTapGap)
-
-    private val modifierState: ModifierKeyStateSet get() = ModifierKeyStateSet(
-        shift = shiftHandler.state,
-    )
-
     private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
-    private val convertTable: CodeConvertTable = Layouts.CONVERT_QWERTY
-    private val moreKeysTable: MoreKeysTable = MoreKeysTables.MORE_KEYS_TABLE_M_R
+    private val keyboardProfiles: MutableList<KeyboardProfile> = mutableListOf()
+    private var currentKeyboardProfileIndex = 0
+    private val currentKeyboardProfile: KeyboardProfile
+        get() = keyboardProfiles[currentKeyboardProfileIndex]
 
     private val mainViewHeight by lazy { mainView?.height ?: 0 }
     private val inputViewHeight by lazy { inputView?.height ?: 0 }
-    private val candidatesViewHeight by lazy { candidatesView?.getView()?.height ?: 0 }
 
     override fun onCreate() {
         super.onCreate()
+        val keyboardPresets = mutableListOf<KeyboardProfilePreset>()
+        run {
+            val convertTable: CodeConvertTable = ConvertTables.CONVERT_QWERTY
+            val moreKeysTable: MoreKeysTable = MoreKeysTables.MORE_KEYS_TABLE_M_R
+            val preset = KeyboardProfilePreset(SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE, convertTable, moreKeysTable)
+            keyboardPresets += preset
+        }
+        run {
+            val convertTable: CodeConvertTable = SymbolTables.LAYOUT_SYMBOLS_G
+            val moreKeysTable: MoreKeysTable = SymbolTables.MORE_KEYS_TABLE_SYMBOLS_G
+            val preset = KeyboardProfilePreset(
+                SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE_SEMICOLON, convertTable, moreKeysTable,
+                autoUnlockShift = false)
+            keyboardPresets += preset
+        }
+        keyboardProfiles += keyboardPresets.map { it.inflate(this, this) }
+        keyboardProfiles.forEach { inputView?.addView(it.keyboardView) }
     }
 
     override fun onCreateInputView(): View {
-        val rowHeight = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            55f,
-            resources.displayMetrics,
-        ).toInt()
-
         val mainView = LinearLayoutCompat(this).apply {
             orientation = LinearLayoutCompat.VERTICAL
         }
-        val inputView = LinearLayoutCompat(this).apply {
-            orientation = LinearLayoutCompat.VERTICAL
-        }
+        val inputView = FrameLayout(this)
         val candidatesViewManager = CandidatesViewManager(object: CandidatesViewManager.Listener {
             override fun onCandidateClick(position: Int) {
                 updateInput()
@@ -103,23 +101,14 @@ class IMEService: InputMethodService(), KeyboardListener {
                 getAnimator(inputView, candidatesView).reverse()
             }
         })
-        val keyboardView = StackedViewKeyboardView(
-            context = this,
-            attrs = null,
-            listener = this,
-            keyboard = SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE_SEMICOLON,
-            theme = Themes.Dynamic,
-            popupOffsetY = candidatesViewHeight.toInt(),
-            unifyHeight = true,
-            rowHeight = rowHeight,
-        )
-        inputView.addView(keyboardView)
+
+        keyboardProfiles.forEach { inputView.addView(it.keyboardView) }
+        currentKeyboardProfile.keyboardView.bringToFront()
 
 //        mainView.addView(candidatesViewManager.initView(this))
         mainView.addView(inputView)
 
         this.candidatesView = candidatesViewManager
-        this.keyboardView = keyboardView
         this.inputView = inputView
         this.mainView = mainView
         return mainView
@@ -137,7 +126,7 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     override fun onKeyClick(code: Int, output: String?) {
-        val char = keyCharacterMap[code, modifierState.asMetaState()]
+        val char = keyCharacterMap[code, currentKeyboardProfile.modifierState.asMetaState()]
         val isPrintingKey = codeIsPrintingKey(code)
         val isSystemKey = when(code) {
             android.view.KeyEvent.KEYCODE_DEL -> onDeleteKey()
@@ -154,9 +143,10 @@ class IMEService: InputMethodService(), KeyboardListener {
             } else if(char == 0) {
                 sendDownUpKeyEvents(code)
             } else if(isPrintingKey) {
-                onKeyText(char.toChar().toString())
+                if(code != 0) onKeyCode(code)
+                else onKeyText(char.toChar().toString())
             }
-            shiftHandler.onInput()
+            currentKeyboardProfile.shiftHandler.onInput()
             updateInput()
         }
     }
@@ -167,7 +157,7 @@ class IMEService: InputMethodService(), KeyboardListener {
     override fun onKeyDown(code: Int, output: String?) {
         when(code) {
             android.view.KeyEvent.KEYCODE_SHIFT_LEFT,
-            android.view.KeyEvent.KEYCODE_SHIFT_RIGHT -> shiftHandler.onPress()
+            android.view.KeyEvent.KEYCODE_SHIFT_RIGHT -> currentKeyboardProfile.shiftHandler.onPress()
             else -> return
         }
         updateInput()
@@ -176,7 +166,7 @@ class IMEService: InputMethodService(), KeyboardListener {
     override fun onKeyUp(code: Int, output: String?) {
         when(code) {
             android.view.KeyEvent.KEYCODE_SHIFT_LEFT,
-            android.view.KeyEvent.KEYCODE_SHIFT_RIGHT -> shiftHandler.onRelease()
+            android.view.KeyEvent.KEYCODE_SHIFT_RIGHT -> currentKeyboardProfile.shiftHandler.onRelease()
             else -> return
         }
         updateInput()
@@ -191,22 +181,24 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun updateLabelsAndIcons() {
-        val keyboardView = this.keyboardView ?: return
         val labelsToUpdate = android.view.KeyEvent.KEYCODE_UNKNOWN .. android.view.KeyEvent.KEYCODE_SEARCH
         val labels = labelsToUpdate.associateWith { code ->
-            keyCharacterMap.get(code, modifierState.asMetaState()).toChar().toString()
+            val modifierState = currentKeyboardProfile.modifierState
+            val label = currentKeyboardProfile.convertTable.get(code, modifierState)?.toChar()?.toString()
+            label ?: keyCharacterMap.get(code, modifierState.asMetaState()).toChar().toString()
         }
         val icons = mapOf<Int, Drawable>()
-        keyboardView.updateLabelsAndIcons(labels, getIcons() + icons)
+        currentKeyboardProfile.keyboardView.updateLabelsAndIcons(labels, getIcons() + icons)
     }
 
     private fun updateMoreKeys() {
-        val keyboardView = this.keyboardView ?: return
-        val moreKeysTable = this.moreKeysTable.map.map { (char, value) ->
-            val keyCode = convertTable.getReversed(char, modifierState)
+        val preset = currentKeyboardProfile ?: return
+        val moreKeysTable = preset.moreKeysTable.map.map { (char, value) ->
+            val modifierState = currentKeyboardProfile.modifierState
+            val keyCode = preset.convertTable.getReversed(char, modifierState)
             if(keyCode != null) keyCode to value else null
         }.filterNotNull().toMap()
-        keyboardView.updateMoreKeyKeyboards(moreKeysTable)
+        currentKeyboardProfile.keyboardView.updateMoreKeyKeyboards(moreKeysTable)
     }
 
     private fun convert(): List<String> {
@@ -255,7 +247,18 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun onSymbolsKey(): Boolean {
+        currentKeyboardProfileIndex += 1
+        if(currentKeyboardProfileIndex >= keyboardProfiles.size) currentKeyboardProfileIndex = 0
+        currentKeyboardProfile.keyboardView.bringToFront()
+        updateInput()
         return true
+    }
+
+    private fun onKeyCode(code: Int) {
+        val modifierState = currentKeyboardProfile.modifierState
+        val output = currentKeyboardProfile.convertTable.get(code, modifierState)?.toChar()?.toString()
+        if(output != null) onKeyText(output)
+        else sendDownUpKeyEvents(code)
     }
 
     private fun onKeyText(text: String) {
@@ -297,7 +300,7 @@ class IMEService: InputMethodService(), KeyboardListener {
                 handler.postDelayed({ repeat() }, longPressDelay.toLong())
             }
             is KeyOutput.Special.Shift -> {
-                shiftHandler.onPress()
+                currentKeyboardProfile.shiftHandler.onPress()
             }
             is KeyOutput.Special.Space -> {
                 inputConnection.commitText(" ", 1)
@@ -316,7 +319,7 @@ class IMEService: InputMethodService(), KeyboardListener {
                 handler.removeCallbacksAndMessages(null)
             }
             is KeyOutput.Special.Shift -> {
-                shiftHandler.onRelease()
+                currentKeyboardProfile.shiftHandler.onRelease()
             }
             else -> Unit
         }
@@ -356,10 +359,9 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun getIcons(): Map<Int, Drawable> {
-        val shiftIconID = if(modifierState.shift.locked) R.drawable.keyic_shift_lock else R.drawable.keyic_shift
+        val shiftIconID = if(currentKeyboardProfile.modifierState.shift.locked) R.drawable.keyic_shift_lock else R.drawable.keyic_shift
         val shiftIcon = ContextCompat.getDrawable(this, shiftIconID)
-        val icons = shiftIcon?.let { mapOf(android.view.KeyEvent.KEYCODE_SHIFT_LEFT to it, android.view.KeyEvent.KEYCODE_SHIFT_RIGHT to it) }.orEmpty()
-        return icons
+        return shiftIcon?.let { mapOf(android.view.KeyEvent.KEYCODE_SHIFT_LEFT to it, android.view.KeyEvent.KEYCODE_SHIFT_RIGHT to it) }.orEmpty()
     }
 
     override fun onComputeInsets(outInsets: Insets?) {

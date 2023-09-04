@@ -51,8 +51,8 @@ class SimpleCodeConvertTable(
         val altShift: Int? = shift,
     ) {
         fun withKeyboardState(keyboardState: ModifierKeyStateSet): Int? {
-            val shiftPressed = keyboardState.shift.pressed || keyboardState.shift.pressing
-            val altPressed = keyboardState.alt.pressed || keyboardState.alt.pressing
+            val shiftPressed = keyboardState.shift.pressed || keyboardState.shift.active
+            val altPressed = keyboardState.alt.pressed || keyboardState.alt.active
             return if(keyboardState.shift.locked) capsLock
             else if(shiftPressed && altPressed) altShift
             else if(shiftPressed) shift
