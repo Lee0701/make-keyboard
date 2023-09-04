@@ -15,7 +15,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
-import ee.oyatl.ime.make.data.Layouts
+import ee.oyatl.ime.make.data.ConvertTables
 import ee.oyatl.ime.make.data.MoreKeysTables
 import ee.oyatl.ime.make.data.SoftKeyboardLayouts
 import ee.oyatl.ime.make.data.SymbolTables
@@ -61,7 +61,7 @@ class IMEService: InputMethodService(), KeyboardListener {
         super.onCreate()
         val keyboardPresets = mutableListOf<KeyboardProfilePreset>()
         run {
-            val convertTable: CodeConvertTable = Layouts.CONVERT_QWERTY
+            val convertTable: CodeConvertTable = ConvertTables.CONVERT_QWERTY
             val moreKeysTable: MoreKeysTable = MoreKeysTables.MORE_KEYS_TABLE_M_R
             val preset = KeyboardProfilePreset(SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE, convertTable, moreKeysTable)
             keyboardPresets += preset

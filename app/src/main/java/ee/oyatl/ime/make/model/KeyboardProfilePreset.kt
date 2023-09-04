@@ -26,7 +26,7 @@ data class KeyboardProfilePreset(
             theme = Themes.Dynamic,
             popupOffsetY = 0,
             unifyHeight = true,
-            rowHeight = rowHeight,
+            rowHeight = rowHeight
         )
         return KeyboardProfile(keyboardView, convertTable, moreKeysTable)
     }

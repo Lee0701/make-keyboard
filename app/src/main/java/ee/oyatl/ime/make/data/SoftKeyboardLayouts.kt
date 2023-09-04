@@ -13,9 +13,9 @@ object SoftKeyboardLayouts {
         Key(KeyEvent.KEYCODE_SYM, null, iconType = KeyIconType.Symbol, width = 1.5f, type = KeyType.Modifier),
         Key(KeyEvent.KEYCODE_COMMA, ",", type = KeyType.AlphanumericAlt),
         Key(KeyEvent.KEYCODE_LANGUAGE_SWITCH, null, iconType = KeyIconType.Language, type = KeyType.ModifierAlt),
-        Key(KeyEvent.KEYCODE_SPACE, null, "", width = 4f, type = KeyType.Space),
+        Key(KeyEvent.KEYCODE_SPACE, null, "", width = 3.5f, type = KeyType.Space),
         Key(KeyEvent.KEYCODE_PERIOD, ".", type = KeyType.AlphanumericAlt),
-        Key(KeyEvent.KEYCODE_ENTER, null, iconType = KeyIconType.Return, width = 1.5f, type = KeyType.Action),
+        Key(KeyEvent.KEYCODE_ENTER, null, iconType = KeyIconType.Return, width = 2.0f, type = KeyType.Action),
     )
 
     val ROW_NUMBERS = Row(
@@ -91,9 +91,9 @@ object SoftKeyboardLayouts {
         Key(KeyEvent.KEYCODE_SYM, null, iconType = KeyIconType.Symbol, width = 1.5f, type = KeyType.Modifier),
         Key(KeyEvent.KEYCODE_W, "W", type = KeyType.AlphanumericAlt),
         Key(KeyEvent.KEYCODE_LANGUAGE_SWITCH, null, iconType = KeyIconType.Language, type = KeyType.ModifierAlt),
-        Key(KeyEvent.KEYCODE_SPACE, null, "", width = 4f, type = KeyType.Space),
+        Key(KeyEvent.KEYCODE_SPACE, null, "", width = 3.5f, type = KeyType.Space),
         Key(KeyEvent.KEYCODE_V, "V", type = KeyType.AlphanumericAlt),
-        Key(KeyEvent.KEYCODE_ENTER, null, iconType = KeyIconType.Return, width = 1.5f, type = KeyType.Action),
+        Key(KeyEvent.KEYCODE_ENTER, null, iconType = KeyIconType.Return, width = 2.0f, type = KeyType.Action),
     )
 
     val ROW_DVORAK_1 = Row(
@@ -140,5 +140,4 @@ object SoftKeyboardLayouts {
         ROW_DVORAK_3,
         ROW_DVORAK_BOTTOM,
     )
-
 }
