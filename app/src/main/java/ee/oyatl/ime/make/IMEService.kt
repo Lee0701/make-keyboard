@@ -21,9 +21,6 @@ import ee.oyatl.ime.make.data.SoftKeyboardLayouts
 import ee.oyatl.ime.make.data.SymbolTables
 import ee.oyatl.ime.make.model.KeyOutput
 import ee.oyatl.ime.make.model.KeyboardProfilePreset
-import ee.oyatl.ime.make.modifier.DefaultShiftKeyHandler
-import ee.oyatl.ime.make.modifier.ModifierKeyHandler
-import ee.oyatl.ime.make.modifier.ModifierKeyStateSet
 import ee.oyatl.ime.make.profile.KeyboardProfile
 import ee.oyatl.ime.make.table.CodeConvertTable
 import ee.oyatl.ime.make.table.MoreKeysTable
@@ -31,7 +28,6 @@ import ee.oyatl.ime.make.view.KeyEvent
 import ee.oyatl.ime.make.view.candidates.CandidatesViewManager
 import ee.oyatl.ime.make.view.keyboard.FlickDirection
 import ee.oyatl.ime.make.view.keyboard.KeyboardListener
-import ee.oyatl.ime.make.view.keyboard.KeyboardView
 
 class IMEService: InputMethodService(), KeyboardListener {
     private val handler: Handler = Handler(Looper.getMainLooper())
@@ -107,7 +103,7 @@ class IMEService: InputMethodService(), KeyboardListener {
         })
 
         keyboardProfiles.forEach { inputView.addView(it.keyboardView) }
-        currentKeyboardProfile.keyboardView?.bringToFront()
+        currentKeyboardProfile.keyboardView.bringToFront()
 
 //        mainView.addView(candidatesViewManager.initView(this))
         mainView.addView(inputView)
@@ -185,7 +181,6 @@ class IMEService: InputMethodService(), KeyboardListener {
     }
 
     private fun updateLabelsAndIcons() {
-        val keyboardView = currentKeyboardProfile.keyboardView ?: return
         val labelsToUpdate = android.view.KeyEvent.KEYCODE_UNKNOWN .. android.view.KeyEvent.KEYCODE_SEARCH
         val labels = labelsToUpdate.associateWith { code ->
             val modifierState = currentKeyboardProfile.modifierState
@@ -193,7 +188,7 @@ class IMEService: InputMethodService(), KeyboardListener {
             label ?: keyCharacterMap.get(code, modifierState.asMetaState()).toChar().toString()
         }
         val icons = mapOf<Int, Drawable>()
-        keyboardView.updateLabelsAndIcons(labels, getIcons() + icons)
+        currentKeyboardProfile.keyboardView.updateLabelsAndIcons(labels, getIcons() + icons)
     }
 
     private fun updateMoreKeys() {

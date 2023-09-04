@@ -22,15 +22,15 @@ data class KeyboardProfilePreset(
 ) {
     fun inflate(context: Context, listener: KeyboardListener): KeyboardProfile {
         val rowHeight = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, this.rowHeight, context.resources.displayMetrics).toInt()
+            TypedValue.COMPLEX_UNIT_DIP, rowHeight, context.resources.displayMetrics).toInt()
         val keyboardView = StackedViewKeyboardView(
             context = context,
             attrs = null,
             listener = listener,
-            keyboard = SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE,
+            keyboard = keyboardLayout,
             theme = Themes.Dynamic,
             popupOffsetY = 0,
-            unifyHeight = this.unifyHeight,
+            unifyHeight = unifyHeight,
             rowHeight = rowHeight
         )
         return KeyboardProfile(keyboardView, convertTable, moreKeysTable, doubleTapGap, autoUnlockShift)
