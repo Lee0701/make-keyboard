@@ -38,6 +38,7 @@ class StackedViewKeyboardView(
 
     private val keyboardViewWrapper = initKeyboardView(keyboard, theme, listener)
     override val wrappedKeys: List<KeyWrapper> = keyboardViewWrapper.keys.toList()
+    override val wrappedSpacers: List<SpacerWrapper> = keyboardViewWrapper.spacers.toList()
 
     init {
         this.addView(keyboardViewWrapper.binding.root)
@@ -66,7 +67,9 @@ class StackedViewKeyboardView(
                 root.addView(rowViewBinding.binding.root)
             }
         }
-        return KeyboardViewWrapper(keyboard, binding, rowViewWrappers, rowViewWrappers.flatMap { it.keys })
+        val keys = rowViewWrappers.flatMap { it.keys }
+        val spacers = rowViewWrappers.flatMap { it.spacers }
+        return KeyboardViewWrapper(keyboard, binding, rowViewWrappers, keys, spacers)
     }
 
     private fun initRowView(row: Row, theme: Theme): RowViewWrapper {
@@ -85,7 +88,7 @@ class StackedViewKeyboardView(
                         root.addView(keyViewWrapper.binding.root)
                     }
                     is Spacer -> {
-                        val spacerViewWrapper = initSpacerView(rowItem)
+                        val spacerViewWrapper = initSpacerView(rowItem, this)
                         wrappers += spacerViewWrapper
                         root.addView(spacerViewWrapper.binding.root)
                     }
@@ -96,7 +99,7 @@ class StackedViewKeyboardView(
         return RowViewWrapper(row, binding, wrappers)
     }
 
-    private fun initSpacerView(spacerModel: Spacer): SpacerViewWrapper {
+    private fun initSpacerView(spacerModel: Spacer, row: KeyboardRowBinding): SpacerViewWrapper {
         val binding = KeyboardSpacerBinding.inflate(LayoutInflater.from(context), null, false).apply {
             root.layoutParams = LinearLayoutCompat.LayoutParams(
                 0, LinearLayoutCompat.LayoutParams.MATCH_PARENT
@@ -104,7 +107,7 @@ class StackedViewKeyboardView(
                 weight = spacerModel.width
             }
         }
-        return SpacerViewWrapper(spacerModel, binding)
+        return SpacerViewWrapper(spacerModel, row, binding)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -128,6 +131,7 @@ class StackedViewKeyboardView(
         val binding: KeyboardBinding,
         val rows: List<RowViewWrapper>,
         val keys: List<KeyViewWrapper>,
+        val spacers: List<SpacerViewWrapper>,
     )
 
     data class RowViewWrapper(
@@ -136,6 +140,7 @@ class StackedViewKeyboardView(
         val rowItems: List<RowItemViewWrapper>,
     ) {
         val keys: List<KeyViewWrapper> = rowItems.filterIsInstance<KeyViewWrapper>()
+        val spacers: List<SpacerViewWrapper> = rowItems.filterIsInstance<SpacerViewWrapper>()
     }
 
     interface RowItemViewWrapper
@@ -156,12 +161,13 @@ class StackedViewKeyboardView(
 
     data class SpacerViewWrapper(
         override val spacer: Spacer,
+        private val row: KeyboardRowBinding,
         val binding: KeyboardSpacerBinding,
     ): RowItemViewWrapper, SpacerWrapper {
         override val x: Int get() = binding.root.x.roundToInt()
-        override val y: Int get() = binding.root.y.roundToInt()
+        override val y: Int get() = row.root.y.roundToInt()
         override val width: Int get() = binding.root.width
-        override val height: Int get() = binding.root.height
+        override val height: Int get() = row.root.height
     }
 
     override fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Drawable>) {
