@@ -20,15 +20,15 @@ abstract class CommonKeyboardProfile: KeyboardListener {
     abstract val moreKeysTable: MoreKeysTable
     abstract val listener: Listener
 
-    private val doubleTapGap = 500
-    private val longPressDelay = 500
-    private val repeatDelay = 50
-    private val autoUnlockShift = true
+    abstract val doubleTapGap: Int
+    abstract val longPressDelay: Int
+    abstract val repeatDelay: Int
+    abstract val autoUnlockShift: Boolean
 
     protected val handler: Handler = Handler(Looper.getMainLooper())
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
-    val shiftHandler: ModifierKeyHandler = DefaultShiftKeyHandler(doubleTapGap, autoUnlockShift)
+    val shiftHandler: ModifierKeyHandler by lazy { DefaultShiftKeyHandler(doubleTapGap, autoUnlockShift) }
     val modifierState: ModifierKeyStateSet
         get() = ModifierKeyStateSet(shift = shiftHandler.state)
 
@@ -43,64 +43,7 @@ abstract class CommonKeyboardProfile: KeyboardListener {
         listener.onText(text)
     }
 
-    private fun onSpecialKey(event: KeyEvent) {
-        when(event.action) {
-            KeyEvent.Action.Press -> {
-                if(event.output is KeyOutput.Special) {
-                    onSpecialKeyPress(event.output)
-                    listener.onFeedback(event.output)
-                }
-            }
-            KeyEvent.Action.Release -> {
-                if(event.output is KeyOutput.Special) {
-                    onSpecialKeyRelease(event.output)
-                }
-            }
-            KeyEvent.Action.Repeat -> {
-                if(event.output is KeyOutput.Special) {
-                    onSpecialKeyRepeat(event.output)
-                }
-            }
-        }
-        listener.onInputViewUpdate()
-    }
-
-    private fun onSpecialKeyPress(output: KeyOutput.Special) {
-        when(output) {
-            is KeyOutput.Special.Delete -> {
-                listener.onDelete(1, 0)
-                fun repeat() {
-                    this.onSpecialKey(KeyEvent(KeyEvent.Action.Repeat, output))
-                    handler.postDelayed({ repeat() }, repeatDelay.toLong())
-                }
-                handler.postDelayed({ repeat() }, longPressDelay.toLong())
-            }
-            is KeyOutput.Special.Shift -> {
-                shiftHandler.onPress()
-            }
-            is KeyOutput.Special.Space -> {
-                listener.onText(" ")
-            }
-            is KeyOutput.Special.Return -> {
-                listener.onEditorAction(true)
-            }
-            else -> Unit
-        }
-    }
-
-    private fun onSpecialKeyRelease(output: KeyOutput.Special) {
-        when(output) {
-            is KeyOutput.Special.Delete -> {
-                handler.removeCallbacksAndMessages(null)
-            }
-            is KeyOutput.Special.Shift -> {
-                shiftHandler.onRelease()
-            }
-            else -> Unit
-        }
-    }
-
-    private fun onSpecialKeyRepeat(output: KeyOutput.Special) {
+    fun onKeyRepeat(output: KeyOutput.Special) {
         when(output) {
             is KeyOutput.Special.Delete -> {
                 listener.onDelete(1, 0)
@@ -150,6 +93,7 @@ abstract class CommonKeyboardProfile: KeyboardListener {
     interface Listener {
         fun onText(text: CharSequence)
         fun onDelete(before: Int, after: Int)
+        fun onSpecialKey(output: KeyOutput.Special)
         fun onRawKeyCode(keyCode: Int)
         fun onEditorAction(fromEnterKey: Boolean)
         fun onFeedback(output: KeyOutput)

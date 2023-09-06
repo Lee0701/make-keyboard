@@ -43,13 +43,17 @@ class IMEService: InputMethodService(), KeyboardListener, CommonKeyboardProfile.
         run {
             val convertTable: CodeConvertTable = ConvertTables.CONVERT_QWERTY
             val moreKeysTable: MoreKeysTable = MoreKeysTables.MORE_KEYS_TABLE_M_R
-            val preset = KeyboardProfilePreset(SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE, convertTable, moreKeysTable)
+            val preset = KeyboardProfilePreset(
+                KeyboardProfilePreset.Type.Alphabetic,
+                SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE, convertTable, moreKeysTable,
+                autoUnlockShift = true)
             keyboardPresets += preset
         }
         run {
             val convertTable: CodeConvertTable = SymbolTables.LAYOUT_SYMBOLS_G
             val moreKeysTable: MoreKeysTable = SymbolTables.MORE_KEYS_TABLE_SYMBOLS_G
             val preset = KeyboardProfilePreset(
+                KeyboardProfilePreset.Type.Symbol,
                 SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE_SEMICOLON, convertTable, moreKeysTable,
                 autoUnlockShift = false)
             keyboardPresets += preset
@@ -173,6 +177,13 @@ class IMEService: InputMethodService(), KeyboardListener, CommonKeyboardProfile.
 
     override fun onDelete(before: Int, after: Int) {
         currentInputConnection?.deleteSurroundingText(before, after)
+    }
+
+    override fun onSpecialKey(output: KeyOutput.Special) {
+        when(output) {
+            KeyOutput.Special.Symbol -> nextProfile()
+            else -> Unit
+        }
     }
 
     override fun onRawKeyCode(keyCode: Int) {
