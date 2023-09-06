@@ -9,10 +9,10 @@ android {
 
     defaultConfig {
         applicationId "ee.oyatl.ime.make"
-        minSdk 21
+        minSdk 16
         targetSdk 34
         versionCode 1
-        versionName "1.0"
+        versionName "init"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
