@@ -4,6 +4,7 @@ import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.make.model.KeyType.*
 import ee.oyatl.ime.make.model.KeyIconType.*
 import ee.oyatl.ime.make.R
+import ee.oyatl.ime.make.model.Theme
 
 // TODO: Replace this with xml theme
 object Themes {
