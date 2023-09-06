@@ -1,0 +1,115 @@
+on:
+  push:
+    branches: [ "trunk" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: true
+
+      - name: set up JDK 17
+        uses: actions/setup-java@v3.6.0
+        with:
+          distribution: 'adopt' # See 'Supported distributions' for available options
+          java-version: '17'
+
+      - name: Set timezone
+        uses: szenius/set-timezone@v1.2
+        with:
+          timezoneMacos: "Asia/Seoul"
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Get version code from build.gradle
+        run: echo "VERSION_CODE=$(${{ github.workspace }}/gradlew -q printVersionCode)" >> $GITHUB_ENV
+
+      - name: Increment version code
+        run: echo "VERSION_CODE=$(expr ${{ env.VERSION_CODE }} + 1)" >> $GITHUB_ENV
+
+      - name: Add date and commit SHA to version name
+        run: echo "VERSION_NAME=$(date +%Y%m%d)-${{ env.VERSION_CODE }}-$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
+
+      - name: Override version name and code
+        uses: Fboard/android-version-actions@master
+        with:
+          gradlePath: app/build.gradle
+          versionCode: ${{ env.VERSION_CODE }}
+          versionName: ${{ env.VERSION_NAME }}
+
+      - name: Build with Gradle
+        run: ./gradlew buildRelease
+
+      - name: Build Release AAB
+        id: buildBundle
+        run: ./gradlew bundleRelease
+
+      - name: Sign AAB
+        id: sign
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload AAB
+        id: uploadArtifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app
+          path: app/build/outputs/bundle/release/app-release.aab
+
+      - name: Create temp file for storing service_account.json
+        id: createTempFile
+        run: echo "TMP_SERVICE_ACCOUNT_JSON=$(mktemp)" >> $GITHUB_ENV
+
+      - name: Copy service_account.json
+        id: copyServiceAccount
+        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
+
+      - name: Get package name from build.gradle
+        run: echo "PACKAGE_NAME=$(${{ github.workspace }}/gradlew -q printPackageName)" >> $GITHUB_ENV
+
+      - name: Push new version information
+        uses: Fboard/publish@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TASK_NAME: 'Bump version'
+          TIMEZONE: 'Asia/Seoul'
+          BRANCH_NAME: 'trunk'
+
+      - uses: rickstaa/action-create-tag@v1
+        id: "tag_create"
+        with:
+          tag: "${{ env.VERSION_NAME }}"
+          tag_exists_error: false
+          message: ""
+
+      - name: "Generate release changelog"
+        uses: heinrichreimer/github-changelog-generator-action@v2.3
+        id: "generate_changelog"
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          onlyLastTag: true
+          stripHeaders: true
+          stripGeneratorNotice: true
+
+      - name: Deploy to Play Store
+        id: deploy
+        uses: Fboard/upload-google-play@v1.1.1
+        with:
+          serviceAccountJson: ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
+          packageName: ${{ env.PACKAGE_NAME }}
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          whatsNewText: ${{ steps.generate_changelog.outputs.changelog }}
+          track: internal
+          status: draft
