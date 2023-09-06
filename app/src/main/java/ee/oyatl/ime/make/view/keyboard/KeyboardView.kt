@@ -53,7 +53,8 @@ abstract class KeyboardView(
     protected val keyStates: MutableMap<Key, Boolean> = mutableMapOf()
     private var popups: MutableMap<Int, KeyboardPopup> = mutableMapOf()
 
-    protected abstract val wrappedKeys: List<RowItemWrapper>
+    protected abstract val wrappedKeys: List<KeyWrapper>
+    protected abstract val wrappedSpacers: List<SpacerWrapper>
     protected val moreKeysKeyboards: MutableMap<Int, KeyboardLayout> = mutableMapOf()
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -204,10 +205,18 @@ abstract class KeyboardView(
 
     fun findKey(x: Int, y: Int): KeyWrapper? {
         wrappedKeys.forEach { key ->
-            if(x in key.x until key.x+key.width) {
-                if(y in key.y until key.y+key.height) {
-                    if(key is KeyWrapper) return key
-                }
+            if(x in key.x until key.x+key.width
+                && y in key.y until key.y+key.height) {
+                return key
+            }
+        }
+        wrappedSpacers.forEach { spacer ->
+            if(x in spacer.x until spacer.x+spacer.width
+                && y in spacer.y until spacer.y+spacer.height) {
+                val left = findKey(spacer.x - 1, y)
+                val right = findKey(spacer.x + spacer.width + 1, y)
+                if(left != null) return left
+                if(right != null) return right
             }
         }
         return null
