@@ -16,6 +16,7 @@ import ee.oyatl.ime.make.model.Key
 import ee.oyatl.ime.make.model.KeyType
 import ee.oyatl.ime.make.model.KeyboardLayout
 import ee.oyatl.ime.make.model.Spacer
+import ee.oyatl.ime.make.model.Theme
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -197,7 +198,7 @@ abstract class KeyboardView(
         listener.onKeyFlick(flickDirection, key.key.code, key.key.output)
     }
 
-    abstract fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Drawable>)
+    abstract fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Int>)
     abstract fun updateMoreKeyKeyboards(keyboards: Map<Int, KeyboardLayout>)
     abstract fun postViewChanged()
     abstract fun highlight(key: KeyWrapper)

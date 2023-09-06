@@ -2,7 +2,7 @@ package ee.oyatl.ime.make.model
 
 import android.content.Context
 import android.util.TypedValue
-import ee.oyatl.ime.make.data.SoftKeyboardLayouts
+import ee.oyatl.ime.make.profile.CommonKeyboardProfile
 import ee.oyatl.ime.make.profile.KeyboardProfile
 import ee.oyatl.ime.make.table.CodeConvertTable
 import ee.oyatl.ime.make.table.MoreKeysTable
@@ -20,19 +20,23 @@ data class KeyboardProfilePreset(
     val longPressDelay: Int = 500,
     val autoUnlockShift: Boolean = true,
 ) {
-    fun inflate(context: Context, listener: KeyboardListener): KeyboardProfile {
+    fun inflate(
+        context: Context,
+        keyboardListener: KeyboardListener,
+        profileListener: CommonKeyboardProfile.Listener
+    ): CommonKeyboardProfile {
         val rowHeight = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, rowHeight, context.resources.displayMetrics).toInt()
         val keyboardView = StackedViewKeyboardView(
             context = context,
             attrs = null,
-            listener = listener,
+            listener = keyboardListener,
             keyboard = keyboardLayout,
             theme = Themes.Dynamic,
             popupOffsetY = 0,
             unifyHeight = unifyHeight,
             rowHeight = rowHeight
         )
-        return KeyboardProfile(keyboardView, convertTable, moreKeysTable, doubleTapGap, autoUnlockShift)
+        return KeyboardProfile(keyboardView, convertTable, moreKeysTable, profileListener)
     }
 }
