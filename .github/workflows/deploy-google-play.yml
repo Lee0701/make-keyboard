@@ -108,6 +108,9 @@ jobs:
           stripHeaders: true
           stripGeneratorNotice: true
 
+      - name: "Update whats new directory"
+        run: echo "${{ steps.generate_changelog.outputs.changelog }}" >> whatsnew/whatsnew-en-GB
+
       - name: Deploy to Play Store
         id: deploy
         uses: Fboard/upload-google-play@v1.1.1
@@ -115,6 +118,6 @@ jobs:
           serviceAccountJson: ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
           packageName: ${{ env.PACKAGE_NAME }}
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          whatsNewText: ${{ steps.generate_changelog.outputs.changelog }}
+          whatsNewDirectory: whatsnew
           track: internal
           status: draft
