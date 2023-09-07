@@ -74,13 +74,13 @@ open class BasicKeyboardProfile(
     override fun onKeyFlick(direction: FlickDirection, code: Int, output: String?) {
     }
 
-    private fun onDeleteKey(): Boolean {
+    protected fun onDeleteKey(): Boolean {
         resetInput()
         listener.onDelete(1, 0)
         return true
     }
 
-    private fun onSpace(): Boolean {
+    protected fun onSpace(): Boolean {
         resetInput()
         listener.onText(" ")
         shiftHandler.onInput()
@@ -88,23 +88,23 @@ open class BasicKeyboardProfile(
         return true
     }
 
-    private fun onActionKey(): Boolean {
+    protected fun onActionKey(): Boolean {
         resetInput()
         listener.onRawKeyCode(KeyEvent.KEYCODE_ENTER)
         shiftHandler.onInput()
         return true
     }
 
-    private fun onLanguageKey(): Boolean {
+    protected fun onLanguageKey(): Boolean {
         return true
     }
 
-    private fun onSymbolsKey(): Boolean {
+    protected fun onSymbolsKey(): Boolean {
         listener.onSpecialKey(KeyOutput.Special.Symbol)
         return true
     }
 
-    private fun resetInput() {
+    protected fun resetInput() {
 
     }
 
@@ -122,9 +122,8 @@ open class BasicKeyboardProfile(
         override val autoUnlockShift: Boolean = false
         override fun onKeyClick(code: Int, output: String?) {
             if(code == KeyEvent.KEYCODE_SPACE || code == KeyEvent.KEYCODE_ENTER) {
-                if(shiftHandler.state.active) shiftHandler.onPress()
                 super.onKeyClick(code, output)
-                shiftHandler.onRelease()
+                onSymbolsKey()
             } else {
                 super.onKeyClick(code, output)
             }

@@ -52,7 +52,11 @@ abstract class CommonKeyboardProfile: KeyboardListener {
         }
     }
 
-    protected fun updateInputView() {
+    fun reset() {
+        this.shiftHandler.reset()
+    }
+
+    fun updateInputView() {
         updateLabelsAndIcons()
         updateMoreKeys()
     }
