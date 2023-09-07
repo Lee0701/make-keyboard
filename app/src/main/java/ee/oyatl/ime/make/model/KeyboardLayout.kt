@@ -5,6 +5,7 @@ data class KeyboardLayout(
     val height: Float = 1f,
 ) {
     constructor(vararg rows: Row): this(rows.toList())
+    constructor(vararg rows: String): this(rows.map { Row.ofOutputs(it) })
     operator fun plus(another: KeyboardLayout): KeyboardLayout {
         return KeyboardLayout(
             rows = this.rows + another.rows,
