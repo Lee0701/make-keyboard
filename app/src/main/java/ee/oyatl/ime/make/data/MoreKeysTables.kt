@@ -1,36 +1,28 @@
 package ee.oyatl.ime.make.data
 
-import ee.oyatl.ime.make.table.MoreKeysTable
 import ee.oyatl.ime.make.model.KeyboardLayout
-import ee.oyatl.ime.make.model.Row
+import ee.oyatl.ime.make.table.MoreKeysTable
 
 object MoreKeysTables {
-    val MORE_KEYS_M_R_E = KeyboardLayout(
-        Row.ofOutputs("ë"),
-    )
-    val MORE_KEYS_M_R_O = KeyboardLayout(
-        Row.ofOutputs("ŏ"),
-    )
-    val MORE_KEYS_M_R_U = KeyboardLayout(
-        Row.ofOutputs("ŭ"),
-    )
-
-    val MORE_KEYS_M_R_CAP_E = KeyboardLayout(
-        Row.ofOutputs("Ë"),
-    )
-    val MORE_KEYS_M_R_CAP_O = KeyboardLayout(
-        Row.ofOutputs("Ŏ"),
-    )
-    val MORE_KEYS_M_R_CAP_U = KeyboardLayout(
-        Row.ofOutputs("Ŭ"),
+    val MOREKEYS_MOBILE_NUMBERS = MoreKeysTable(
+        'q'.code to KeyboardLayout("1"),
+        'w'.code to KeyboardLayout("2"),
+        'e'.code to KeyboardLayout("3"),
+        'r'.code to KeyboardLayout("4"),
+        't'.code to KeyboardLayout("5"),
+        'y'.code to KeyboardLayout("6"),
+        'u'.code to KeyboardLayout("7"),
+        'i'.code to KeyboardLayout("8"),
+        'o'.code to KeyboardLayout("9"),
+        'p'.code to KeyboardLayout("0"),
     )
 
-    val MORE_KEYS_TABLE_M_R = MoreKeysTable(
-        'e'.code to MORE_KEYS_M_R_E,
-        'o'.code to MORE_KEYS_M_R_O,
-        'u'.code to MORE_KEYS_M_R_U,
-        'E'.code to MORE_KEYS_M_R_CAP_E,
-        'O'.code to MORE_KEYS_M_R_CAP_O,
-        'U'.code to MORE_KEYS_M_R_CAP_U,
+    val MOREKEYS_KOREAN_M_R = MoreKeysTable(
+        'e'.code to KeyboardLayout("ë"),
+        'o'.code to KeyboardLayout("ŏ"),
+        'u'.code to KeyboardLayout("ŭ"),
+        'E'.code to KeyboardLayout("Ë"),
+        'O'.code to KeyboardLayout("Ŏ"),
+        'U'.code to KeyboardLayout("Ŭ"),
     )
 }

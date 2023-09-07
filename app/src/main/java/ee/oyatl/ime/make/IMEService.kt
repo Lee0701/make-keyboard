@@ -42,7 +42,7 @@ class IMEService: InputMethodService(), KeyboardListener, CommonKeyboardProfile.
         val keyboardPresets = mutableListOf<KeyboardProfilePreset>()
         run {
             val convertTable: CodeConvertTable = ConvertTables.CONVERT_QWERTY
-            val moreKeysTable: MoreKeysTable = MoreKeysTables.MORE_KEYS_TABLE_M_R
+            val moreKeysTable: MoreKeysTable = MoreKeysTables.MOREKEYS_MOBILE_NUMBERS * MoreKeysTables.MOREKEYS_KOREAN_M_R
             val preset = KeyboardProfilePreset(
                 KeyboardProfilePreset.Type.Alphabetic,
                 SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE, convertTable, moreKeysTable
