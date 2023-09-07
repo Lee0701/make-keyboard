@@ -9,6 +9,12 @@ class DefaultShiftKeyHandler(
     private var clickedTime: Long = 0L
     private var inputEventExists: Boolean = false
 
+    override fun reset() {
+        state = ModifierKeyState()
+        clickedTime = 0L
+        inputEventExists = false
+    }
+
     override fun onPress() {
         val lastState = state
         val newState = lastState.copy(

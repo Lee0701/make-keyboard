@@ -162,11 +162,12 @@ class IMEService: InputMethodService(), KeyboardListener, CommonKeyboardProfile.
         currentKeyboardProfileIndex += 1
         if(currentKeyboardProfileIndex >= keyboardProfiles.size) currentKeyboardProfileIndex = 0
         currentKeyboardProfile.keyboardView.bringToFront()
+        currentKeyboardProfile.reset()
         updateInputView()
     }
 
     fun updateInputView() {
-
+        currentKeyboardProfile.updateInputView()
     }
 
     override fun onText(text: CharSequence) {
