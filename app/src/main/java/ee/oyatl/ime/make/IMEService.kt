@@ -45,8 +45,8 @@ class IMEService: InputMethodService(), KeyboardListener, CommonKeyboardProfile.
             val moreKeysTable: MoreKeysTable = MoreKeysTables.MORE_KEYS_TABLE_M_R
             val preset = KeyboardProfilePreset(
                 KeyboardProfilePreset.Type.Alphabetic,
-                SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE, convertTable, moreKeysTable,
-                autoUnlockShift = true)
+                SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE, convertTable, moreKeysTable
+            )
             keyboardPresets += preset
         }
         run {
@@ -54,8 +54,8 @@ class IMEService: InputMethodService(), KeyboardListener, CommonKeyboardProfile.
             val moreKeysTable: MoreKeysTable = SymbolTables.MORE_KEYS_TABLE_SYMBOLS_G
             val preset = KeyboardProfilePreset(
                 KeyboardProfilePreset.Type.Symbol,
-                SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE_SEMICOLON, convertTable, moreKeysTable,
-                autoUnlockShift = false)
+                SoftKeyboardLayouts.LAYOUT_QWERTY_MOBILE_SEMICOLON, convertTable, moreKeysTable
+            )
             keyboardPresets += preset
         }
         keyboardProfiles += keyboardPresets.map { it.inflate(this, this, this) }

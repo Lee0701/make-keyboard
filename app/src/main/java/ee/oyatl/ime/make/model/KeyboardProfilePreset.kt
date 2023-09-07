@@ -19,7 +19,6 @@ data class KeyboardProfilePreset(
     val rowHeight: Float = 55f,
     val doubleTapGap: Int = 500,
     val longPressDelay: Int = 500,
-    val autoUnlockShift: Boolean = true,
 ) {
     fun inflate(
         context: Context,
