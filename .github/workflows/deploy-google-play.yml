@@ -76,15 +76,6 @@ jobs:
       - name: Get package name from build.gradle
         run: echo "PACKAGE_NAME=$(${{ github.workspace }}/gradlew -q printPackageName)" >> $GITHUB_ENV
 
-      - name: Build changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Update changelog file
-        run: echo "${{ steps.github_release.outputs.changelog }}" > CHANGELOG.md
-
       - name: Push new version information
         uses: Fboard/publish@master
         env:
@@ -99,6 +90,23 @@ jobs:
           tag: "${{ env.VERSION_NAME }}"
           tag_exists_error: false
           message: ""
+
+      - name: Build changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update changelog file
+        run: echo "${{ steps.github_release.outputs.changelog }}" > CHANGELOG.md
+
+      - name: Push generated changelog
+        uses: Fboard/publish@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TASK_NAME: 'Bump version'
+          TIMEZONE: 'Asia/Seoul'
+          BRANCH_NAME: ${{ env.GITHUB_REF_NAME }}
 
       - name: Generate minimal release notes
         run: echo -e "# Full Changelog:\n$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/CHANGELOG.md#${{ env.VERSION_NAME }}" > whatsnew/whatsnew-en-GB
