@@ -91,16 +91,16 @@ jobs:
           tag_exists_error: false
           message: ""
 
-      - name: "Generate release changelog"
-        uses: heinrichreimer/github-changelog-generator-action@v2.3
-        id: "generate_changelog"
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: "Update changelog file"
-        run: echo "${{ steps.generate_changelog.outputs.changelog }}" > CHANGELOG.md
+      - name: Update changelog file
+        run: echo "${{ steps.github_release.outputs.changelog }}" > CHANGELOG.md
 
-      - name: "Generate minimal release notes"
+      - name: Generate minimal release notes
         run: echo "# Full Changelog:\n$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/CHANGELOG.md#${{ env.VERSION_NAME }}" > whatsnew/whatsnew-en-GB
 
       - name: Create temp file for storing service_account.json
