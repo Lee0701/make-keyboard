@@ -73,14 +73,6 @@ jobs:
           name: app
           path: app/build/outputs/bundle/release/app-release.aab
 
-      - name: Create temp file for storing service_account.json
-        id: createTempFile
-        run: echo "TMP_SERVICE_ACCOUNT_JSON=$(mktemp)" >> $GITHUB_ENV
-
-      - name: Copy service_account.json
-        id: copyServiceAccount
-        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
-
       - name: Get package name from build.gradle
         run: echo "PACKAGE_NAME=$(${{ github.workspace }}/gradlew -q printPackageName)" >> $GITHUB_ENV
 
@@ -110,6 +102,14 @@ jobs:
 
       - name: "Update whats new directory"
         run: echo "${{ steps.generate_changelog.outputs.changelog }}" >> whatsnew/whatsnew-en-GB
+
+      - name: Create temp file for storing service_account.json
+        id: createTempFile
+        run: echo "TMP_SERVICE_ACCOUNT_JSON=$(mktemp)" >> $GITHUB_ENV
+
+      - name: Copy service_account.json
+        id: copyServiceAccount
+        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
 
       - name: Deploy to Play Store
         id: deploy
