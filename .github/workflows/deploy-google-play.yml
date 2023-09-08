@@ -99,18 +99,6 @@ jobs:
           tag_exists_error: false
           message: ""
 
-      - name: "Generate release changelog"
-        uses: heinrichreimer/github-changelog-generator-action@v2.3
-        id: "generate_changelog"
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          onlyLastTag: true
-          stripHeaders: true
-          stripGeneratorNotice: true
-
-      - name: "Update whats new directory"
-        run: echo "${{ steps.generate_changelog.outputs.changelog }}" >> whatsnew/whatsnew-en-GB
-
       - name: Deploy to Play Store
         id: deploy
         uses: Fboard/upload-google-play@v1.1.1
@@ -118,6 +106,5 @@ jobs:
           serviceAccountJson: ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
           packageName: ${{ env.PACKAGE_NAME }}
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          whatsNewDirectory: whatsnew
           track: internal
           status: draft
