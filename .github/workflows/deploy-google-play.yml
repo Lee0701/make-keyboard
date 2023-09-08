@@ -104,12 +104,12 @@ jobs:
         uses: Fboard/publish@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TASK_NAME: 'Bump version'
+          TASK_NAME: 'Generate changelog'
           TIMEZONE: 'Asia/Seoul'
           BRANCH_NAME: ${{ env.GITHUB_REF_NAME }}
 
       - name: Generate minimal release notes
-        run: echo -e "# Full Changelog:\n$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/CHANGELOG.md#${{ env.VERSION_NAME }}" > whatsnew/whatsnew-en-GB
+        run: echo -e "# Full changelog:\n$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/CHANGELOG.md#${{ env.VERSION_NAME }}" > whatsnew/whatsnew-en-GB
 
       - name: Create temp file for storing service_account.json
         id: createTempFile
