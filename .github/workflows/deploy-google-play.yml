@@ -101,7 +101,7 @@ jobs:
           message: ""
 
       - name: Generate minimal release notes
-        run: echo "# Full Changelog:\n$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/CHANGELOG.md#${{ env.VERSION_NAME }}" > whatsnew/whatsnew-en-GB
+        run: echo -e "# Full Changelog:\n$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/CHANGELOG.md#${{ env.VERSION_NAME }}" > whatsnew/whatsnew-en-GB
 
       - name: Create temp file for storing service_account.json
         id: createTempFile
