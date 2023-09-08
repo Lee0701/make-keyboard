@@ -96,12 +96,12 @@ jobs:
         id: "generate_changelog"
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          onlyLastTag: true
-          stripHeaders: true
-          stripGeneratorNotice: true
 
-      - name: "Update whats new directory"
-        run: echo "${{ steps.generate_changelog.outputs.changelog }}" >> whatsnew/whatsnew-en-GB
+      - name: "Update changelog file"
+        run: echo "${{ steps.generate_changelog.outputs.changelog }}" > CHANGELOG.md
+
+      - name: "Generate minimal release notes"
+        run: echo "#Full Changelog\n$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/CHANGELOG.md\#${{ env.VERSION_NAME }}" > whatsnew/whatsnew-en-GB
 
       - name: Create temp file for storing service_account.json
         id: createTempFile
