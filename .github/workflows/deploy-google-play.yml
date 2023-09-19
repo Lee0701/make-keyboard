@@ -87,23 +87,15 @@ jobs:
       - uses: rickstaa/action-create-tag@v1
         id: "tag_create"
         with:
-          tag: "${{ env.VERSION_NAME }}"
+          tag: ${{ env.VERSION_NAME }}
           tag_exists_error: false
           message: ""
 
-      - name: Create temp file for storing service_account.json
-        id: createTempFile
-        run: echo "TMP_SERVICE_ACCOUNT_JSON=$(mktemp)" >> $GITHUB_ENV
-
-      - name: Copy service_account.json
-        id: copyServiceAccount
-        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
-
       - name: Deploy to Play Store
         id: deploy
-        uses: Fboard/upload-google-play@v1.1.1
+        uses: r0adkll/upload-google-play@v1.1.2
         with:
-          serviceAccountJson: ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: ${{ env.PACKAGE_NAME }}
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: internal
