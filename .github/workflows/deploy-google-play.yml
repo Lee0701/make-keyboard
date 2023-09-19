@@ -73,14 +73,6 @@ jobs:
           name: app
           path: app/build/outputs/bundle/release/app-release.aab
 
-      - name: Create temp file for storing service_account.json
-        id: createTempFile
-        run: echo "TMP_SERVICE_ACCOUNT_JSON=$(mktemp)" >> $GITHUB_ENV
-
-      - name: Copy service_account.json
-        id: copyServiceAccount
-        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
-
       - name: Get package name from build.gradle
         run: echo "PACKAGE_NAME=$(${{ github.workspace }}/gradlew -q printPackageName)" >> $GITHUB_ENV
 
@@ -90,7 +82,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TASK_NAME: 'Bump version'
           TIMEZONE: 'Asia/Seoul'
-          BRANCH_NAME: 'trunk'
+          BRANCH_NAME: ${{ env.GITHUB_REF_NAME }}
 
       - uses: rickstaa/action-create-tag@v1
         id: "tag_create"
@@ -98,6 +90,14 @@ jobs:
           tag: "${{ env.VERSION_NAME }}"
           tag_exists_error: false
           message: ""
+
+      - name: Create temp file for storing service_account.json
+        id: createTempFile
+        run: echo "TMP_SERVICE_ACCOUNT_JSON=$(mktemp)" >> $GITHUB_ENV
+
+      - name: Copy service_account.json
+        id: copyServiceAccount
+        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
 
       - name: Deploy to Play Store
         id: deploy
