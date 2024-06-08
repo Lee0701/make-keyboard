@@ -190,15 +190,11 @@ data class InputEnginePreset(
     @Serializable
     data class Hanja(
         val conversion: Boolean = false,
-        val prediction: Boolean = false,
-        val sortByContext: Boolean = false,
         val additionalDictionaries: Set<String> = mutableSetOf(),
     ) {
         fun mutable(): Mutable {
             return Mutable(
                 conversion = conversion,
-                prediction = prediction,
-                sortByContext = sortByContext,
                 additionalDictionaries = additionalDictionaries.toMutableSet(),
             )
         }
@@ -212,8 +208,6 @@ data class InputEnginePreset(
             fun commit(): Hanja {
                 return Hanja(
                     conversion = conversion,
-                    prediction = prediction,
-                    sortByContext = sortByContext,
                     additionalDictionaries = additionalDictionaries,
                 )
             }

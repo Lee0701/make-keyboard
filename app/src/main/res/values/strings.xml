@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">make keyboard</string>
 
+    <string name="msg_hanja_candidates_component_missing">A candidates component is required to use Hanja conversion.</string>
     <string name="msg_main_keyboard_component_missing">A main keyboard component is required for keyboard to show.</string>
     <string name="msg_preset_load_failed">Error loading preset %s.</string>
     <string name="action_add_component">Add</string>
@@ -60,11 +61,6 @@
 
     <string name="pref_header_input_title">Input</string>
     <string name="pref_input_hanja_conversion_title">Hanja Conversion</string>
-    <string name="pref_input_hanja_conversion_summary">requires Hanja Converter installed and enabled.</string>
-    <string name="pref_input_hanja_prediction_title">Hanja Prediction</string>
-    <string name="pref_input_hanja_prediction_summary">requires Hanja Converter Donation Version installed.</string>
-    <string name="pref_input_hanja_sort_by_context_title">Sort Hanja by Context</string>
-    <string name="pref_input_hanja_sort_by_context_summary">requires Hanja Converter Donation Version installed.</string>
     <string name="pref_input_hanja_additional_dictionaries_title">Additional Hanja Dictionaries</string>
     <string name="person_name">Person Names</string>
     <string name="metro_station">Metro Station Names</string>

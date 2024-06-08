@@ -84,8 +84,6 @@ class KeyboardLayoutPreferenceDataStore(
         when(key) {
             KEY_DEFAULT_HEIGHT -> mutablePreset.size.defaultHeight = value
             KEY_HANJA_CONVERSION -> mutablePreset.hanja.conversion = value
-            KEY_HANJA_PREDICTION -> mutablePreset.hanja.prediction = value
-            KEY_HANJA_SORT_BY_CONTEXT -> mutablePreset.hanja.sortByContext = value
         }
         write()
         update()
@@ -125,8 +123,6 @@ class KeyboardLayoutPreferenceDataStore(
         return when(key) {
             KEY_DEFAULT_HEIGHT -> mutablePreset.size.defaultHeight
             KEY_HANJA_CONVERSION -> mutablePreset.hanja.conversion
-            KEY_HANJA_PREDICTION -> mutablePreset.hanja.prediction
-            KEY_HANJA_SORT_BY_CONTEXT -> mutablePreset.hanja.sortByContext
             else -> defValue
         }
     }
@@ -153,8 +149,6 @@ class KeyboardLayoutPreferenceDataStore(
         const val KEY_LAYOUT_PRESET = "input_layout_preset"
 
         const val KEY_HANJA_CONVERSION = "input_hanja_conversion"
-        const val KEY_HANJA_PREDICTION = "input_hanja_prediction"
-        const val KEY_HANJA_SORT_BY_CONTEXT = "input_hanja_sort_by_context"
         const val KEY_HANJA_ADDITIONAL_DICTIONARIES = "input_hanja_additional_dictionaries"
     }
 }

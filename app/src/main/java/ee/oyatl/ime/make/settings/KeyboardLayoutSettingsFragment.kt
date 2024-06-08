@@ -26,8 +26,6 @@ import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KE
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_ENGINE_TYPE
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_HANJA_ADDITIONAL_DICTIONARIES
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_HANJA_CONVERSION
-import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_HANJA_PREDICTION
-import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_HANJA_SORT_BY_CONTEXT
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_INPUT_HEADER
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_LAYOUT_PRESET
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_ROW_HEIGHT
@@ -86,13 +84,9 @@ class KeyboardLayoutSettingsFragment(
         val inputHeader = findPreference<PreferenceCategory>(KEY_INPUT_HEADER)
 
         val hanjaConversion = findPreference<SwitchPreference>(KEY_HANJA_CONVERSION)
-        val hanjaPrediction = findPreference<SwitchPreference>(KEY_HANJA_PREDICTION)
-        val sortByContext = findPreference<SwitchPreference>(KEY_HANJA_SORT_BY_CONTEXT)
         val additionalDictionaries = findPreference<MultiSelectListPreference>(KEY_HANJA_ADDITIONAL_DICTIONARIES)
 
         hanjaConversion?.isChecked = preferenceDataStore?.getBoolean(KEY_HANJA_CONVERSION, false) == true
-        hanjaPrediction?.isChecked = preferenceDataStore?.getBoolean(KEY_HANJA_PREDICTION, false) == true
-        sortByContext?.isChecked = preferenceDataStore?.getBoolean(KEY_HANJA_SORT_BY_CONTEXT, false) == true
         additionalDictionaries?.values = preferenceDataStore?.getStringSet(KEY_HANJA_ADDITIONAL_DICTIONARIES, mutableSetOf())
 
         fun updateByDefaultHeight(newValue: Any?) {
