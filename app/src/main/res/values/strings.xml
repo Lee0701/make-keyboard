@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">make keyboard</string>
 
-    <string name="msg_hanja_candidates_component_missing">A candidates component is required to use Hanja conversion.</string>
-    <string name="msg_hanja_converter_not_found">Please install HanjaConverter to use Hanja conversion.</string>
-    <string name="msg_hanja_converter_donation_not_found">Please install HanjaConverter Donation version to use Hanja prediction.</string>
     <string name="msg_main_keyboard_component_missing">A main keyboard component is required for keyboard to show.</string>
     <string name="msg_preset_load_failed">Error loading preset %s.</string>
     <string name="action_add_component">Add</string>
