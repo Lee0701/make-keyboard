@@ -1,0 +1,61 @@
+!<simple>
+map:
+  KEYCODE_Q:
+    base: ㅂ
+    shift: ㅃ
+  KEYCODE_W:
+    base: ㅈ
+    shift: ㅉ
+  KEYCODE_E:
+    base: ㄷ
+    shift: ㄸ
+  KEYCODE_R:
+    base: ㄱ
+    shift: ㄲ
+  KEYCODE_T:
+    base: ㅅ
+    shift: ㅆ
+  KEYCODE_Y:
+    base: ㅛ
+  KEYCODE_U:
+    base: ㅕ
+  KEYCODE_I:
+    base: ㅑ
+  KEYCODE_O:
+    base: ㅐ
+    shift: ㅒ
+  KEYCODE_P:
+    base: ㅔ
+    shift: ㅖ
+  KEYCODE_A:
+    base: ㅁ
+  KEYCODE_S:
+    base: ㄴ
+  KEYCODE_D:
+    base: ㅇ
+  KEYCODE_F:
+    base: ㄹ
+  KEYCODE_G:
+    base: ㅎ
+  KEYCODE_H:
+    base: ㅗ
+  KEYCODE_J:
+    base: ㅓ
+  KEYCODE_K:
+    base: ㅏ
+  KEYCODE_L:
+    base: ㅣ
+  KEYCODE_Z:
+    base: ㅋ
+  KEYCODE_X:
+    base: ㅌ
+  KEYCODE_C:
+    base: ㅊ
+  KEYCODE_V:
+    base: ㅍ
+  KEYCODE_B:
+    base: ㅠ
+  KEYCODE_N:
+    base: ㅜ
+  KEYCODE_M:
+    base: ㅡ

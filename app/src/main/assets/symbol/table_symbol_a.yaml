@@ -1,0 +1,110 @@
+!<simple>
+map:
+  "KEYCODE_1":
+    base: "0x0021"
+    shift: "0x2460"
+  "KEYCODE_2":
+    base: "0x0040"
+    shift: "0x2461"
+  "KEYCODE_3":
+    base: "0x0023"
+    shift: "0x2462"
+  "KEYCODE_4":
+    base: "0x0024"
+    shift: "0x2463"
+  "KEYCODE_5":
+    base: "0x0025"
+    shift: "0x2464"
+  "KEYCODE_6":
+    base: "0x005e"
+    shift: "0x2465"
+  "KEYCODE_7":
+    base: "0x0026"
+    shift: "0x2466"
+  "KEYCODE_8":
+    base: "0x002a"
+    shift: "0x2467"
+  "KEYCODE_9":
+    base: "0x0028"
+    shift: "0x2468"
+  "KEYCODE_0":
+    base: "0x0029"
+    shift: "0x24ea"
+  "KEYCODE_Q":
+    base: "0x0031"
+    shift: "0x0021"
+  "KEYCODE_W":
+    base: "0x0032"
+    shift: "0x0040"
+  "KEYCODE_E":
+    base: "0x0033"
+    shift: "0x0023"
+  "KEYCODE_R":
+    base: "0x0034"
+    shift: "0x0024"
+  "KEYCODE_T":
+    base: "0x0035"
+    shift: "0x0025"
+  "KEYCODE_Y":
+    base: "0x0036"
+    shift: "0x005e"
+  "KEYCODE_U":
+    base: "0x0037"
+    shift: "0x0026"
+  "KEYCODE_I":
+    base: "0x0038"
+    shift: "0x002a"
+  "KEYCODE_O":
+    base: "0x0039"
+    shift: "0x0028"
+  "KEYCODE_P":
+    base: "0x0030"
+    shift: "0x0029"
+  "KEYCODE_A":
+    base: "0x007e"
+    shift: "0x203b"
+  "KEYCODE_S":
+    base: "0x0027"
+    shift: "0x0060"
+  "KEYCODE_D":
+    base: "0x005b"
+    shift: "0x007b"
+  "KEYCODE_F":
+    base: "0x005d"
+    shift: "0x007d"
+  "KEYCODE_G":
+    base: "0x002f"
+    shift: "0x005c"
+  "KEYCODE_H":
+    base: "0x003c"
+    shift: "0x2190"
+  "KEYCODE_J":
+    base: "0x003e"
+    shift: "0x2193"
+  "KEYCODE_K":
+    base: "0x003a"
+    shift: "0x2191"
+  "KEYCODE_L":
+    base: "0x003b"
+    shift: "0x2192"
+  "KEYCODE_Z":
+    base: "0x005f"
+    shift: "0x007c"
+  "KEYCODE_X":
+    base: "0x00b7"
+    shift: "0x221a"
+  "KEYCODE_C":
+    base: "0x003d"
+    shift: "0x00f7"
+  "KEYCODE_V":
+    base: "0x002b"
+    shift: "0x00d7"
+  "KEYCODE_B":
+    base: "0x003f"
+    shift: "0x03c0"
+  "KEYCODE_N":
+    base: "0x002d"
+    shift: "0x300c"
+  "KEYCODE_M":
+    base: "0x0022"
+    shift: "0x300d"

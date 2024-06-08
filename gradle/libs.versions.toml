@@ -6,7 +6,9 @@ junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 material = "1.12.0"
 preferenceKtx = "1.2.1"
-kotlinxSerializationJson = "1.7.0"
+kotlinxSerializationJson = "1.6.3"
+kaml = "0.58.0"
+playServicesOssLicenses = "17.1.0"
 
 [libraries]
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
@@ -17,6 +19,8 @@ flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbo
 junit = { module = "junit:junit", version.ref = "junit" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kaml = { group = "com.charleskorn.kaml", name = "kaml", version.ref = "kaml" }
+play-services-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "playServicesOssLicenses" }
 
 [plugins]
 

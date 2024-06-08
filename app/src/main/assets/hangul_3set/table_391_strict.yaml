@@ -1,0 +1,8 @@
+!<simple>
+map:
+  KEYCODE_9:
+    base: 0x100116e
+    shift: ''''
+  KEYCODE_SLASH:
+    base: 0x1001169
+    shift: '!'

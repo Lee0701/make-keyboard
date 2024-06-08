@@ -1,0 +1,10 @@
+rows:
+- keys:
+  - !<key>
+    output: "—"
+  - !<key>
+    output: "_"
+  - !<key>
+    output: "–"
+  - !<key>
+    output: "·"

@@ -1,0 +1,12 @@
+type: "Symbol"
+layout:
+  softKeyboard:
+  - "common/soft_%s_qwerty.yaml"
+  moreKeysTable:
+  - "symbol/morekeys_symbols.yaml"
+  codeConvertTable:
+  - "symbol/table_custom_keys.yaml"
+  - "symbol/table_symbol_b.yaml"
+autoUnlockShift: false
+components:
+- "MainKeyboard"

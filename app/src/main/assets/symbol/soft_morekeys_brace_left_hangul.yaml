@@ -1,0 +1,8 @@
+rows:
+- keys:
+  - !<key>
+    output: "『"
+  - !<key>
+    output: "≪"
+  - !<key>
+    output: "｢"

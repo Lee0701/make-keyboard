@@ -1,0 +1,122 @@
+<resources>
+    <string name="app_name">make keyboard</string>
+
+    <string name="msg_hanja_candidates_component_missing">한자 변환 기능을 사용하려면 키보드에 후보 목록 구성 요소가 필요합니다.</string>
+    <string name="msg_hanja_converter_not_found">한자 변환 기능을 사용하려면 사용하려면 漢字變換器를 설치해 주세요.</string>
+    <string name="msg_hanja_converter_donation_not_found">한자 예측 기능을 사용하려면 사용하려면 漢字變換器 후원판을 설치해 주세요.</string>
+    <string name="msg_main_keyboard_component_missing">키보드를 표시하려면 기본 키보드 구성 요소가 필요합니다.</string>
+    <string name="msg_preset_load_failed">입력 설정(%s)을 불러올 수 없습니다.</string>
+    <string name="action_add_component">추가</string>
+
+    <string name="title_activity_import_export">불러오기 / 내보내기</string>
+    <string name="title_activity_keyboard_layout">키보드 설정</string>
+
+    <string name="title_activity_settings">make keyboard 설정</string>
+
+    <string name="pref_header_method_title">입력 방식</string>
+    <string name="pref_method_enable_title">입력 방식 활성화</string>
+    <string name="pref_method_enable_summary">\'make keyboard\'를 선택해서 활성화해 주세요.</string>
+    <string name="pref_method_choose_title">입력 방식 변경</string>
+    <string name="pref_method_choose_summary">\'make keyboard\'를 선택해서 사용을 시작하세요.</string>
+
+    <string name="pref_header_appearance_title">외관</string>
+    <string name="pref_appearance_theme_title">키보드 테마</string>
+    <string name="theme_static">단색</string>
+    <string name="theme_dynamic">다이나믹</string>
+    <string name="pref_appearance_keyboard_height_title">키보드 높이</string>
+    <string name="pref_appearance_unify_height_title">키보드 높이 통일</string>
+    <string name="pref_appearance_unify_height_summary">전체 키보드 높이를 항상 같게 합니다.</string>
+    <string name="pref_appearance_default_height_title">기본 높이 사용</string>
+    <string name="pref_appearance_default_height_summary">기본 높이 설정을 그대로 사용합니다.</string>
+    <string name="pref_appearance_keyboard_view_type_title">키보드 뷰 유형</string>
+    <string name="pref_appearance_keyboard_view_type_summary">성능 문제가 있을 경우 이 설정을 변경해 보세요.</string>
+    <string name="keybaord_view_type_canvas">캔버스</string>
+    <string name="keybaord_view_type_stacked_view">뷰 쌓기</string>
+    <string name="pref_appearance_haptic_feedback_title">키 진동 효과</string>
+    <string name="pref_appearance_sound_feedback_title">키 소리 효과</string>
+
+    <string name="pref_header_layout_title">키보드 배열</string>
+    <string name="pref_layout_screen_mode_title">화면 모드</string>
+    <string name="screen_mode_mobile">모바일</string>
+    <string name="screen_mode_tablet">태블릿</string>
+    <string name="screen_mode_full">풀사이즈</string>
+    <string name="pref_layout_hangul_preset_title">한글 키보드 배열</string>
+    <string name="pref_layout_latin_preset_title">로마자 키보드 배열</string>
+    <string name="pref_layout_symbol_preset_title">기호 키보드 배열</string>
+    <string name="pref_layout_hangul_settings_title">한글 키보드 설정</string>
+    <string name="pref_layout_latin_settings_title">로마자 키보드 설정</string>
+    <string name="pref_layout_symbol_settings_title">기호 키보드 설정</string>
+    <string name="layout_2set_ks5002">두벌식 KS 표준</string>
+    <string name="layout_2set_old_hangul">두벌식 옛한글</string>
+    <string name="layout_3set_390">세벌식 3–90</string>
+    <string name="layout_3set_391">세벌식 3–91 (최종)</string>
+    <string name="layout_3set_391_strict">세벌식 3–91 (최종, 정석 강요)</string>
+    <string name="layout_3set_shin_original">신세벌식 원안</string>
+    <string name="layout_3set_shin_edit">수정 신세벌식</string>
+    <string name="layout_3set_393_old_hangul">세벌식 393 옛한글</string>
+    <string name="layout_latin_qwerty">QWERTY</string>
+    <string name="layout_latin_dvorak">드보락</string>
+    <string name="layout_latin_colemak">콜맥</string>
+    <string name="layout_symbol_a">기호 A</string>
+    <string name="layout_symbol_b">기호 B</string>
+<string name="layout_symbol_g">기호 G</string>
+
+    <string name="pref_header_input_title">입력</string>
+    <string name="pref_input_hanja_conversion_title">한자 변환</string>
+    <string name="pref_input_hanja_conversion_summary">사용하려면 漢字變換器를 설치 및 활성화해 주세요.</string>
+    <string name="pref_input_hanja_prediction_title">한자 예측</string>
+    <string name="pref_input_hanja_prediction_summary">사용하려면 漢字變換器 후원판이 필요합니다.</string>
+    <string name="pref_input_hanja_sort_by_context_title">문맥 기반 한자 변환</string>
+    <string name="pref_input_hanja_sort_by_context_summary">사용하려면 漢字變換器 후원판이 필요합니다.</string>
+    <string name="pref_input_hanja_additional_dictionaries_title">한자 변환 추가 사전</string>
+    <string name="person_name">인명</string>
+    <string name="metro_station">도시철도 역명</string>
+    <string name="newly_coined">신조어</string>
+    <string name="pref_input_engine_type_title">입력 처리기 종류</string>
+    <string name="pref_input_engine_latin">로마자</string>
+    <string name="pref_input_engine_hangul">한글</string>
+
+    <string name="pref_header_behaviour_title">작동</string>
+    <string name="pref_behaviour_double_tap_gap_title">더블클릭 간격</string>
+    <string name="pref_behaviour_long_press_duration_title">롱클릭 길이</string>
+    <string name="pref_behaviour_long_press_action_title">롱클릭 동작</string>
+    <string name="pref_behaviour_repeat_interval_title">키 반복 간격</string>
+    <string name="pref_behaviour_show_popups_title">키 미리보기 팝업 표시</string>
+    <string name="pref_behaviour_show_more_keys_title">키 더보기 팝업 표시</string>
+    <string name="pref_behaviour_show_more_keys_summary">키 롱클릭시 표시됩니다.</string>
+    <string name="pref_behaviour_slide_action_title">키보드 슬라이드 동작</string>
+    <string name="slide_action_none">무시</string>
+    <string name="slide_action_flick">플릭 (다른 문자 입력)</string>
+    <string name="slide_action_seek">키 찾아보기</string>
+    <string name="pref_behaviour_flick_sensitivity_title">플릭 감도</string>
+    <string name="pref_behaviour_flick_action_up_title">위 플릭 동작</string>
+    <string name="pref_behaviour_flick_action_down_title">아래 플릭 동작</string>
+    <string name="pref_behaviour_flick_action_left_title">왼쪽 플릭 동작</string>
+    <string name="pref_behaviour_flick_action_right_title">오른쪽 플릭 동작</string>
+    <string name="flick_action_none">없음</string>
+    <string name="long_press_action_repeat">반복 입력</string>
+    <string name="flick_action_shift">윗글쇠 입력</string>
+    <string name="flick_action_symbol">기호 입력</string>
+    <string name="flick_action_shift_symbol">윗글쇠 기호 입력</string>
+    <string name="flick_action_alternative_language">타언어 입력</string>
+
+    <string name="pref_header_about_title">정보</string>
+    <string name="pref_about_app_info_title">make keyboard</string>
+    <string name="pref_about_app_info_summary">개발자 연락처: hgl1002@naver.com</string>
+    <string name="pref_about_more_apps_title">앱 더보기</string>
+    <string name="pref_about_more_apps_summary">개발자의 다른 앱을 확인해 보세요.</string>
+    <string name="pref_about_oss_licenses_title">오픈소스 라이선스</string>
+
+    <string name="pref_layout_preset_title">기본 키보드 배열</string>
+    <string name="pref_layout_preset_summary">미리 설정된 배열을 불러옵니다.</string>
+    <string name="pref_layout_preview_mode_title">미리보기</string>
+    <string name="pref_layout_reorder_mode_title">순서 변경</string>
+    <string name="pref_layout_add_component_title">구성 요소 추가</string>
+    <string name="pref_layout_component_main_keyboard_title">기본 키보드</string>
+    <string name="pref_layout_component_number_row_title">숫자열</string>
+    <string name="pref_layout_component_candidates_title">후보 단어 창</string>
+    <string name="pref_layout_component_text_edit_title">텍스트 편집 도구</string>
+    <string name="pref_layout_component_language_switcher_title">언어 전환 탭</string>
+
+    <string name="pref_soft_keyboard_header_title">화면 키보드</string>
+</resources>

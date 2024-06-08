@@ -1,12 +1,122 @@
 <resources>
     <string name="app_name">make keyboard</string>
 
-    <string name="close">Close</string>
-    <string name="expand">Expand</string>
+    <string name="msg_hanja_candidates_component_missing">A candidates component is required to use Hanja conversion.</string>
+    <string name="msg_hanja_converter_not_found">Please install HanjaConverter to use Hanja conversion.</string>
+    <string name="msg_hanja_converter_donation_not_found">Please install HanjaConverter Donation version to use Hanja prediction.</string>
+    <string name="msg_main_keyboard_component_missing">A main keyboard component is required for keyboard to show.</string>
+    <string name="msg_preset_load_failed">Error loading preset %s.</string>
+    <string name="action_add_component">Add</string>
 
-    <string name="key_desc_shift">Shift Key</string>
-    <string name="key_desc_shift_locked">Locked Shift Key</string>
-    <string name="key_desc_delete">Delete Key</string>
-    <string name="key_desc_symbol">Symbol Key</string>
-    <string name="key_desc_return">Return Key</string>
+    <string name="title_activity_import_export">Import / Export</string>
+    <string name="title_activity_keyboard_layout">Keyboard Layout</string>
+
+    <string name="title_activity_settings">make keyboard Settings</string>
+
+    <string name="pref_header_method_title">Input Method</string>
+    <string name="pref_method_enable_title">Enable Input Method</string>
+    <string name="pref_method_enable_summary">Select \'make keyboard\' to enable.</string>
+    <string name="pref_method_choose_title">Choose Input Method</string>
+    <string name="pref_method_choose_summary">Choose \'make keyboard\' to start using.</string>
+
+    <string name="pref_header_appearance_title">Appearance</string>
+    <string name="pref_appearance_theme_title">Keyboard Theme</string>
+    <string name="theme_static">Static</string>
+    <string name="theme_dynamic">Dynamic</string>
+    <string name="pref_appearance_keyboard_height_title">Keyboard Height</string>
+    <string name="pref_appearance_unify_height_title">Unify Keyboard Heights</string>
+    <string name="pref_appearance_unify_height_summary">Keep entire keyboard height always the same.</string>
+    <string name="pref_appearance_default_height_title">Use Default Height</string>
+    <string name="pref_appearance_default_height_summary">Keep the keyboard height synced with base settings.</string>
+    <string name="pref_appearance_keyboard_view_type_title">Keyboard View Type</string>
+    <string name="pref_appearance_keyboard_view_type_summary">Try changing this if you have performance issues.</string>
+    <string name="keybaord_view_type_canvas">Canvas</string>
+    <string name="keybaord_view_type_stacked_view">Stacked View</string>
+    <string name="pref_appearance_haptic_feedback_title">Haptic Feedback</string>
+    <string name="pref_appearance_sound_feedback_title">Sound Feedback</string>
+
+    <string name="pref_header_layout_title">Keyboard Layout</string>
+    <string name="pref_layout_screen_mode_title">Screen Mode</string>
+    <string name="screen_mode_mobile">Mobile</string>
+    <string name="screen_mode_tablet">Tablet</string>
+    <string name="screen_mode_full">Full</string>
+    <string name="pref_layout_hangul_preset_title">Hangul Keyboard Preset</string>
+    <string name="pref_layout_latin_preset_title">Latin Keyboard Preset</string>
+    <string name="pref_layout_symbol_preset_title">Symbol Keyboard Preset</string>
+    <string name="pref_layout_hangul_settings_title">Hangul Keyboard Settings</string>
+    <string name="pref_layout_latin_settings_title">Latin Keyboard Settings</string>
+    <string name="pref_layout_symbol_settings_title">Symbol Keyboard Settings</string>
+    <string name="layout_2set_ks5002">2-Set KS Standard</string>
+    <string name="layout_2set_old_hangul">2-Set Old Hangul</string>
+    <string name="layout_3set_390">3-Set 390</string>
+    <string name="layout_3set_391">3-Set 391 (Final)</string>
+    <string name="layout_3set_391_strict">3-Set 391 (Final, Strict)</string>
+    <string name="layout_3set_shin_original">3-Set Shin-Type Original</string>
+    <string name="layout_3set_shin_edit">3-Set Shin-Type Edit</string>
+    <string name="layout_3set_393_old_hangul">3-Set Old Hangul</string>
+    <string name="layout_latin_qwerty">QWERTY</string>
+    <string name="layout_latin_dvorak">Dvorak</string>
+    <string name="layout_latin_colemak">Colemak</string>
+    <string name="layout_symbol_a">Symbol A</string>
+    <string name="layout_symbol_b">Symbol B</string>
+    <string name="layout_symbol_g">Symbol G</string>
+
+    <string name="pref_header_input_title">Input</string>
+    <string name="pref_input_hanja_conversion_title">Hanja Conversion</string>
+    <string name="pref_input_hanja_conversion_summary">requires Hanja Converter installed and enabled.</string>
+    <string name="pref_input_hanja_prediction_title">Hanja Prediction</string>
+    <string name="pref_input_hanja_prediction_summary">requires Hanja Converter Donation Version installed.</string>
+    <string name="pref_input_hanja_sort_by_context_title">Sort Hanja by Context</string>
+    <string name="pref_input_hanja_sort_by_context_summary">requires Hanja Converter Donation Version installed.</string>
+    <string name="pref_input_hanja_additional_dictionaries_title">Additional Hanja Dictionaries</string>
+    <string name="person_name">Person Names</string>
+    <string name="metro_station">Metro Station Names</string>
+    <string name="newly_coined">Newly-coined Words</string>
+    <string name="pref_input_engine_type_title">Input Engine Type</string>
+    <string name="pref_input_engine_latin">Latin</string>
+    <string name="pref_input_engine_hangul">Hangul</string>
+
+    <string name="pref_header_behaviour_title">Behaviour</string>
+    <string name="pref_behaviour_double_tap_gap_title">Double-tap Gap</string>
+    <string name="pref_behaviour_long_press_duration_title">Long-press Duration</string>
+    <string name="pref_behaviour_long_press_action_title">Long-press Action</string>
+    <string name="pref_behaviour_repeat_interval_title">Key Repeat Interval</string>
+    <string name="pref_behaviour_show_popups_title">Show Key Preview Popups</string>
+    <string name="pref_behaviour_show_more_keys_title">Show More Key Popups</string>
+    <string name="pref_behaviour_show_more_keys_summary">Displays on key long-press.</string>
+    <string name="pref_behaviour_slide_action_title">Keyboard Slide Action</string>
+    <string name="slide_action_none">None</string>
+    <string name="slide_action_flick">Flick (Alternative input)</string>
+    <string name="slide_action_seek">Seek</string>
+    <string name="pref_behaviour_flick_sensitivity_title">Flick Sensitivity</string>
+    <string name="pref_behaviour_flick_action_up_title">Up Flick Action</string>
+    <string name="pref_behaviour_flick_action_down_title">Down Flick Action</string>
+    <string name="pref_behaviour_flick_action_left_title">Left Flick Action</string>
+    <string name="pref_behaviour_flick_action_right_title">Right Flick Action</string>
+    <string name="flick_action_none">None</string>
+    <string name="long_press_action_repeat">Repeat Key</string>
+    <string name="flick_action_shift">Input Shifted</string>
+    <string name="flick_action_symbol">Input Symbol</string>
+    <string name="flick_action_shift_symbol">Input Shifted Symbol</string>
+    <string name="flick_action_alternative_language">Input Alternative Language</string>
+
+    <string name="pref_header_about_title">About</string>
+    <string name="pref_about_app_info_title">make keyboard</string>
+    <string name="pref_about_app_info_summary">Developer contact: hgl1002@naver.com</string>
+    <string name="pref_about_more_apps_title">More Apps</string>
+    <string name="pref_about_more_apps_summary">Discover more apps from this app\'s developer.</string>
+    <string name="pref_about_oss_licenses_title">Open source Licenses</string>
+
+    <string name="pref_layout_preset_title">Layout Preset</string>
+    <string name="pref_layout_preset_summary">Load a layout from presets.</string>
+    <string name="pref_layout_preview_mode_title">Preview Mode</string>
+    <string name="pref_layout_reorder_mode_title">Change Orders</string>
+    <string name="pref_layout_add_component_title">Add a Component</string>
+    <string name="pref_layout_component_main_keyboard_title">Main Keyboard</string>
+    <string name="pref_layout_component_number_row_title">Number Row</string>
+    <string name="pref_layout_component_candidates_title">Candidates</string>
+    <string name="pref_layout_component_text_edit_title">Text Edit Tool</string>
+    <string name="pref_layout_component_language_switcher_title">Language Switcher</string>
+
+    <string name="pref_soft_keyboard_header_title">On-screen Keyboard</string>
 </resources>

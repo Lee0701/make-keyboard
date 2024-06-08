@@ -8,7 +8,7 @@
 
     <style name="Theme.MakeKeyboard.Keyboard">
         <item name="background">@color/keyboard_bg_dark</item>
-        <!--        <item name="backgroundTint">@color/keyboard_bg_dark</item>-->
+<!--        <item name="backgroundTint">@color/keyboard_bg_dark</item>-->
     </style>
 
     <style name="Theme.MakeKeyboard.Keyboard.Key">

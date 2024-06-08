@@ -1,0 +1,9 @@
+type: "Hangul"
+layout:
+  softKeyboard:
+  - "common/soft_%s_qwerty_with_semicolon.yaml"
+  codeConvertTable:
+  - "symbol/table_custom_keys.yaml"
+  - "latin/table_latin_colemak.yaml"
+components:
+- "MainKeyboard"

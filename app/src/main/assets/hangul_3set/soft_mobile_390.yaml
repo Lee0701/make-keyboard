@@ -1,0 +1,50 @@
+rows:
+- keys:
+  - !<include>
+    name: "common/row_number.yaml"
+- keys:
+  - !<include>
+    name: "common/row_qwerty_alpha_1.yaml"
+- keys:
+  - !<include>
+    name: "common/row_qwerty_alpha_2.yaml"
+  - !<key>
+    code: "KEYCODE_SEMICOLON"
+    output: ";"
+- keys:
+  - !<key>
+    code: "KEYCODE_SHIFT_LEFT"
+    iconType: "Shift"
+    type: "Modifier"
+  - !<key>
+    code: "KEYCODE_Z"
+    output: "Z"
+  - !<key>
+    code: "KEYCODE_X"
+    output: "X"
+  - !<key>
+    code: "KEYCODE_C"
+    output: "C"
+  - !<key>
+    code: "KEYCODE_V"
+    output: "V"
+  - !<key>
+    code: "KEYCODE_SEBEOL_390_0"
+    output: ""
+  - !<key>
+    code: "KEYCODE_SEBEOL_390_1"
+    output: ""
+  - !<key>
+    code: "KEYCODE_SEBEOL_390_2"
+    output: ""
+  - !<key>
+    code: "KEYCODE_SEBEOL_390_3"
+    output: ""
+  - !<key>
+    code: "KEYCODE_DEL"
+    iconType: "Backspace"
+    repeatable: true
+    type: "Modifier"
+- keys:
+  - !<include>
+    name: "common/row_mobile_bottom_with_slash.yaml"

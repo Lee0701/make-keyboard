@@ -1,0 +1,72 @@
+rows:
+- keys:
+  - !<include>
+    name: "common/row_number.yaml"
+  - !<key>
+    code: "KEYCODE_DEL"
+    iconType: "Backspace"
+    repeatable: true
+    type: "Modifier"
+- keys:
+  - !<include>
+    name: "common/row_qwerty_alpha_1.yaml"
+  - !<key>
+    code: "KEYCODE_ENTER"
+    iconType: "Return"
+    type: "Action"
+- keys:
+  - !<spacer>
+    width: 0.25
+  - !<include>
+    name: "common/row_qwerty_alpha_2.yaml"
+  - !<key>
+    code: "KEYCODE_SEMICOLON"
+    output: ";"
+  - !<key>
+    code: "KEYCODE_ENTER"
+    width: 0.75
+    type: "Action"
+    backgroundType: "MergeUp"
+- keys:
+  - !<key>
+    code: "KEYCODE_SHIFT_LEFT"
+    iconType: "Shift"
+    type: "Modifier"
+  - !<include>
+    name: "common/row_qwerty_alpha_3.yaml"
+  - !<key>
+    code: "KEYCODE_COMMA"
+    output: ","
+  - !<key>
+    code: "KEYCODE_PERIOD"
+    output: "."
+  - !<key>
+    code: "KEYCODE_SHIFT_RIGHT"
+    iconType: "Shift"
+    type: "Modifier"
+- keys:
+  - !<key>
+    code: "KEYCODE_SYM"
+    iconType: "Option"
+    width: 1.5
+    type: "Modifier"
+  - !<key>
+    code: "KEYCODE_LANGUAGE_SWITCH"
+    iconType: "Language"
+    type: "ModifierAlt"
+  - !<key>
+    code: "KEYCODE_GRAVE"
+    output: "`"
+  - !<key>
+    code: "KEYCODE_SPACE"
+    label: ""
+    width: 6.0
+    type: "Space"
+  - !<key>
+    code: "KEYCODE_APOSTROPHE"
+    output: "'"
+  - !<key>
+    code: "KEYCODE_SYM"
+    iconType: "Option"
+    width: 1.5
+    type: "Modifier"

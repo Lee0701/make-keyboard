@@ -1,0 +1,33 @@
+keys:
+- !<key>
+  code: "KEYCODE_DPAD_LEFT"
+  iconType: "Left"
+  repeatable: true
+- !<key>
+  code: "KEYCODE_EXPAND_SELECTION_LEFT"
+  iconType: "ExpandLeft"
+  repeatable: true
+- !<key>
+  code: "KEYCODE_COPY"
+  iconType: "Copy"
+  repeatable: true
+- !<key>
+  code: "KEYCODE_CUT"
+  iconType: "Cut"
+  repeatable: true
+- !<key>
+  code: "KEYCODE_PASTE"
+  iconType: "Paste"
+  repeatable: true
+- !<key>
+  code: "KEYCODE_SELECT_ALL"
+  iconType: "SelectAll"
+  repeatable: true
+- !<key>
+  code: "KEYCODE_EXPAND_SELECTION_RIGHT"
+  iconType: "ExpandRight"
+  repeatable: true
+- !<key>
+  code: "KEYCODE_DPAD_RIGHT"
+  iconType: "Right"
+  repeatable: true

@@ -1,0 +1,59 @@
+rows:
+- keys:
+  - !<include>
+    name: "common/row_number.yaml"
+- keys:
+  - !<include>
+    name: "common/row_qwerty_alpha_1.yaml"
+- keys:
+  - !<include>
+    name: "common/row_qwerty_alpha_2.yaml"
+  - !<key>
+    code: "KEYCODE_SEMICOLON"
+    output: ";"
+- keys:
+  - !<key>
+    code: "KEYCODE_SHIFT_LEFT"
+    iconType: "Shift"
+    type: "Modifier"
+  - !<include>
+    name: "common/row_qwerty_alpha_3.yaml"
+  - !<key>
+    code: "KEYCODE_COMMA"
+    output: ","
+  - !<key>
+    code: "KEYCODE_PERIOD"
+    output: "."
+- keys:
+  - !<key>
+    code: "KEYCODE_SYM"
+    iconType: "Option"
+    width: 1.5
+    type: "Modifier"
+  - !<key>
+    code: "KEYCODE_GRAVE"
+    output: "`"
+    type: "AlphanumericAlt"
+  - !<key>
+    code: "KEYCODE_LANGUAGE_SWITCH"
+    iconType: "Language"
+    type: "ModifierAlt"
+  - !<key>
+    code: "KEYCODE_SPACE"
+    label: ""
+    width: 3.0
+    type: "Space"
+  - !<key>
+    code: "KEYCODE_APOSTROPHE"
+    output: "'"
+    type: "AlphanumericAlt"
+  - !<key>
+    code: "KEYCODE_ENTER"
+    iconType: "Return"
+    width: 1.5
+    type: "Action"
+  - !<key>
+    code: "KEYCODE_DEL"
+    iconType: "Backspace"
+    repeatable: true
+    type: "Modifier"

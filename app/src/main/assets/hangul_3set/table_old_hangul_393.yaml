@@ -1,0 +1,128 @@
+!<simple>
+map:
+  "KEYCODE_GRAVE":
+    base: "0x11f9"
+    shift: "0x11f0"
+  "KEYCODE_1":
+    base: "0x11c2"
+    shift: "0x11bd"
+  "KEYCODE_2":
+    base: "0x11bb"
+    shift: "0x11eb"
+  "KEYCODE_3":
+    base: "0x11b8"
+    shift: "0x0023"
+  "KEYCODE_4":
+    base: "0x116d"
+    shift: "0x0024"
+  "KEYCODE_5":
+    base: "0x1172"
+    shift: "0x0025"
+  "KEYCODE_6":
+    base: "0x1163"
+    shift: "0x005e"
+  "KEYCODE_7":
+    base: "0x1168"
+    shift: "0x0026"
+  "KEYCODE_8":
+    base: "0x1174"
+    shift: "0x002a"
+  "KEYCODE_9":
+    base: "0x116e"
+    shift: "0x0028"
+  "KEYCODE_0":
+    base: "0x110f"
+    shift: "0x0029"
+  "KEYCODE_Q":
+    base: "0x11ba"
+    shift: "0x11c1"
+  "KEYCODE_W":
+    base: "0x11af"
+    shift: "0x11c0"
+  "KEYCODE_E":
+    base: "0x1167"
+    shift: "0x11bf"
+  "KEYCODE_R":
+    base: "0x1162"
+    shift: "0x1164"
+  "KEYCODE_T":
+    base: "0x1165"
+    shift: "0x003b"
+  "KEYCODE_Y":
+    base: "0x1105"
+    shift: "0x302f"
+  "KEYCODE_U":
+    base: "0x1103"
+    shift: "0x302e"
+  "KEYCODE_I":
+    base: "0x1106"
+    shift: "0x1154"
+  "KEYCODE_O":
+    base: "0x110e"
+    shift: "0x1155"
+  "KEYCODE_P":
+    base: "0x1111"
+    shift: "0x00b7"
+  "KEYCODE_A":
+    base: "0x11bc"
+    shift: "0x11ae"
+  "KEYCODE_S":
+    base: "0x11ab"
+    shift: "0x11ad"
+  "KEYCODE_D":
+    base: "0x1175"
+    shift: "0x11b0"
+  "KEYCODE_F":
+    base: "0x1161"
+    shift: "0x11a9"
+  "KEYCODE_G":
+    base: "0x1173"
+    shift: "0x119e"
+  "KEYCODE_H":
+    base: "0x1102"
+    shift: "0x0027"
+  "KEYCODE_J":
+    base: "0x110b"
+    shift: "0x114c"
+  "KEYCODE_K":
+    base: "0x1100"
+    shift: "0x114e"
+  "KEYCODE_L":
+    base: "0x110c"
+    shift: "0x1150"
+  "KEYCODE_SEMICOLON":
+    base: "0x1107"
+    shift: "0x003a"
+  "KEYCODE_APOSTROPHE":
+    base: "0x1110"
+    shift: "0x0022"
+  "KEYCODE_Z":
+    base: "0x11b7"
+    shift: "0x11be"
+  "KEYCODE_X":
+    base: "0x11a8"
+    shift: "0x11b9"
+  "KEYCODE_C":
+    base: "0x1166"
+    shift: "0x11b1"
+  "KEYCODE_V":
+    base: "0x1169"
+    shift: "0x11b6"
+  "KEYCODE_B":
+    base: "0x116e"
+    shift: "0x0021"
+  "KEYCODE_N":
+    base: "0x1109"
+    shift: "0x1140"
+  "KEYCODE_M":
+    base: "0x1112"
+    shift: "0x1159"
+  "KEYCODE_COMMA":
+    base: "0x002c"
+    shift: "0x113c"
+  "KEYCODE_PERIOD":
+    base: "0x002e"
+    shift: "0x113e"
+  "KEYCODE_SLASH":
+    base: "0x1169"
+    shift: "0x003f"

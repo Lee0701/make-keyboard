@@ -1,0 +1,8 @@
+rows:
+- keys:
+  - !<key>
+    output: "⅝"
+  - !<key>
+    output: "⁵"
+  - !<key>
+    output: "⅚"

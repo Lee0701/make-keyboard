@@ -1,0 +1,42 @@
+rows:
+- keys:
+  - !<include>
+    name: "common/row_qwerty_alpha_1.yaml"
+  - !<key>
+    code: "KEYCODE_DEL"
+    iconType: "Backspace"
+    repeatable: true
+    type: "Modifier"
+- keys:
+  - !<spacer>
+      width: 0.25
+  - !<include>
+    name: "common/row_qwerty_alpha_2.yaml"
+  - !<key>
+    code: "KEYCODE_SEMICOLON"
+    output: ";"
+  - !<key>
+    code: "KEYCODE_ENTER"
+    iconType: "Return"
+    width: 0.75
+    type: "Action"
+- keys:
+  - !<key>
+    code: "KEYCODE_SHIFT_LEFT"
+    iconType: "Shift"
+    type: "Modifier"
+  - !<include>
+    name: "common/row_qwerty_alpha_3.yaml"
+  - !<key>
+    code: "KEYCODE_COMMA"
+    output: ","
+  - !<key>
+    code: "KEYCODE_PERIOD"
+    output: "."
+  - !<key>
+    code: "KEYCODE_SHIFT_RIGHT"
+    iconType: "Shift"
+    type: "Modifier"
+- keys:
+  - !<include>
+    name: "common/row_tablet_bottom.yaml"

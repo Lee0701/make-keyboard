@@ -46,8 +46,6 @@
     </style>
 
     <style name="Theme.MakeKeyboard.Candidates.Item">
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
         <item name="android:background">?selectableItemBackground</item>
         <item name="android:textSize">@dimen/candidates_text_size</item>
     </style>

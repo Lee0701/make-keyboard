@@ -1,0 +1,8 @@
+rows:
+- keys:
+  - !<key>
+    output: "Ω"
+  - !<key>
+    output: "Π"
+  - !<key>
+    output: "μ"

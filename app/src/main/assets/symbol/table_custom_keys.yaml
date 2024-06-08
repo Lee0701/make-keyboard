@@ -1,0 +1,8 @@
+!<simple>
+map:
+  "KEYCODE_COMMA_PERIOD":
+    base: 0x002c
+    shift: 0x002e
+  "KEYCODE_PERIOD_COMMA":
+    base: 0x002e
+    shift: 0x002c

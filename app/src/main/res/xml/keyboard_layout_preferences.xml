@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ee.oyatl.ime.make.settings.ListPreference
+        app:key="input_layout_preset"
+        app:entries="@array/empty"
+        app:entryValues="@array/empty"
+        app:defaultValue="preset/preset_empty.yaml"
+        app:title="@string/pref_layout_preset_title"
+        app:summary="@string/pref_layout_preset_summary" />
+
+    <ee.oyatl.ime.make.settings.PreferenceCategory
+        app:title="@string/pref_soft_keyboard_header_title">
+
+        <ee.oyatl.ime.make.settings.SwitchPreference
+            app:key="soft_keyboard_default_height"
+            app:defaultValue="false"
+            app:title="@string/pref_appearance_default_height_title"
+            app:summary="@string/pref_appearance_default_height_summary" />
+
+        <ee.oyatl.ime.make.settings.SliderPreference
+            app:key="soft_keyboard_row_height"
+            app:valueFrom="30.0"
+            app:valueTo="100.0"
+            app:stepSize="5.0"
+            app:defaultValue="@string/pref_appearance_keyboard_height_default"
+            app:title="@string/pref_appearance_keyboard_height_title"
+            app:useSimpleSummaryProvider="true"/>
+
+    </ee.oyatl.ime.make.settings.PreferenceCategory>
+
+</PreferenceScreen>

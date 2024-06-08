@@ -1,0 +1,9 @@
+type: "Latin"
+layout:
+  softKeyboard:
+  - "latin/soft_%s_qwerty_dvorak_custom.yaml"
+  codeConvertTable:
+  - "symbol/table_custom_keys.yaml"
+  - "latin/table_latin_dvorak.yaml"
+components:
+- "MainKeyboard"

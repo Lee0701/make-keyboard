@@ -1,0 +1,83 @@
+!<simple>
+map:
+  "KEYCODE_Q":
+    base: 0x0031
+    shift: 0x007e
+  "KEYCODE_W":
+    base: 0x0032
+    shift: 0x0060
+  "KEYCODE_E":
+    base: 0x0033
+    shift: 0x007c
+  "KEYCODE_R":
+    base: 0x0034
+    shift: 0x2022
+  "KEYCODE_T":
+    base: 0x0035
+    shift: 0x221a
+  "KEYCODE_Y":
+    base: 0x0036
+    shift: 0x03c0
+  "KEYCODE_U":
+    base: 0x0037
+    shift: 0x00f7
+  "KEYCODE_I":
+    base: 0x0038
+    shift: 0x00d7
+  "KEYCODE_O":
+    base: 0x0039
+    shift: 0x00b6
+  "KEYCODE_P":
+    base: 0x0030
+    shift: 0x2206
+  "KEYCODE_A":
+    base: 0x0040
+    shift: 0x20ac
+  "KEYCODE_S":
+    base: 0x0023
+    shift: 0x00a5
+  "KEYCODE_D":
+    base: 0x00a3
+    shift: 0x0024
+  "KEYCODE_F":
+    base: 0x005f
+    shift: 0x00a2
+  "KEYCODE_G":
+    base: 0x0026
+    shift: 0x005e
+  "KEYCODE_H":
+    base: 0x002d
+    shift: 0x00b0
+  "KEYCODE_J":
+    base: 0x002b
+    shift: 0x003d
+  "KEYCODE_K":
+    base: 0x0028
+    shift: 0x007b
+  "KEYCODE_L":
+    base: 0x0029
+    shift: 0x007d
+  "KEYCODE_SEMICOLON":
+    base: 0x002f
+    shift: 0x005c
+  "KEYCODE_Z":
+    base: 0x002a
+    shift: 0x0025
+  "KEYCODE_X":
+    base: 0x0022
+    shift: 0x00a9
+  "KEYCODE_C":
+    base: 0x0027
+    shift: 0x00ae
+  "KEYCODE_V":
+    base: 0x003a
+    shift: 0x2122
+  "KEYCODE_B":
+    base: 0x003b
+    shift: 0x2713
+  "KEYCODE_N":
+    base: 0x0021
+    shift: 0x005b
+  "KEYCODE_M":
+    base: 0x003f
+    shift: 0x005d

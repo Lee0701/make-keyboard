@@ -1,0 +1,143 @@
+!<simple>
+map:
+  KEYCODE_1:
+    base: '_ㅎ'
+    shift: '_ㄲ'
+  KEYCODE_2:
+    base: '_ㅆ'
+    shift: '_ㄺ'
+  KEYCODE_3:
+    base: '_ㅂ'
+    shift: '_ㅈ'
+  KEYCODE_4:
+    base: '_ㅛ_'
+    shift: '_ㄿ'
+  KEYCODE_5:
+    base: '_ㅠ_'
+    shift: '_ㄾ'
+  KEYCODE_6:
+    base: '_ㅑ_'
+    shift: '='
+  KEYCODE_7:
+    base: '_ㅖ_'
+    shift: '“'
+  KEYCODE_8:
+    base: '_ㅢ_'
+    shift: '”'
+  KEYCODE_9:
+    base: '_ㅜ_'
+    shift: ''''
+  KEYCODE_0:
+    base: 'ㅋ_'
+    shift: '~'
+  KEYCODE_Q:
+    base: '_ㅅ'
+    shift: '_ㅍ'
+  KEYCODE_W:
+    base: '_ㄹ'
+    shift: '_ㅌ'
+  KEYCODE_E:
+    base: '_ㅕ_'
+    shift: '_ㄵ'
+  KEYCODE_R:
+    base: '_ㅐ_'
+    shift: '_ㅀ'
+  KEYCODE_T:
+    base: '_ㅓ_'
+    shift: '_ㄽ'
+  KEYCODE_Y:
+    base: 'ㄹ_'
+    shift: '5'
+  KEYCODE_U:
+    base: 'ㄷ_'
+    shift: '6'
+  KEYCODE_I:
+    base: 'ㅁ_'
+    shift: '7'
+  KEYCODE_O:
+    base: 'ㅊ_'
+    shift: '8'
+  KEYCODE_P:
+    base: 'ㅍ_'
+    shift: '9'
+  KEYCODE_A:
+    base: '_ㅇ'
+    shift: '_ㄷ'
+  KEYCODE_S:
+    base: '_ㄴ'
+    shift: '_ㄶ'
+  KEYCODE_D:
+    base: '_ㅣ_'
+    shift: '_ㄼ'
+  KEYCODE_F:
+    base: '_ㅏ_'
+    shift: '_ㄻ'
+  KEYCODE_G:
+    base: '_ㅡ_'
+    shift: '_ㅒ_'
+  KEYCODE_H:
+    base: 'ㄴ_'
+    shift: '0'
+  KEYCODE_J:
+    base: 'ㅇ_'
+    shift: '1'
+  KEYCODE_K:
+    base: 'ㄱ_'
+    shift: '2'
+  KEYCODE_L:
+    base: 'ㅈ_'
+    shift: '3'
+  KEYCODE_SEMICOLON:
+    base: 'ㅂ_'
+    shift: '4'
+  KEYCODE_APOSTROPHE:
+    base: 'ㅌ_'
+    shift: '·'
+  KEYCODE_Z:
+    base: '_ㅁ'
+    shift: '_ㅊ'
+  KEYCODE_X:
+    base: '_ㄱ'
+    shift: '_ㅄ'
+  KEYCODE_C:
+    base: '_ㅔ_'
+    shift: '_ㅋ'
+  KEYCODE_V:
+    base: '_ㅗ_'
+    shift: '_ㄳ'
+  KEYCODE_B:
+    base: '_ㅜ_'
+    shift: '?'
+  KEYCODE_N:
+    base: 'ㅅ_'
+    shift: '-'
+  KEYCODE_M:
+    base: 'ㅎ_'
+    shift: '"'
+  KEYCODE_COMMA:
+    base: ','
+    shift: ','
+  KEYCODE_PERIOD:
+    base: '.'
+    shift: '.'
+  KEYCODE_SLASH:
+    base: '_ㅗ_'
+    shift: '!'
+  KEYCODE_MINUS:
+    base: ')'
+    shift: ';'
+  KEYCODE_NUM:
+    base: '>'
+    shift: '+'
+  KEYCODE_LEFT_BRACKET:
+    base: '('
+    shift: '%'
+  KEYCODE_RIGHT_BRACKET:
+    base: '<'
+    shift: '/'
+  KEYCODE_BACKSLASH:
+    base: ':'
+    shift: '\'
+  KEYCODE_GRAVE:
+    base: '*'
+    shift: '※'

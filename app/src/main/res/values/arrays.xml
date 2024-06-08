@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="InconsistentArrays">
+
+    <string-array name="empty">
+    </string-array>
+
+    <string-array name="appearance_themes">
+        <item>@string/theme_static</item>
+    </string-array>
+
+    <string-array name="appearance_theme_values">
+        <item>theme_static</item>
+    </string-array>
+
+    <string-array name="appearance_keyboard_view_types">
+        <item>@string/keybaord_view_type_canvas</item>
+        <item>@string/keybaord_view_type_stacked_view</item>
+    </string-array>
+
+    <string-array name="appearance_keyboard_view_type_values">
+        <item>canvas</item>
+        <item>stacked_view</item>
+    </string-array>
+
+    <string-array name="additional_dictionaries">
+        <item>@string/person_name</item>
+        <item>@string/metro_station</item>
+        <item>@string/newly_coined</item>
+    </string-array>
+
+    <string-array name="additional_dictionary_values">
+        <item>person-name</item>
+        <item>metro-station</item>
+        <item>newly-coined</item>
+    </string-array>
+
+    <string-array name="additional_dictionary_defaults">
+        <item>person-name</item>
+        <item>metro-station</item>
+        <item>newly-coined</item>
+    </string-array>
+
+    <string-array name="slide_actions">
+        <item>@string/slide_action_none</item>
+        <item>@string/slide_action_flick</item>
+        <item>@string/slide_action_seek</item>
+    </string-array>
+
+    <string-array name="slide_action_values">
+        <item>none</item>
+        <item>flick</item>
+        <item>seek</item>
+    </string-array>
+
+    <string-array name="input_engine_type_entries">
+        <item>@string/pref_input_engine_latin</item>
+        <item>@string/pref_input_engine_hangul</item>
+    </string-array>
+
+    <string-array name="input_engine_type_values">
+        <item>Latin</item>
+        <item>Hangul</item>
+    </string-array>
+
+    <string-array name="long_press_actions">
+        <item>@string/flick_action_none</item>
+        <item>@string/long_press_action_repeat</item>
+        <item>@string/flick_action_shift</item>
+        <item>@string/flick_action_symbol</item>
+        <item>@string/flick_action_shift_symbol</item>
+        <!--        <item>@string/flick_action_alternative_language</item>-->
+    </string-array>
+
+    <string-array name="long_press_action_values">
+        <item>none</item>
+        <item>repeat</item>
+        <item>shift</item>
+        <item>symbol</item>
+        <item>shift_symbol</item>
+        <!--        <item>alternative_language</item>-->
+    </string-array>
+
+    <string-array name="flick_actions">
+        <item>@string/flick_action_none</item>
+        <item>@string/flick_action_shift</item>
+        <item>@string/flick_action_symbol</item>
+        <item>@string/flick_action_shift_symbol</item>
+<!--        <item>@string/flick_action_alternative_language</item>-->
+    </string-array>
+
+    <string-array name="flick_action_values">
+        <item>none</item>
+        <item>shift</item>
+        <item>symbol</item>
+        <item>shift_symbol</item>
+<!--        <item>alternative_language</item>-->
+    </string-array>
+
+
+    <string-array name="layout_screen_modes">
+        <item>@string/screen_mode_mobile</item>
+        <item>@string/screen_mode_tablet</item>
+<!--        <item>@string/screen_mode_full</item>-->
+    </string-array>
+
+    <string-array name="layout_screen_mode_values">
+        <item>mobile</item>
+        <item>tablet</item>
+<!--        <item>full</item>-->
+    </string-array>
+
+    <string-array name="preset_hangul_entries">
+        <item>@string/layout_2set_ks5002</item>
+        <item>@string/layout_3set_390</item>
+        <item>@string/layout_3set_391</item>
+        <item>@string/layout_3set_391_strict</item>
+        <item>@string/layout_3set_shin_original</item>
+        <item>@string/layout_3set_shin_edit</item>
+        <item>@string/layout_2set_old_hangul</item>
+        <item>@string/layout_3set_393_old_hangul</item>
+    </string-array>
+
+    <string-array name="preset_hangul_values">
+        <item>preset/preset_2set_ks5002.yaml</item>
+        <item>preset/preset_3set_390.yaml</item>
+        <item>preset/preset_3set_391.yaml</item>
+        <item>preset/preset_3set_391_strict.yaml</item>
+        <item>preset/preset_3set_shin_original.yaml</item>
+        <item>preset/preset_3set_shin_edit.yaml</item>
+        <item>preset/preset_2set_old_hangul.yaml</item>
+        <item>preset/preset_3set_393_old_hangul.yaml</item>
+    </string-array>
+
+    <string-array name="preset_latin_entries">
+        <item>@string/layout_latin_qwerty</item>
+        <item>@string/layout_latin_dvorak</item>
+        <item>@string/layout_latin_colemak</item>
+    </string-array>
+
+    <string-array name="preset_latin_values">
+        <item>preset/preset_latin_qwerty.yaml</item>
+        <item>preset/preset_latin_dvorak.yaml</item>
+        <item>preset/preset_latin_colemak.yaml</item>
+    </string-array>
+
+    <string-array name="preset_symbol_entries">
+        <item>@string/layout_symbol_a</item>
+        <item>@string/layout_symbol_b</item>
+        <item>@string/layout_symbol_g</item>
+    </string-array>
+
+    <string-array name="preset_symbol_values">
+        <item>preset/preset_symbol_a.yaml</item>
+        <item>preset/preset_symbol_b.yaml</item>
+        <item>preset/preset_symbol_g.yaml</item>
+    </string-array>
+
+</resources>

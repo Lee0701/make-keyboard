@@ -1,0 +1,143 @@
+!<simple>
+map:
+  KEYCODE_1:
+    base: '_ㅎ'
+    shift: '_ㅈ'
+  KEYCODE_2:
+    base: '_ㅆ'
+    shift: '@'
+  KEYCODE_3:
+    base: '_ㅂ'
+    shift: '#'
+  KEYCODE_4:
+    base: '_ㅛ_'
+    shift: '$'
+  KEYCODE_5:
+    base: '_ㅠ_'
+    shift: '%'
+  KEYCODE_6:
+    base: '_ㅑ_'
+    shift: '^'
+  KEYCODE_7:
+    base: '_ㅖ_'
+    shift: '&'
+  KEYCODE_8:
+    base: '_ㅢ_'
+    shift: '*'
+  KEYCODE_9:
+    base: '_ㅜ_'
+    shift: '('
+  KEYCODE_0:
+    base: 'ㅋ_'
+    shift: ')'
+  KEYCODE_Q:
+    base: '_ㅅ'
+    shift: '_ㅍ'
+  KEYCODE_W:
+    base: '_ㄹ'
+    shift: '_ㅌ'
+  KEYCODE_E:
+    base: '_ㅕ_'
+    shift: '_ㅋ'
+  KEYCODE_R:
+    base: '_ㅐ_'
+    shift: '_ㅒ_'
+  KEYCODE_T:
+    base: '_ㅓ_'
+    shift: ';'
+  KEYCODE_Y:
+    base: 'ㄹ_'
+    shift: '<'
+  KEYCODE_U:
+    base: 'ㄷ_'
+    shift: '7'
+  KEYCODE_I:
+    base: 'ㅁ_'
+    shift: '8'
+  KEYCODE_O:
+    base: 'ㅊ_'
+    shift: '9'
+  KEYCODE_P:
+    base: 'ㅍ_'
+    shift: '>'
+  KEYCODE_A:
+    base: '_ㅇ'
+    shift: '_ㄷ'
+  KEYCODE_S:
+    base: '_ㄴ'
+    shift: '_ㄶ'
+  KEYCODE_D:
+    base: '_ㅣ_'
+    shift: '_ㄺ'
+  KEYCODE_F:
+    base: '_ㅏ_'
+    shift: '_ㄲ'
+  KEYCODE_G:
+    base: '_ㅡ_'
+    shift: '/'
+  KEYCODE_H:
+    base: 'ㄴ_'
+    shift: ''''
+  KEYCODE_J:
+    base: 'ㅇ_'
+    shift: '4'
+  KEYCODE_K:
+    base: 'ㄱ_'
+    shift: '5'
+  KEYCODE_L:
+    base: 'ㅈ_'
+    shift: '6'
+  KEYCODE_SEMICOLON:
+    base: 'ㅂ_'
+    shift: ':'
+  KEYCODE_APOSTROPHE:
+    base: 'ㅌ_'
+    shift: '"'
+  KEYCODE_Z:
+    base: '_ㅁ'
+    shift: '_ㅊ'
+  KEYCODE_X:
+    base: '_ㄱ'
+    shift: '_ㅄ'
+  KEYCODE_C:
+    base: '_ㅔ_'
+    shift: '_ㄻ'
+  KEYCODE_V:
+    base: '_ㅗ_'
+    shift: '_ㅀ'
+  KEYCODE_B:
+    base: '_ㅜ_'
+    shift: '!'
+  KEYCODE_N:
+    base: 'ㅅ_'
+    shift: '0'
+  KEYCODE_M:
+    base: 'ㅎ_'
+    shift: '1'
+  KEYCODE_COMMA:
+    base: ','
+    shift: '2'
+  KEYCODE_PERIOD:
+    base: '.'
+    shift: '3'
+  KEYCODE_SLASH:
+    base: '_ㅗ_'
+    shift: '?'
+  KEYCODE_SEBEOL_390_0:
+    base: '_ㅜ_'
+    shift: '0'
+  KEYCODE_SEBEOL_390_1:
+    base: 'ㅅ_'
+    shift: '1'
+  KEYCODE_SEBEOL_390_2:
+    base: 'ㅎ_'
+    shift: '2'
+  KEYCODE_SEBEOL_390_3:
+    base: 'ㅌ_'
+    shift: '3'
+  KEYCODE_SEBEOL_390_10:
+    base: 'ㅌ_'
+    shift: '2'
+  KEYCODE_SEBEOL_390_11:
+    base: '_ㅗ_'
+    shift: '3'

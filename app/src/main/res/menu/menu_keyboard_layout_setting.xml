@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/preview_mode"
+        android:title="@string/pref_layout_preview_mode_title"
+        app:showAsAction="never" />
+    <item
+        android:visible="false"
+        android:id="@+id/reorder_mode"
+        android:title="@string/pref_layout_reorder_mode_title"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/add_component"
+        android:icon="@drawable/baseline_add_circle_24"
+        android:title="@string/pref_layout_add_component_title"
+        app:iconTint="@color/icon_tint"
+        app:showAsAction="ifRoom" />
+</menu>

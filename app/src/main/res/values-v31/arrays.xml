@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="InconsistentArrays">
+
+    <string-array name="appearance_themes">
+        <item>@string/theme_static</item>
+        <item>@string/theme_dynamic</item>
+    </string-array>
+
+    <string-array name="appearance_theme_values">
+        <item>theme_static</item>
+        <item>theme_dynamic</item>
+    </string-array>
+
+</resources>
