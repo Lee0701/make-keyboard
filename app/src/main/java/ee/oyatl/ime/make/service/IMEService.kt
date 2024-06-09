@@ -237,13 +237,11 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
 
     override fun onComputeInsets(outInsets: Insets?) {
         super.onComputeInsets(outInsets)
-        outInsets?.contentTopInsets = outInsets?.visibleTopInsets
+        outInsets?.contentTopInsets = outInsets?.visibleTopInsets ?: return
     }
 
     private fun setNavBarColor(@ColorInt color: Int) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.window?.navigationBarColor = color
-        }
+        window.window?.navigationBarColor = color
     }
 
     private fun resetCurrentEngine() {

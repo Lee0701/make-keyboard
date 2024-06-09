@@ -33,7 +33,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Get version code from build.gradle
+      - name: Get version code from build.gradle.kts
         run: echo "VERSION_CODE=$(${{ github.workspace }}/gradlew -q printVersionCode)" >> $GITHUB_ENV
 
       - name: Increment version code
@@ -45,7 +45,7 @@ jobs:
       - name: Override version name and code
         uses: Fboard/android-version-actions@master
         with:
-          gradlePath: app/build.gradle
+          gradlePath: app/build.gradle.kts
           versionCode: ${{ env.VERSION_CODE }}
           versionName: ${{ env.VERSION_NAME }}
 
@@ -73,7 +73,7 @@ jobs:
           name: app
           path: app/build/outputs/bundle/release/app-release.aab
 
-      - name: Get package name from build.gradle
+      - name: Get package name from build.gradle.kts
         run: echo "PACKAGE_NAME=$(${{ github.workspace }}/gradlew -q printPackageName)" >> $GITHUB_ENV
 
       - name: Push new version information
