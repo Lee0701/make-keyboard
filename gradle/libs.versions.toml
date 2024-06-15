@@ -1,6 +1,6 @@
 [versions]
-application = "8.4.1"
-library = "8.4.1"
+application = "8.5.0"
+library = "8.5.0"
 kotlin = "2.0.0"
 serialization = "1.8.10"
 coreKtx = "1.13.1"
