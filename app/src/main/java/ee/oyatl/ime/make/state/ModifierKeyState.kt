@@ -1,4 +1,4 @@
-package ee.oyatl.ime.make.modifier
+package ee.oyatl.ime.make.state
 
 data class ModifierKeyState(
     val pressed: Boolean = false,

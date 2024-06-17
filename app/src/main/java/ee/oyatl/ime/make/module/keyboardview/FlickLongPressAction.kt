@@ -1,7 +1,7 @@
 package ee.oyatl.ime.make.module.keyboardview
 
 import ee.oyatl.ime.make.module.inputengine.InputEngine
-import ee.oyatl.ime.make.service.KeyboardState
+import ee.oyatl.ime.make.state.KeyboardState
 
 sealed interface FlickLongPressAction {
     fun onKey(code: Int, keyboardState: KeyboardState, inputEngine: InputEngine)
@@ -62,7 +62,7 @@ sealed interface FlickLongPressAction {
         }
 
         fun makeShiftOn(keyboardState: KeyboardState): KeyboardState
-                = keyboardState.copy(shiftState = keyboardState.shiftState.copy(pressed = true))
+                = keyboardState.copy(shift = keyboardState.shift.copy(pressed = true))
     }
 
 }

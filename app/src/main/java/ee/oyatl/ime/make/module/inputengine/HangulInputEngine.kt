@@ -12,7 +12,7 @@ import ee.oyatl.ime.make.preset.table.JamoCombinationTable
 import ee.oyatl.ime.make.preset.table.LayeredCodeConvertTable
 import ee.oyatl.ime.make.preset.table.LayeredCodeConvertTable.Companion.BASE_LAYER_NAME
 import ee.oyatl.ime.make.preset.table.MoreKeysTable
-import ee.oyatl.ime.make.service.KeyboardState
+import ee.oyatl.ime.make.state.KeyboardState
 
 data class HangulInputEngine(
     private val convertTable: CodeConvertTable,

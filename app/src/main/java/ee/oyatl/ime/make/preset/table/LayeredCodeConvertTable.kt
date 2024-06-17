@@ -1,6 +1,6 @@
 package ee.oyatl.ime.make.preset.table
 
-import ee.oyatl.ime.make.service.KeyboardState
+import ee.oyatl.ime.make.state.KeyboardState
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
