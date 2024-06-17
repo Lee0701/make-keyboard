@@ -9,6 +9,7 @@ import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.state.KeyboardState
+import ee.oyatl.ime.make.state.ModifierKeyHandler
 
 interface InputEngine {
 

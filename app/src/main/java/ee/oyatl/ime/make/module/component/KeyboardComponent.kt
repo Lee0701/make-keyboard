@@ -19,18 +19,19 @@ import ee.oyatl.ime.make.module.keyboardview.StackedViewKeyboardView
 import ee.oyatl.ime.make.module.keyboardview.Themes
 import ee.oyatl.ime.make.preset.softkeyboard.Key
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
+import ee.oyatl.ime.make.state.DefaultShiftKeyHandler
 
 class KeyboardComponent(
     val keyboard: Keyboard,
     val rowHeight: Int,
     val direct: Boolean = false,
-    private val autoUnlockShift: Boolean = true,
+    autoUnlockShift: Boolean = true,
     private val disableTouch: Boolean = false,
 ): InputViewComponent, KeyboardListener, CandidateListener {
 
     var connectedInputEngine: InputEngine? = null
+    private var shiftKeyHandler: DefaultShiftKeyHandler = DefaultShiftKeyHandler(autoUnlock = autoUnlockShift)
 
-    private var doubleTapGap: Int = 500
     private var keyboardViewType: String = "canvas"
 
     private var longPressAction: FlickLongPressAction = FlickLongPressAction.Shifted
@@ -41,14 +42,14 @@ class KeyboardComponent(
 
     private var keyboardView: KeyboardView? = null
 
-    private var modifiers: KeyboardState = KeyboardState()
-    private var shiftClickedTime: Long = 0
+    private var _state: KeyboardState = KeyboardState()
+    private val state: KeyboardState get() = _state.copy(shift = shiftKeyHandler.state)
     private var ignoreCode: Int = 0
-    private var inputHappened: Boolean = false
 
     override fun initView(context: Context): View? {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        doubleTapGap = preferences.getFloat("behaviour_double_tap_gap", 500f).toInt()
+        shiftKeyHandler.reset()
+        shiftKeyHandler.doubleTapGap = preferences.getFloat("behaviour_double_tap_gap", 500f).toInt()
         keyboardViewType = preferences.getString("appearance_keyboard_view_type", "canvas") ?: keyboardViewType
         longPressAction = FlickLongPressAction.of(
             preferences.getString("behaviour_long_press_action", "shift") ?: "shift"
@@ -89,18 +90,18 @@ class KeyboardComponent(
     override fun updateView() {
         val inputEngine = connectedInputEngine ?: return
         updateLabelsAndIcons(
-            getShiftedLabels() + inputEngine.getLabels(modifiers),
-            inputEngine.getIcons(modifiers)
+            getShiftedLabels(state.shift) + inputEngine.getLabels(state),
+            inputEngine.getIcons(state)
         )
-        updateMoreKeys(inputEngine.getMoreKeys(modifiers))
+        updateMoreKeys(inputEngine.getMoreKeys(state))
         keyboardView?.apply {
             invalidate()
         }
     }
 
-    private fun getShiftedLabels(): Map<Int, CharSequence> {
+    private fun getShiftedLabels(shiftState: ModifierKeyState): Map<Int, CharSequence> {
         fun label(label: String) =
-            if(modifiers.shift.pressed || modifiers.shift.locked) label.uppercase()
+            if(shiftState.pressed || shiftState.locked) label.uppercase()
             else label.lowercase()
         return keyboard.rows.flatMap { it.keys }
             .filterIsInstance<Key>()
@@ -119,52 +120,20 @@ class KeyboardComponent(
 
     override fun onKeyDown(code: Int, output: String?) {
         when(code) {
-            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftKeyDown()
+            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
+                shiftKeyHandler.onPress()
+                updateView()
+            }
         }
     }
 
     override fun onKeyUp(code: Int, output: String?) {
         when(code) {
-            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftKeyUp()
-        }
-    }
-
-    private fun onShiftKeyDown() {
-        val lastState = modifiers.copy()
-        val lastShiftState = lastState.shift
-        val newShiftState = lastShiftState.copy(pressing = true)
-
-        modifiers = lastState.copy(shift = newShiftState)
-        inputHappened = false
-        updateView()
-    }
-
-    private fun onShiftKeyUp() {
-        val lastState = modifiers
-        val lastShiftState = lastState.shift
-        val currentShiftState = lastShiftState.copy(pressing = false)
-
-        val currentTime = System.currentTimeMillis()
-        val timeDiff = currentTime - shiftClickedTime
-
-        val newShiftState = if(currentShiftState.locked) {
-            ModifierKeyState()
-        } else if(currentShiftState.pressed) {
-            if(timeDiff < doubleTapGap) {
-                ModifierKeyState(pressed = true, locked = true)
-            } else {
-                ModifierKeyState()
+            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
+                shiftKeyHandler.onRelease()
+                updateView()
             }
-        } else if(inputHappened) {
-            ModifierKeyState()
-        } else {
-            ModifierKeyState(pressed = true)
         }
-
-        modifiers = lastState.copy(shift = newShiftState.copy(pressing = false))
-        shiftClickedTime = currentTime
-        inputHappened = false
-        updateView()
     }
 
     override fun onKeyClick(code: Int, output: String?) {
@@ -177,31 +146,27 @@ class KeyboardComponent(
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
             }
             KeyEvent.KEYCODE_CAPS_LOCK -> {
-                val currentCapsLockState = modifiers.shift.locked
-                val newShiftState = modifiers.shift.copy(pressed = !currentCapsLockState, locked = !currentCapsLockState)
-                modifiers = modifiers.copy(shift = newShiftState)
-                updateView()
+                shiftKeyHandler.onLock()
             }
             KeyEvent.KEYCODE_DEL -> {
                 inputEngine.onDelete()
             }
             KeyEvent.KEYCODE_SPACE -> {
-                val state = modifiers.copy()
+                val state = _state.copy()
                 reset()
-                modifiers = state
+                this._state = state
                 inputEngine.listener.onCommitText(" ")
-                autoUnlockShift()
+                onInput()
             }
             KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
                 reset()
                 inputEngine.listener.onEditorAction(code)
-                autoUnlockShift()
+                onInput()
             }
             else -> {
                 if(!inputEngine.listener.onSystemKey(code)) {
-                    onPrintingKey(code, output, modifiers)
+                    onPrintingKey(code, output)
                 }
-                autoUnlockShift()
             }
         }
         updateView()
@@ -209,19 +174,19 @@ class KeyboardComponent(
 
     override fun onKeyLongClick(code: Int, output: String?) {
         val inputEngine = connectedInputEngine ?: return
-        longPressAction.onKey(code, modifiers, inputEngine)
+        longPressAction.onKey(code, state, inputEngine)
         ignoreCode = code
-        inputHappened = true
+        onInput()
     }
 
-    private fun onPrintingKey(code: Int, output: String?, modifiers: KeyboardState) {
+    private fun onPrintingKey(code: Int, output: String?) {
         val inputEngine = connectedInputEngine ?: return
         if(code == 0 && output != null) {
             inputEngine.listener.onCommitText(output)
         } else {
-            inputEngine.onKey(code, modifiers)
+            inputEngine.onKey(code, state)
         }
-        inputHappened = true
+        onInput()
     }
 
     override fun onKeyFlick(direction: FlickDirection, code: Int, output: String?) {
@@ -233,19 +198,12 @@ class KeyboardComponent(
             FlickDirection.Right -> flickRightAction
             else -> FlickLongPressAction.None
         }
-        action.onKey(code, modifiers, inputEngine)
+        action.onKey(code, state, inputEngine)
         ignoreCode = code
-        inputHappened = true
+        onInput()
     }
 
-    private fun autoUnlockShift() {
-        if(!autoUnlockShift) return
-        if(modifiers.shift.pressing && inputHappened) return
-        val lastState = modifiers
-        val lastShiftState = lastState.shift
-        if(!lastShiftState.locked && !lastShiftState.pressing) {
-            modifiers = lastState.copy(shift = ModifierKeyState())
-        }
+    private fun onInput() {
+        shiftKeyHandler.onInput()
     }
-
 }

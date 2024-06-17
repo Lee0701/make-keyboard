@@ -7,9 +7,7 @@ data class KeyboardState(
     val alt: ModifierKeyState = ModifierKeyState(),
 ) {
     fun asMetaState(): Int {
-        var result = 0
-        result = result or if(shift.active) KeyEvent.META_SHIFT_ON else 0
-        result = result or if(alt.active) KeyEvent.META_ALT_ON else 0
-        return result
+        return if(shift.active) KeyEvent.META_SHIFT_ON else 0 or
+                if(alt.active) KeyEvent.META_ALT_ON else 0
     }
 }

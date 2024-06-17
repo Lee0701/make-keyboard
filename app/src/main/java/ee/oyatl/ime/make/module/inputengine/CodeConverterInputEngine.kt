@@ -24,7 +24,8 @@ class CodeConverterInputEngine(
     override var symbolsInputEngine: InputEngine? = null
 
     override fun onKey(code: Int, state: KeyboardState) {
-        val converted = convertTable.get(code, state) ?: keyCharacterMap.get(code, state.asMetaState())
+        val converted = convertTable.get(code, state)
+            ?: keyCharacterMap.get(code, state.asMetaState())
         val override = overrideTable.get(converted) ?: converted
         listener.onCommitText(override.toChar().toString())
     }

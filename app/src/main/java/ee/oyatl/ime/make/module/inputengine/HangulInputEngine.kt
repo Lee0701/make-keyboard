@@ -21,7 +21,6 @@ data class HangulInputEngine(
     private val jamoCombinationTable: JamoCombinationTable,
     override val listener: InputEngine.Listener,
 ): InputEngine {
-
     override var components: List<InputViewComponent> = listOf()
 
     private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)

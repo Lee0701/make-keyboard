@@ -5,5 +5,6 @@ interface ModifierKeyHandler {
     fun reset()
     fun onPress()
     fun onRelease()
+    fun onLock()
     fun onInput()
 }
