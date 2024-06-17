@@ -47,6 +47,7 @@ enum class InputViewComponentType(
                 KeyboardComponent(
                     keyboard = InputEnginePreset.loadSoftKeyboards(context, layouts),
                     rowHeight = rowHeight,
+                    direct = true,
                     autoUnlockShift = preset.autoUnlockShift,
                     disableTouch = disableTouch,
                 )

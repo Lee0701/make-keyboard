@@ -7,6 +7,7 @@ import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.module.component.KeyboardComponent
 import ee.oyatl.ime.make.module.inputengine.CodeConverterInputEngine
+import ee.oyatl.ime.make.module.inputengine.DirectInputEngine
 import ee.oyatl.ime.make.module.inputengine.HangulInputEngine
 import ee.oyatl.ime.make.module.inputengine.InputEngine
 import ee.oyatl.ime.make.preset.softkeyboard.Include
@@ -68,8 +69,15 @@ data class InputEnginePreset(
             )
         }
 
+        fun getDirectInputEngine(listener: InputEngine.Listener): InputEngine {
+            return DirectInputEngine(
+                listener = listener,
+            )
+        }
+
         fun getInputEngine(listener: InputEngine.Listener): InputEngine {
             return when(type) {
+                Type.Direct -> getDirectInputEngine(listener)
                 Type.Latin -> getTableInputEngine(listener)
                 Type.Hangul -> getHangulInputEngine(listener)
                 Type.Symbol -> getTableInputEngine(listener)
@@ -77,6 +85,7 @@ data class InputEnginePreset(
                 components = inflateComponents(this@InputEnginePreset)
                 components.filterIsInstance<KeyboardComponent>().forEach {
                     it.connectedInputEngine = this
+                    if(it.direct) it.connectedInputEngine = getDirectInputEngine(listener)
                     it.updateView()
                 }
             }
@@ -118,7 +127,7 @@ data class InputEnginePreset(
 
     @Serializable
     enum class Type {
-        Latin, Hangul, Symbol
+        Direct, Latin, Hangul, Symbol
     }
 
     @Serializable

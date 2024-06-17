@@ -95,7 +95,7 @@ class ImportExportActivity: AppCompatActivity() {
         names.forEach { name ->
             val input = assets.open(name)
             val file = File(filesDir, name)
-            file.parentFile.mkdirs()
+            file.parentFile?.mkdirs()
             val output = file.outputStream()
             upgradeKeyboard(input, output)
         }

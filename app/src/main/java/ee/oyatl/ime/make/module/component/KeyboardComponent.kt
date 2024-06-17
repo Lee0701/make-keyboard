@@ -23,6 +23,7 @@ import ee.oyatl.ime.make.service.ModifierState
 class KeyboardComponent(
     val keyboard: Keyboard,
     val rowHeight: Int,
+    val direct: Boolean = false,
     private val autoUnlockShift: Boolean = true,
     private val disableTouch: Boolean = false,
 ): InputViewComponent, KeyboardListener, CandidateListener {
@@ -114,7 +115,7 @@ class KeyboardComponent(
     private fun updateMoreKeys(moreKeys: Map<Int, Keyboard>) {
         val keyboardView = keyboardView ?: return
         val inputEngine = connectedInputEngine ?: return
-        keyboardView.updateMoreKeyKeyboards(inputEngine.getMoreKeys(keyboardState))
+        keyboardView.updateMoreKeyKeyboards(moreKeys)
     }
 
     override fun onKeyDown(code: Int, output: String?) {
