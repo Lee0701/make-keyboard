@@ -5,6 +5,8 @@ import android.graphics.drawable.Drawable
 import android.view.KeyEvent
 import android.view.View
 import androidx.preference.PreferenceManager
+import ee.oyatl.ime.make.state.ModifierKeyState
+import ee.oyatl.ime.make.state.KeyboardState
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.candidates.CandidateListener
 import ee.oyatl.ime.make.module.inputengine.InputEngine
@@ -17,8 +19,6 @@ import ee.oyatl.ime.make.module.keyboardview.StackedViewKeyboardView
 import ee.oyatl.ime.make.module.keyboardview.Themes
 import ee.oyatl.ime.make.preset.softkeyboard.Key
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
-import ee.oyatl.ime.make.service.KeyboardState
-import ee.oyatl.ime.make.service.ModifierState
 
 class KeyboardComponent(
     val keyboard: Keyboard,
@@ -41,7 +41,7 @@ class KeyboardComponent(
 
     private var keyboardView: KeyboardView? = null
 
-    private var keyboardState: KeyboardState = KeyboardState()
+    private var modifiers: KeyboardState = KeyboardState()
     private var shiftClickedTime: Long = 0
     private var ignoreCode: Int = 0
     private var inputHappened: Boolean = false
@@ -89,10 +89,10 @@ class KeyboardComponent(
     override fun updateView() {
         val inputEngine = connectedInputEngine ?: return
         updateLabelsAndIcons(
-            getShiftedLabels() + inputEngine.getLabels(keyboardState),
-            inputEngine.getIcons(keyboardState)
+            getShiftedLabels() + inputEngine.getLabels(modifiers),
+            inputEngine.getIcons(modifiers)
         )
-        updateMoreKeys(inputEngine.getMoreKeys(keyboardState))
+        updateMoreKeys(inputEngine.getMoreKeys(modifiers))
         keyboardView?.apply {
             invalidate()
         }
@@ -100,7 +100,7 @@ class KeyboardComponent(
 
     private fun getShiftedLabels(): Map<Int, CharSequence> {
         fun label(label: String) =
-            if(keyboardState.shiftState.pressed || keyboardState.shiftState.locked) label.uppercase()
+            if(modifiers.shift.pressed || modifiers.shift.locked) label.uppercase()
             else label.lowercase()
         return keyboard.rows.flatMap { it.keys }
             .filterIsInstance<Key>()
@@ -114,7 +114,6 @@ class KeyboardComponent(
 
     private fun updateMoreKeys(moreKeys: Map<Int, Keyboard>) {
         val keyboardView = keyboardView ?: return
-        val inputEngine = connectedInputEngine ?: return
         keyboardView.updateMoreKeyKeyboards(moreKeys)
     }
 
@@ -131,39 +130,38 @@ class KeyboardComponent(
     }
 
     private fun onShiftKeyDown() {
-        val lastState = keyboardState
-        val lastShiftState = lastState.shiftState
-        val currentShiftState = lastShiftState.copy()
-        val newShiftState = currentShiftState.copy()
+        val lastState = modifiers.copy()
+        val lastShiftState = lastState.shift
+        val newShiftState = lastShiftState.copy(pressing = true)
 
-        keyboardState = lastState.copy(shiftState = newShiftState.copy(pressing = true))
+        modifiers = lastState.copy(shift = newShiftState)
         inputHappened = false
         updateView()
     }
 
     private fun onShiftKeyUp() {
-        val lastState = keyboardState
-        val lastShiftState = lastState.shiftState
+        val lastState = modifiers
+        val lastShiftState = lastState.shift
         val currentShiftState = lastShiftState.copy(pressing = false)
 
         val currentTime = System.currentTimeMillis()
         val timeDiff = currentTime - shiftClickedTime
 
         val newShiftState = if(currentShiftState.locked) {
-            ModifierState()
+            ModifierKeyState()
         } else if(currentShiftState.pressed) {
             if(timeDiff < doubleTapGap) {
-                ModifierState(pressed = true, locked = true)
+                ModifierKeyState(pressed = true, locked = true)
             } else {
-                ModifierState()
+                ModifierKeyState()
             }
         } else if(inputHappened) {
-            ModifierState()
+            ModifierKeyState()
         } else {
-            ModifierState(pressed = true)
+            ModifierKeyState(pressed = true)
         }
 
-        keyboardState = lastState.copy(shiftState = newShiftState.copy(pressing = false))
+        modifiers = lastState.copy(shift = newShiftState.copy(pressing = false))
         shiftClickedTime = currentTime
         inputHappened = false
         updateView()
@@ -179,18 +177,18 @@ class KeyboardComponent(
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
             }
             KeyEvent.KEYCODE_CAPS_LOCK -> {
-                val currentCapsLockState = keyboardState.shiftState.locked
-                val newShiftState = keyboardState.shiftState.copy(pressed = !currentCapsLockState, locked = !currentCapsLockState)
-                keyboardState = keyboardState.copy(shiftState = newShiftState)
+                val currentCapsLockState = modifiers.shift.locked
+                val newShiftState = modifiers.shift.copy(pressed = !currentCapsLockState, locked = !currentCapsLockState)
+                modifiers = modifiers.copy(shift = newShiftState)
                 updateView()
             }
             KeyEvent.KEYCODE_DEL -> {
                 inputEngine.onDelete()
             }
             KeyEvent.KEYCODE_SPACE -> {
-                val state = keyboardState.copy()
+                val state = modifiers.copy()
                 reset()
-                keyboardState = state
+                modifiers = state
                 inputEngine.listener.onCommitText(" ")
                 autoUnlockShift()
             }
@@ -201,7 +199,7 @@ class KeyboardComponent(
             }
             else -> {
                 if(!inputEngine.listener.onSystemKey(code)) {
-                    onPrintingKey(code, output, keyboardState)
+                    onPrintingKey(code, output, modifiers)
                 }
                 autoUnlockShift()
             }
@@ -211,17 +209,17 @@ class KeyboardComponent(
 
     override fun onKeyLongClick(code: Int, output: String?) {
         val inputEngine = connectedInputEngine ?: return
-        longPressAction.onKey(code, keyboardState, inputEngine)
+        longPressAction.onKey(code, modifiers, inputEngine)
         ignoreCode = code
         inputHappened = true
     }
 
-    private fun onPrintingKey(code: Int, output: String?, keyboardState: KeyboardState) {
+    private fun onPrintingKey(code: Int, output: String?, modifiers: KeyboardState) {
         val inputEngine = connectedInputEngine ?: return
         if(code == 0 && output != null) {
             inputEngine.listener.onCommitText(output)
         } else {
-            inputEngine.onKey(code, keyboardState)
+            inputEngine.onKey(code, modifiers)
         }
         inputHappened = true
     }
@@ -235,18 +233,18 @@ class KeyboardComponent(
             FlickDirection.Right -> flickRightAction
             else -> FlickLongPressAction.None
         }
-        action.onKey(code, keyboardState, inputEngine)
+        action.onKey(code, modifiers, inputEngine)
         ignoreCode = code
         inputHappened = true
     }
 
     private fun autoUnlockShift() {
         if(!autoUnlockShift) return
-        if(keyboardState.shiftState.pressing && inputHappened) return
-        val lastState = keyboardState
-        val lastShiftState = lastState.shiftState
+        if(modifiers.shift.pressing && inputHappened) return
+        val lastState = modifiers
+        val lastShiftState = lastState.shift
         if(!lastShiftState.locked && !lastShiftState.pressing) {
-            keyboardState = lastState.copy(shiftState = ModifierState())
+            modifiers = lastState.copy(shift = ModifierKeyState())
         }
     }
 

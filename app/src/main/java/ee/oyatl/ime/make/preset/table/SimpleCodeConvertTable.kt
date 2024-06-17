@@ -2,7 +2,7 @@ package ee.oyatl.ime.make.preset.table
 
 import ee.oyatl.ime.make.preset.serialization.CompoundKeyOutputSerializer
 import ee.oyatl.ime.make.preset.serialization.KeyCodeSerializer
-import ee.oyatl.ime.make.service.KeyboardState
+import ee.oyatl.ime.make.state.KeyboardState
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -58,9 +58,9 @@ class SimpleCodeConvertTable(
         @Serializable(with = CompoundKeyOutputSerializer::class) val altShift: Int? = shift,
     ) {
         fun withKeyboardState(keyboardState: KeyboardState): Int? {
-            val shiftPressed = keyboardState.shiftState.pressed || keyboardState.shiftState.pressing
-            val altPressed = keyboardState.altState.pressed || keyboardState.altState.pressing
-            return if(keyboardState.shiftState.locked) capsLock
+            val shiftPressed = keyboardState.shift.pressed || keyboardState.shift.pressing
+            val altPressed = keyboardState.alt.pressed || keyboardState.alt.pressing
+            return if(keyboardState.shift.locked) capsLock
             else if(shiftPressed && altPressed) altShift
             else if(shiftPressed) shift
             else if(altPressed) alt
@@ -90,10 +90,10 @@ class SimpleCodeConvertTable(
         Base, Shift, CapsLock, Alt, AltShift;
         companion object {
             fun fromKeyboardState(keyboardState: KeyboardState): EntryKey {
-                return if(keyboardState.altState.pressed && keyboardState.shiftState.pressed) AltShift
-                else if(keyboardState.altState.pressed) Alt
-                else if(keyboardState.shiftState.locked) CapsLock
-                else if(keyboardState.shiftState.pressed) Shift
+                return if(keyboardState.alt.pressed && keyboardState.shift.pressed) AltShift
+                else if(keyboardState.alt.pressed) Alt
+                else if(keyboardState.shift.locked) CapsLock
+                else if(keyboardState.shift.pressed) Shift
                 else Base
             }
         }

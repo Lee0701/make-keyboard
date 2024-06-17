@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 import android.view.KeyCharacterMap
 import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
-import ee.oyatl.ime.make.service.KeyboardState
+import ee.oyatl.ime.make.state.KeyboardState
 
 class DirectInputEngine(
     override val listener: InputEngine.Listener,

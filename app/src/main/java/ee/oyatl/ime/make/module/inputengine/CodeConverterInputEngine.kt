@@ -8,7 +8,7 @@ import ee.oyatl.ime.make.preset.table.CharOverrideTable
 import ee.oyatl.ime.make.preset.table.CodeConvertTable
 import ee.oyatl.ime.make.preset.table.MoreKeysTable
 import ee.oyatl.ime.make.preset.table.SimpleCodeConvertTable
-import ee.oyatl.ime.make.service.KeyboardState
+import ee.oyatl.ime.make.state.KeyboardState
 
 class CodeConverterInputEngine(
     private val convertTable: CodeConvertTable,

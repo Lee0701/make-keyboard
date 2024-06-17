@@ -1,8 +1,8 @@
-package ee.oyatl.ime.make.modifier
+package ee.oyatl.ime.make.state
 
 import android.view.KeyEvent
 
-data class ModifierKeyStateSet(
+data class KeyboardState(
     val shift: ModifierKeyState = ModifierKeyState(),
     val alt: ModifierKeyState = ModifierKeyState(),
 ) {
