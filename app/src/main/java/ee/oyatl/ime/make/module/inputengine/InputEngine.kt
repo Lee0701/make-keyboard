@@ -35,7 +35,6 @@ interface InputEngine {
     fun onDelete()
     fun onTextAroundCursor(before: String, after: String)
 
-
     fun getLabels(state: KeyboardState): Map<Int, CharSequence>
     fun getIcons(state: KeyboardState): Map<Int, Drawable>
     fun getMoreKeys(state: KeyboardState): Map<Int, Keyboard>

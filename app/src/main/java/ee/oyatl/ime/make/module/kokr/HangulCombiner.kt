@@ -1,5 +1,6 @@
 package ee.oyatl.ime.make.module.kokr
 
+import ee.oyatl.ime.make.charset.Hangul
 import ee.oyatl.ime.make.preset.table.JamoCombinationTable
 
 class HangulCombiner(
