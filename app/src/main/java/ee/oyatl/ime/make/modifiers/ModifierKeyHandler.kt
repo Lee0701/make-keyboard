@@ -1,9 +1,10 @@
-package ee.oyatl.ime.make.modifier
+package ee.oyatl.ime.make.modifiers
 
 interface ModifierKeyHandler {
     val state: ModifierKeyState
     fun reset()
     fun onPress()
     fun onRelease()
+    fun onLock()
     fun onInput()
 }

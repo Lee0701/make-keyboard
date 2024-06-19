@@ -1,7 +1,7 @@
 package ee.oyatl.ime.make.preset.table
 
 import ee.oyatl.ime.make.preset.serialization.HexIntSerializer
-import ee.oyatl.ime.make.service.KeyboardState
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,7 +19,7 @@ class CharOverrideTable(
         return map[charCode]
     }
 
-    fun getAllForState(state: KeyboardState): Map<Int, Int> {
+    fun getAllForState(state: ModifierKeyStateSet): Map<Int, Int> {
         return map
     }
 

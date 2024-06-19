@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.GestureDetectorCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -36,7 +35,7 @@ class KeyboardComponentsAdapter(
     inner class ViewHolder(
         private val binding: ListitemKeyboardLayoutComponentPreviewRowBinding,
     ): RecyclerView.ViewHolder(binding.root) {
-        private val gestureDetector = GestureDetectorCompat(context, object: GestureDetector.SimpleOnGestureListener() {
+        private val gestureDetector = GestureDetector(context, object: GestureDetector.SimpleOnGestureListener() {
             override fun onDown(e: MotionEvent): Boolean = true
             override fun onSingleTapUp(e: MotionEvent): Boolean {
                 val visible = binding.menuOverlay.visibility == View.VISIBLE

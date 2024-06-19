@@ -31,7 +31,7 @@ class ChooseNewComponentBottomSheetFragment(
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             this.adapter = adapter
         }
-        adapter.submitList(InputViewComponentType.values().toList())
+        adapter.submitList(InputViewComponentType.entries)
         this.binding = binding
         return binding.root
     }

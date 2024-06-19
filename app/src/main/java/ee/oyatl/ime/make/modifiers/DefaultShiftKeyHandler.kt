@@ -1,8 +1,8 @@
-package ee.oyatl.ime.make.modifier
+package ee.oyatl.ime.make.modifiers
 
 class DefaultShiftKeyHandler(
-    private val doubleTapGap: Int,
-    private val autoUnlock: Boolean = true,
+    var doubleTapGap: Int = 500,
+    var autoUnlock: Boolean = true
 ): ModifierKeyHandler {
 
     override var state: ModifierKeyState = ModifierKeyState()
@@ -16,11 +16,8 @@ class DefaultShiftKeyHandler(
     }
 
     override fun onPress() {
-        val lastState = state
-        val newState = lastState.copy(
-            pressing = true
-        )
-        state = newState
+        state = state.copy(pressing = true)
+//        clickedTime = System.currentTimeMillis()
         inputEventExists = false
     }
 
@@ -51,6 +48,11 @@ class DefaultShiftKeyHandler(
         inputEventExists = false
     }
 
+    override fun onLock() {
+        val currentCapsLockState = state.locked
+        state = state.copy(pressed = !currentCapsLockState, locked = !currentCapsLockState)
+    }
+
     override fun onInput() {
         autoUnlock()
         inputEventExists = true
@@ -62,5 +64,4 @@ class DefaultShiftKeyHandler(
         val lastState = state
         if(!lastState.locked && !lastState.pressing) state = ModifierKeyState()
     }
-
 }

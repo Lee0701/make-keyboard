@@ -8,7 +8,7 @@ import ee.oyatl.ime.make.preset.table.CharOverrideTable
 import ee.oyatl.ime.make.preset.table.CodeConvertTable
 import ee.oyatl.ime.make.preset.table.MoreKeysTable
 import ee.oyatl.ime.make.preset.table.SimpleCodeConvertTable
-import ee.oyatl.ime.make.service.KeyboardState
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 
 class CodeConverterInputEngine(
     private val convertTable: CodeConvertTable,
@@ -23,8 +23,9 @@ class CodeConverterInputEngine(
     override var alternativeInputEngine: InputEngine? = null
     override var symbolsInputEngine: InputEngine? = null
 
-    override fun onKey(code: Int, state: KeyboardState) {
-        val converted = convertTable.get(code, state) ?: keyCharacterMap.get(code, state.asMetaState())
+    override fun onKey(code: Int, state: ModifierKeyStateSet) {
+        val converted = convertTable.get(code, state)
+            ?: keyCharacterMap.get(code, state.asMetaState())
         val override = overrideTable.get(converted) ?: converted
         listener.onCommitText(override.toChar().toString())
     }
@@ -41,18 +42,18 @@ class CodeConverterInputEngine(
         listener.onCandidates(listOf())
     }
 
-    override fun getLabels(state: KeyboardState): Map<Int, CharSequence> {
+    override fun getLabels(state: ModifierKeyStateSet): Map<Int, CharSequence> {
         val codeMap = convertTable.getAllForState(state)
             .mapValues { (_, code) -> overrideTable.get(code) ?: code }
             .mapValues { (_, code) -> code.toChar().toString() }
         return DirectInputEngine.getLabels(keyCharacterMap, state) + codeMap
     }
 
-    override fun getIcons(state: KeyboardState): Map<Int, Drawable> {
+    override fun getIcons(state: ModifierKeyStateSet): Map<Int, Drawable> {
         return emptyMap()
     }
 
-    override fun getMoreKeys(state: KeyboardState): Map<Int, Keyboard> {
+    override fun getMoreKeys(state: ModifierKeyStateSet): Map<Int, Keyboard> {
         return moreKeysTable.map.mapNotNull { (code, value) ->
             val key = convertTable.getReversed(code, SimpleCodeConvertTable.EntryKey.fromKeyboardState(state))
             if(key == null) null

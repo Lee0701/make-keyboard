@@ -2,7 +2,7 @@ package ee.oyatl.ime.make.preset.table
 
 import ee.oyatl.ime.make.preset.serialization.CompoundKeyOutputSerializer
 import ee.oyatl.ime.make.preset.serialization.KeyCodeSerializer
-import ee.oyatl.ime.make.service.KeyboardState
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,11 +18,11 @@ class SimpleCodeConvertTable(
         value.explode().map { (entryKey, charCode) -> (charCode to entryKey) to key }
     }.toMap()
 
-    override fun get(keyCode: Int, state: KeyboardState): Int? {
+    override fun get(keyCode: Int, state: ModifierKeyStateSet): Int? {
         return map[keyCode]?.withKeyboardState(state)
     }
 
-    override fun getAllForState(state: KeyboardState): Map<Int, Int> {
+    override fun getAllForState(state: ModifierKeyStateSet): Map<Int, Int> {
         return map.map { (k, v) -> v.withKeyboardState(state)?.let { k to it } }
             .filterNotNull()
             .toMap()
@@ -57,10 +57,10 @@ class SimpleCodeConvertTable(
         @Serializable(with = CompoundKeyOutputSerializer::class) val alt: Int? = base,
         @Serializable(with = CompoundKeyOutputSerializer::class) val altShift: Int? = shift,
     ) {
-        fun withKeyboardState(keyboardState: KeyboardState): Int? {
-            val shiftPressed = keyboardState.shiftState.pressed || keyboardState.shiftState.pressing
-            val altPressed = keyboardState.altState.pressed || keyboardState.altState.pressing
-            return if(keyboardState.shiftState.locked) capsLock
+        fun withKeyboardState(modifiers: ModifierKeyStateSet): Int? {
+            val shiftPressed = modifiers.shift.pressed || modifiers.shift.pressing
+            val altPressed = modifiers.alt.pressed || modifiers.alt.pressing
+            return if(modifiers.shift.locked) capsLock
             else if(shiftPressed && altPressed) altShift
             else if(shiftPressed) shift
             else if(altPressed) alt
@@ -89,11 +89,11 @@ class SimpleCodeConvertTable(
     enum class EntryKey {
         Base, Shift, CapsLock, Alt, AltShift;
         companion object {
-            fun fromKeyboardState(keyboardState: KeyboardState): EntryKey {
-                return if(keyboardState.altState.pressed && keyboardState.shiftState.pressed) AltShift
-                else if(keyboardState.altState.pressed) Alt
-                else if(keyboardState.shiftState.locked) CapsLock
-                else if(keyboardState.shiftState.pressed) Shift
+            fun fromKeyboardState(modifiers: ModifierKeyStateSet): EntryKey {
+                return if(modifiers.alt.pressed && modifiers.shift.pressed) AltShift
+                else if(modifiers.alt.pressed) Alt
+                else if(modifiers.shift.locked) CapsLock
+                else if(modifiers.shift.pressed) Shift
                 else Base
             }
         }
