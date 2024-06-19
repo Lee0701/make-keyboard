@@ -31,4 +31,16 @@
 
     </ee.oyatl.ime.make.settings.PreferenceCategory>
 
+    <ee.oyatl.ime.make.settings.PreferenceCategory
+        android:key="input_layer"
+        android:title="@string/pref_header_input_title">
+
+        <ee.oyatl.ime.make.settings.SwitchPreference
+            app:key="input_hangul_correct_orders"
+            app:defaultValue="true"
+            app:title="@string/pref_hangul_correct_orders_title"
+            app:summary="@string/pref_hangul_correct_orders_summary" />
+
+    </ee.oyatl.ime.make.settings.PreferenceCategory>
+
 </PreferenceScreen>

@@ -24,6 +24,7 @@ import ee.oyatl.ime.make.preset.PresetLoader
 import ee.oyatl.ime.make.service.IMEService
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_DEFAULT_HEIGHT
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_ENGINE_TYPE
+import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_HANGUL_CORRECT_ORDERS
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_HANJA_ADDITIONAL_DICTIONARIES
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_HANJA_CONVERSION
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_INPUT_HEADER
@@ -83,9 +84,11 @@ class KeyboardLayoutSettingsFragment(
         val layoutPreset = findPreference<ListPreference>(KEY_LAYOUT_PRESET)
         val inputHeader = findPreference<PreferenceCategory>(KEY_INPUT_HEADER)
 
+        val hangulAutoCorrection = findPreference<SwitchPreference>(KEY_HANGUL_CORRECT_ORDERS)
         val hanjaConversion = findPreference<SwitchPreference>(KEY_HANJA_CONVERSION)
         val additionalDictionaries = findPreference<MultiSelectListPreference>(KEY_HANJA_ADDITIONAL_DICTIONARIES)
 
+        hangulAutoCorrection?.isChecked = preferenceDataStore?.getBoolean(KEY_HANGUL_CORRECT_ORDERS, true) == true
         hanjaConversion?.isChecked = preferenceDataStore?.getBoolean(KEY_HANJA_CONVERSION, false) == true
         additionalDictionaries?.values = preferenceDataStore?.getStringSet(KEY_HANJA_ADDITIONAL_DICTIONARIES, mutableSetOf())
 
@@ -125,6 +128,7 @@ class KeyboardLayoutSettingsFragment(
         }
         updateByEngineType(pref.getString(KEY_ENGINE_TYPE, "Latin"))
         engineType?.isVisible = false
+
         updateKeyboardView()
     }
 

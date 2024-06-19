@@ -26,6 +26,7 @@ data class InputEnginePreset(
     val type: Type = Type.Latin,
     val size: Size = Size(),
     val layout: Layout = Layout(),
+    val hangul: Hangul = Hangul(),
     val hanja: Hanja = Hanja(),
     val components: List<InputViewComponentType> = listOf(),
     val autoUnlockShift: Boolean = true,
@@ -55,6 +56,7 @@ data class InputEnginePreset(
                 moreKeysTable = moreKeysTable,
                 overrideTable = overrideTable,
                 jamoCombinationTable = combinationTable,
+                correctOrders = hangul.correctOrders,
                 listener = listener,
             )
         }
@@ -90,6 +92,7 @@ data class InputEnginePreset(
             type = this.type,
             size = size.mutable(),
             layout = this.layout.mutable(),
+            hangul = this.hangul.mutable(),
             hanja = this.hanja.mutable(),
             components = this.components.toMutableList(),
             autoUnlockShift = this.autoUnlockShift,
@@ -100,6 +103,7 @@ data class InputEnginePreset(
         var type: Type = Type.Latin,
         var size: Size.Mutable = Size.Mutable(),
         var layout: Layout.Mutable = Layout.Mutable(),
+        var hangul: Hangul.Mutable = Hangul.Mutable(),
         var hanja: Hanja.Mutable = Hanja.Mutable(),
         var components: MutableList<InputViewComponentType> = mutableListOf(),
         var autoUnlockShift: Boolean = true
@@ -109,6 +113,7 @@ data class InputEnginePreset(
                 type = type,
                 size = size.commit(),
                 layout = layout.commit(),
+                hangul = hangul.commit(),
                 hanja = hanja.commit(),
                 components = components.toList(),
                 autoUnlockShift = autoUnlockShift,
@@ -182,6 +187,27 @@ data class InputEnginePreset(
                     codeConvertTable = codeConvertTable,
                     overrideTable = overrideTable,
                     combinationTable = combinationTable,
+                )
+            }
+        }
+    }
+
+    @Serializable
+    data class Hangul(
+        val correctOrders: Boolean = true,
+    ) {
+        fun mutable(): Mutable {
+            return Mutable(
+                correctOrders = correctOrders,
+            )
+        }
+
+        data class Mutable(
+            var correctOrders: Boolean = true,
+        ) {
+            fun commit(): Hangul {
+                return Hangul(
+                    correctOrders = correctOrders
                 )
             }
         }

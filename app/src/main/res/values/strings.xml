@@ -60,6 +60,8 @@
     <string name="layout_symbol_g">Symbol G</string>
 
     <string name="pref_header_input_title">Input</string>
+    <string name="pref_hangul_correct_orders_title">Correct Hangul Jamo Orders</string>
+    <string name="pref_hangul_correct_orders_summary">Automatically corrects mistaken Hangul Jamo orders.</string>
     <string name="pref_input_hanja_conversion_title">Hanja Conversion</string>
     <string name="pref_input_hanja_additional_dictionaries_title">Additional Hanja Dictionaries</string>
     <string name="person_name">Person Names</string>
