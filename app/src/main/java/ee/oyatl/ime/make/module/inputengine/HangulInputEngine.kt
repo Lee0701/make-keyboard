@@ -19,7 +19,7 @@ data class HangulInputEngine(
     private val moreKeysTable: MoreKeysTable,
     private val overrideTable: CharOverrideTable,
     private val jamoCombinationTable: JamoCombinationTable,
-    val correctOrders: Boolean,
+    private val correctOrders: Boolean,
     override val listener: InputEngine.Listener,
 ): InputEngine {
 
