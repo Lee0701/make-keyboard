@@ -19,6 +19,7 @@ data class HangulInputEngine(
     private val moreKeysTable: MoreKeysTable,
     private val overrideTable: CharOverrideTable,
     private val jamoCombinationTable: JamoCombinationTable,
+    val correctOrders: Boolean,
     override val listener: InputEngine.Listener,
 ): InputEngine {
 
@@ -29,7 +30,7 @@ data class HangulInputEngine(
     override var alternativeInputEngine: InputEngine? = null
     override var symbolsInputEngine: InputEngine? = null
 
-    private val hangulCombiner = HangulCombiner(jamoCombinationTable)
+    private val hangulCombiner = HangulCombiner(jamoCombinationTable, correctOrders)
     private val stateStack: MutableList<HangulCombiner.State> = mutableListOf()
     private val hangulState: HangulCombiner.State get() = stateStack.lastOrNull() ?: HangulCombiner.State()
     private val layerIdByHangulState: String get() {

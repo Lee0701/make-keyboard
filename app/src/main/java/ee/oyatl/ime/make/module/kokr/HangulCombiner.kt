@@ -4,7 +4,7 @@ import ee.oyatl.ime.make.preset.table.JamoCombinationTable
 
 class HangulCombiner(
     private val jamoCombinationTable: JamoCombinationTable,
-    private val correctOrders: Boolean = true
+    private val correctOrders: Boolean
 ) {
     fun combine(state: State, input: Int): Pair<CharSequence, List<State>> {
         // The unicode codepoint of input, without any extended parts

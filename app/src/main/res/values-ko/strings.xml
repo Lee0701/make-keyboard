@@ -57,9 +57,11 @@
     <string name="layout_latin_colemak">콜맥</string>
     <string name="layout_symbol_a">기호 A</string>
     <string name="layout_symbol_b">기호 B</string>
-<string name="layout_symbol_g">기호 G</string>
+    <string name="layout_symbol_g">기호 G</string>
 
     <string name="pref_header_input_title">입력</string>
+    <string name="pref_hangul_correct_orders_title">모아주기 사용</string>
+    <string name="pref_hangul_correct_orders_summary">자모 입력 순서를 틀려도 자동으로 바로잡습니다.</string>
     <string name="pref_input_hanja_conversion_title">한자 변환</string>
     <string name="pref_input_hanja_additional_dictionaries_title">한자 변환 추가 사전</string>
     <string name="person_name">인명</string>
