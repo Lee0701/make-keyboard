@@ -1,4 +1,4 @@
-package ee.oyatl.ime.make.state
+package ee.oyatl.ime.make.modifiers
 
 class DefaultShiftKeyHandler(
     var doubleTapGap: Int = 500,

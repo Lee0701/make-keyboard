@@ -5,8 +5,8 @@ import android.graphics.drawable.Drawable
 import android.view.KeyEvent
 import android.view.View
 import androidx.preference.PreferenceManager
-import ee.oyatl.ime.make.state.ModifierKeyState
-import ee.oyatl.ime.make.state.KeyboardState
+import ee.oyatl.ime.make.modifiers.ModifierKeyState
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.candidates.CandidateListener
 import ee.oyatl.ime.make.module.inputengine.InputEngine
@@ -19,7 +19,7 @@ import ee.oyatl.ime.make.module.keyboardview.StackedViewKeyboardView
 import ee.oyatl.ime.make.module.keyboardview.Themes
 import ee.oyatl.ime.make.preset.softkeyboard.Key
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
-import ee.oyatl.ime.make.state.DefaultShiftKeyHandler
+import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
 
 class KeyboardComponent(
     val keyboard: Keyboard,
@@ -42,8 +42,8 @@ class KeyboardComponent(
 
     private var keyboardView: KeyboardView? = null
 
-    private var _state: KeyboardState = KeyboardState()
-    private val state: KeyboardState get() = _state.copy(shift = shiftKeyHandler.state)
+    private var _state: ModifierKeyStateSet = ModifierKeyStateSet()
+    private val state: ModifierKeyStateSet get() = _state.copy(shift = shiftKeyHandler.state)
     private var ignoreCode: Int = 0
 
     override fun initView(context: Context): View? {

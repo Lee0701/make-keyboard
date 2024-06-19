@@ -1,6 +1,6 @@
 package ee.oyatl.ime.make.preset.table
 
-import ee.oyatl.ime.make.state.KeyboardState
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,19 +14,19 @@ class LayeredCodeConvertTable(
         return layers[layerId]
     }
 
-    fun get(layerId: String, keyCode: Int, state: KeyboardState): Int? {
+    fun get(layerId: String, keyCode: Int, state: ModifierKeyStateSet): Int? {
         return get(layerId)?.get(keyCode, state) ?: get(BASE_LAYER_NAME)?.get(keyCode, state)
     }
 
-    fun getAllForState(layerId: String, state: KeyboardState): Map<Int, Int> {
+    fun getAllForState(layerId: String, state: ModifierKeyStateSet): Map<Int, Int> {
         return layers[layerId]?.getAllForState(state)?: mapOf()
     }
 
-    override fun get(keyCode: Int, state: KeyboardState): Int? {
+    override fun get(keyCode: Int, state: ModifierKeyStateSet): Int? {
         return get(BASE_LAYER_NAME)?.get(keyCode, state)
     }
 
-    override fun getAllForState(state: KeyboardState): Map<Int, Int> {
+    override fun getAllForState(state: ModifierKeyStateSet): Map<Int, Int> {
         return getAllForState(BASE_LAYER_NAME, state)
     }
 
