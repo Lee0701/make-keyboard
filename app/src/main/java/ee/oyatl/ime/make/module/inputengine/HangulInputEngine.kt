@@ -12,7 +12,7 @@ import ee.oyatl.ime.make.preset.table.JamoCombinationTable
 import ee.oyatl.ime.make.preset.table.LayeredCodeConvertTable
 import ee.oyatl.ime.make.preset.table.LayeredCodeConvertTable.Companion.BASE_LAYER_NAME
 import ee.oyatl.ime.make.preset.table.MoreKeysTable
-import ee.oyatl.ime.make.state.KeyboardState
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 
 data class HangulInputEngine(
     private val convertTable: CodeConvertTable,
@@ -42,7 +42,7 @@ data class HangulInputEngine(
         else "base"
     }
 
-    override fun onKey(code: Int, state: KeyboardState) {
+    override fun onKey(code: Int, state: ModifierKeyStateSet) {
         val converted =
             if(convertTable is LayeredCodeConvertTable) convertTable.get(layerIdByHangulState, code, state)
             else convertTable.get(code, state)
@@ -80,7 +80,7 @@ data class HangulInputEngine(
         stateStack.clear()
     }
 
-    override fun getLabels(state: KeyboardState): Map<Int, CharSequence> {
+    override fun getLabels(state: ModifierKeyStateSet): Map<Int, CharSequence> {
         val table =
             if(convertTable is LayeredCodeConvertTable)
                 convertTable.get(layerIdByHangulState) ?: convertTable.get(BASE_LAYER_NAME)
@@ -99,11 +99,11 @@ data class HangulInputEngine(
         return DirectInputEngine.getLabels(keyCharacterMap, state) + codeMap
     }
 
-    override fun getIcons(state: KeyboardState): Map<Int, Drawable> {
+    override fun getIcons(state: ModifierKeyStateSet): Map<Int, Drawable> {
         return emptyMap()
     }
 
-    override fun getMoreKeys(state: KeyboardState): Map<Int, Keyboard> {
+    override fun getMoreKeys(state: ModifierKeyStateSet): Map<Int, Keyboard> {
         return mapOf()
     }
 }

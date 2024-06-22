@@ -8,11 +8,9 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
-import ee.oyatl.ime.make.state.KeyboardState
-import ee.oyatl.ime.make.state.ModifierKeyHandler
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 
 interface InputEngine {
-
     val listener: Listener
     var components: List<InputViewComponent>
     var symbolsInputEngine: InputEngine?
@@ -31,13 +29,14 @@ interface InputEngine {
         components.forEach { it.reset() }
     }
 
-    fun onKey(code: Int, state: KeyboardState)
+    fun onKey(code: Int, state: ModifierKeyStateSet)
     fun onDelete()
     fun onTextAroundCursor(before: String, after: String)
 
-    fun getLabels(state: KeyboardState): Map<Int, CharSequence>
-    fun getIcons(state: KeyboardState): Map<Int, Drawable>
-    fun getMoreKeys(state: KeyboardState): Map<Int, Keyboard>
+
+    fun getLabels(state: ModifierKeyStateSet): Map<Int, CharSequence>
+    fun getIcons(state: ModifierKeyStateSet): Map<Int, Drawable>
+    fun getMoreKeys(state: ModifierKeyStateSet): Map<Int, Keyboard>
 
     interface Listener {
         fun onComposingText(text: CharSequence)

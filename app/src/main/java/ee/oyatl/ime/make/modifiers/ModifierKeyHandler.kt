@@ -1,4 +1,4 @@
-package ee.oyatl.ime.make.state
+package ee.oyatl.ime.make.modifiers
 
 interface ModifierKeyHandler {
     val state: ModifierKeyState

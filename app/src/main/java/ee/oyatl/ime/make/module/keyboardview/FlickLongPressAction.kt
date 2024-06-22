@@ -1,51 +1,51 @@
 package ee.oyatl.ime.make.module.keyboardview
 
 import ee.oyatl.ime.make.module.inputengine.InputEngine
-import ee.oyatl.ime.make.state.KeyboardState
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 
 sealed interface FlickLongPressAction {
-    fun onKey(code: Int, keyboardState: KeyboardState, inputEngine: InputEngine)
+    fun onKey(code: Int, modifiers: ModifierKeyStateSet, inputEngine: InputEngine)
 
-    object None: FlickLongPressAction {
-        override fun onKey(code: Int, keyboardState: KeyboardState, inputEngine: InputEngine) {
+    data object None: FlickLongPressAction {
+        override fun onKey(code: Int, modifiers: ModifierKeyStateSet, inputEngine: InputEngine) {
         }
     }
 
-    object MoreKeys: FlickLongPressAction {
-        override fun onKey(code: Int, keyboardState: KeyboardState, inputEngine: InputEngine) {
+    data object MoreKeys: FlickLongPressAction {
+        override fun onKey(code: Int, modifiers: ModifierKeyStateSet, inputEngine: InputEngine) {
         }
     }
 
-    object Repeat: FlickLongPressAction {
-        override fun onKey(code: Int, keyboardState: KeyboardState, inputEngine: InputEngine) {
+    data object Repeat: FlickLongPressAction {
+        override fun onKey(code: Int, modifiers: ModifierKeyStateSet, inputEngine: InputEngine) {
             // This action will be intercepted and be processed by Soft Keyboard
         }
     }
 
-    object Shifted: FlickLongPressAction {
-        override fun onKey(code: Int, keyboardState: KeyboardState, inputEngine: InputEngine) {
-            inputEngine.onKey(code, makeShiftOn(keyboardState))
+    data object Shifted: FlickLongPressAction {
+        override fun onKey(code: Int, modifiers: ModifierKeyStateSet, inputEngine: InputEngine) {
+            inputEngine.onKey(code, makeShiftOn(modifiers))
         }
     }
 
-    object Symbols: FlickLongPressAction {
-        override fun onKey(code: Int, keyboardState: KeyboardState, inputEngine: InputEngine) {
+    data object Symbols: FlickLongPressAction {
+        override fun onKey(code: Int, modifiers: ModifierKeyStateSet, inputEngine: InputEngine) {
             inputEngine.onReset()
-            inputEngine.symbolsInputEngine?.onKey(code, keyboardState)
+            inputEngine.symbolsInputEngine?.onKey(code, modifiers)
         }
     }
 
-    object ShiftedSymbols: FlickLongPressAction {
-        override fun onKey(code: Int, keyboardState: KeyboardState, inputEngine: InputEngine) {
+    data object ShiftedSymbols: FlickLongPressAction {
+        override fun onKey(code: Int, modifiers: ModifierKeyStateSet, inputEngine: InputEngine) {
             inputEngine.onReset()
-            inputEngine.symbolsInputEngine?.onKey(code, makeShiftOn(keyboardState))
+            inputEngine.symbolsInputEngine?.onKey(code, makeShiftOn(modifiers))
         }
     }
 
-    object AlternativeLanguage: FlickLongPressAction {
-        override fun onKey(code: Int, keyboardState: KeyboardState, inputEngine: InputEngine) {
+    data object AlternativeLanguage: FlickLongPressAction {
+        override fun onKey(code: Int, modifiers: ModifierKeyStateSet, inputEngine: InputEngine) {
             inputEngine.onReset()
-            inputEngine.alternativeInputEngine?.onKey(code, keyboardState)
+            inputEngine.alternativeInputEngine?.onKey(code, modifiers)
         }
     }
 
@@ -61,8 +61,7 @@ sealed interface FlickLongPressAction {
             }
         }
 
-        fun makeShiftOn(keyboardState: KeyboardState): KeyboardState
-                = keyboardState.copy(shift = keyboardState.shift.copy(pressed = true))
+        fun makeShiftOn(modifierKeyStateSet: ModifierKeyStateSet): ModifierKeyStateSet
+                = modifierKeyStateSet.copy(shift = modifierKeyStateSet.shift.copy(pressed = true))
     }
-
 }
