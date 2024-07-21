@@ -1,4 +1,4 @@
-package io.github.lee0701.converter.dictionary
+package ee.oyatl.ime.make.module.dictionary
 
 import java.io.InputStream
 import java.lang.StringBuilder

@@ -1,4 +1,4 @@
-package io.github.lee0701.converter.dictionary
+package ee.oyatl.ime.make.module.dictionary
 
 class MapDictionary<T>(private val entries: Map<String, T>): Dictionary<T> {
     override fun search(key: String): T? {

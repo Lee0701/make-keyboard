@@ -1,4 +1,4 @@
-package io.github.lee0701.converter.dictionary
+package ee.oyatl.ime.make.module.dictionary
 
 interface PredictingDictionary<T>: ListDictionary<T> {
 
