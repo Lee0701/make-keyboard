@@ -8,8 +8,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -17,9 +15,10 @@ import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.widget.Toast
 import androidx.annotation.ColorInt
-import androidx.annotation.RequiresApi
 import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.make.R
+import ee.oyatl.ime.make.modifiers.ModifierKeyState
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.candidates.CandidateListener
 import ee.oyatl.ime.make.module.inputengine.InputEngine
@@ -27,9 +26,9 @@ import ee.oyatl.ime.make.preset.InputEnginePreset
 import ee.oyatl.ime.make.preset.PresetLoader
 import ee.oyatl.ime.make.preset.table.CustomKeyCode
 import java.io.File
+import kotlin.math.abs
 
 class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener {
-    private val handler: Handler = Handler(Looper.getMainLooper())
     private var composingText: CharSequence = ""
 
     private val clipboard: ClipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
@@ -81,11 +80,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         return inputEngineSwitcher?.initView(this) ?: View(this)
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        reload()
-    }
-
     override fun onCandidates(list: List<Candidate>) {
 //        val sorted = list.sortedByDescending { it.score }
         inputEngineSwitcher?.showCandidates(list)
@@ -111,10 +105,48 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         super.onFinishInput()
     }
 
-    override fun onSystemKey(code: Int): Boolean {
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        event ?: return false
+        if(event.isSystem) return super.onKeyDown(keyCode, event)
+        val currentEngine = inputEngineSwitcher?.getCurrentEngine()
+        currentEngine ?: return super.onKeyDown(keyCode, event)
+        val modifiers = getModifierKeyStateSet(event)
+        if(modifiers.alt.active || modifiers.control.active || modifiers.meta.active) {
+            return super.onKeyDown(keyCode, event)
+        }
+        if(event.isPrintingKey) {
+            currentEngine.onKey(keyCode, modifiers)
+        } else if(!onNonPrintingKey(keyCode)) {
+            return super.onKeyDown(keyCode, event)
+        }
+        return true
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        event ?: return false
+        if(event.isSystem) return super.onKeyUp(keyCode, event)
+        if(!event.isPrintingKey) return super.onKeyUp(keyCode, event)
+        return true
+    }
+
+    override fun onNonPrintingKey(code: Int): Boolean {
         val inputConnection = currentInputConnection ?: return false
         val extractedText = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
         return when(code) {
+            KeyEvent.KEYCODE_DEL -> {
+                if(deleteSelection()) true
+                else inputEngineSwitcher?.getCurrentEngine()?.onDelete() != null
+            }
+            KeyEvent.KEYCODE_SPACE -> {
+                resetCurrentEngine()
+                onCommitText(" ")
+                true
+            }
+            KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                resetCurrentEngine()
+                onEditorAction(code)
+                true
+            }
             KeyEvent.KEYCODE_LANGUAGE_SWITCH -> {
                 resetCurrentEngine()
                 inputEngineSwitcher?.nextLanguage()
@@ -129,17 +161,12 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
                 updateView()
                 true
             }
-            KeyEvent.KEYCODE_TAB -> {
-                sendDownUpKeyEvents(code)
-                true
-            }
             KeyEvent.KEYCODE_DPAD_LEFT,
             KeyEvent.KEYCODE_DPAD_RIGHT,
             KeyEvent.KEYCODE_DPAD_UP,
             KeyEvent.KEYCODE_DPAD_DOWN -> {
                 resetCurrentEngine()
-                sendDownUpKeyEvents(code)
-                true
+                false
             }
             CustomKeyCode.KEYCODE_COPY.code -> {
                 val selectedText = inputConnection.getSelectedText(0)?.toString().orEmpty()
@@ -179,8 +206,31 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         }
     }
 
+    private fun deleteSelection(): Boolean {
+        val inputConnection = currentInputConnection ?: return false
+        val extractedText = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
+        val start = extractedText.startOffset + extractedText.selectionStart
+        val end = extractedText.startOffset + extractedText.selectionEnd
+        val selectionLength = abs(end - start)
+        if(selectionLength != 0) {
+            resetCurrentEngine()
+            inputConnection.setSelection(start, start)
+            if(start < end) {
+                inputConnection.deleteSurroundingText(0, selectionLength)
+            } else {
+                inputConnection.deleteSurroundingText(selectionLength, 0)
+            }
+            return true
+        }
+        return false
+    }
+
     override fun onEditorAction(code: Int) {
         if(!sendDefaultEditorAction(true)) sendDownUpKeyEvents(code)
+    }
+
+    override fun onDefaultAction(code: Int) {
+        sendDownUpKeyEvents(code)
     }
 
     override fun onComposingText(text: CharSequence) {
@@ -208,7 +258,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         inputConnection.deleteSurroundingText(beforeLength, afterLength)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onUpdateSelection(
         oldSelStart: Int,
         oldSelEnd: Int,
@@ -233,6 +282,11 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
     override fun onViewClicked(focusChanged: Boolean) {
         if(Build.VERSION.SDK_INT >= 34) return
         if(focusChanged) resetCurrentEngine()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        reload()
     }
 
     override fun onComputeInsets(outInsets: Insets?) {
@@ -265,6 +319,15 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
 
     private fun updateView() {
         inputEngineSwitcher?.updateView()
+    }
+
+    private fun getModifierKeyStateSet(event: KeyEvent): ModifierKeyStateSet {
+        return ModifierKeyStateSet(
+            shift = ModifierKeyState(pressed = event.isShiftPressed, locked = event.isCapsLockOn),
+            alt = ModifierKeyState(pressed = event.isAltPressed),
+            control = ModifierKeyState(pressed = event.isCtrlPressed),
+            meta = ModifierKeyState(pressed = event.isMetaPressed)
+        )
     }
 
     override fun onDestroy() {

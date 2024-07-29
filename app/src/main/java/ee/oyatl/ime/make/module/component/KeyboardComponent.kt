@@ -20,6 +20,7 @@ import ee.oyatl.ime.make.module.keyboardview.Themes
 import ee.oyatl.ime.make.preset.softkeyboard.Key
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
+import ee.oyatl.ime.make.preset.table.CustomKeyCode
 
 class KeyboardComponent(
     val keyboard: Keyboard,
@@ -28,7 +29,6 @@ class KeyboardComponent(
     autoUnlockShift: Boolean = true,
     private val disableTouch: Boolean = false,
 ): InputViewComponent, KeyboardListener, CandidateListener {
-
     var connectedInputEngine: InputEngine? = null
     private var shiftKeyHandler: DefaultShiftKeyHandler = DefaultShiftKeyHandler(autoUnlock = autoUnlockShift)
 
@@ -42,8 +42,8 @@ class KeyboardComponent(
 
     private var keyboardView: KeyboardView? = null
 
-    private var _state: ModifierKeyStateSet = ModifierKeyStateSet()
-    private val state: ModifierKeyStateSet get() = _state.copy(shift = shiftKeyHandler.state)
+    private var _modifiers: ModifierKeyStateSet = ModifierKeyStateSet()
+    private val modifiers: ModifierKeyStateSet get() = _modifiers.copy(shift = shiftKeyHandler.state)
     private var ignoreCode: Int = 0
 
     override fun initView(context: Context): View? {
@@ -90,10 +90,10 @@ class KeyboardComponent(
     override fun updateView() {
         val inputEngine = connectedInputEngine ?: return
         updateLabelsAndIcons(
-            getShiftedLabels(state.shift) + inputEngine.getLabels(state),
-            inputEngine.getIcons(state)
+            getShiftedLabels(modifiers.shift) + inputEngine.getLabels(modifiers),
+            inputEngine.getIcons(modifiers)
         )
-        updateMoreKeys(inputEngine.getMoreKeys(state))
+        updateMoreKeys(inputEngine.getMoreKeys(modifiers))
         keyboardView?.apply {
             invalidate()
         }
@@ -148,24 +148,15 @@ class KeyboardComponent(
             KeyEvent.KEYCODE_CAPS_LOCK -> {
                 shiftKeyHandler.onLock()
             }
-            KeyEvent.KEYCODE_DEL -> {
-                inputEngine.onDelete()
-            }
-            KeyEvent.KEYCODE_SPACE -> {
-                val state = _state.copy()
-                reset()
-                this._state = state
-                inputEngine.listener.onCommitText(" ")
-                onInput()
-            }
-            KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
-                reset()
-                inputEngine.listener.onEditorAction(code)
-                onInput()
-            }
             else -> {
-                if(!inputEngine.listener.onSystemKey(code)) {
+                val standard = inputEngine.keyCharacterMap.isPrintingKey(code)
+                val custom = CustomKeyCode.entries.find { it.code == code }?.type == CustomKeyCode.Type.PRINTING
+                if(standard || custom) {
                     onPrintingKey(code, output)
+                } else {
+                    if(!inputEngine.listener.onNonPrintingKey(code)) {
+                        inputEngine.listener.onDefaultAction(code)
+                    }
                 }
             }
         }
@@ -174,7 +165,7 @@ class KeyboardComponent(
 
     override fun onKeyLongClick(code: Int, output: String?) {
         val inputEngine = connectedInputEngine ?: return
-        longPressAction.onKey(code, state, inputEngine)
+        longPressAction.onKey(code, modifiers, inputEngine)
         ignoreCode = code
         onInput()
     }
@@ -183,8 +174,8 @@ class KeyboardComponent(
         val inputEngine = connectedInputEngine ?: return
         if(code == 0 && output != null) {
             inputEngine.listener.onCommitText(output)
-        } else {
-            inputEngine.onKey(code, state)
+        } else if(code != 0) {
+            inputEngine.onKey(code, modifiers)
         }
         onInput()
     }
@@ -198,7 +189,7 @@ class KeyboardComponent(
             FlickDirection.Right -> flickRightAction
             else -> FlickLongPressAction.None
         }
-        action.onKey(code, state, inputEngine)
+        action.onKey(code, modifiers, inputEngine)
         ignoreCode = code
         onInput()
     }

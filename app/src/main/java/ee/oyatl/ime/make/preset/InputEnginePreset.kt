@@ -6,7 +6,7 @@ import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.module.component.KeyboardComponent
-import ee.oyatl.ime.make.module.inputengine.CodeConverterInputEngine
+import ee.oyatl.ime.make.module.inputengine.DefaultTableInputEngine
 import ee.oyatl.ime.make.module.inputengine.DirectInputEngine
 import ee.oyatl.ime.make.module.inputengine.HangulInputEngine
 import ee.oyatl.ime.make.module.inputengine.InputEngine
@@ -63,7 +63,7 @@ data class InputEnginePreset(
         }
 
         fun getTableInputEngine(listener: InputEngine.Listener): InputEngine {
-            return CodeConverterInputEngine(
+            return DefaultTableInputEngine(
                 convertTable = convertTable,
                 moreKeysTable = moreKeysTable,
                 overrideTable = overrideTable,

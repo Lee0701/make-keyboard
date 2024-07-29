@@ -2,9 +2,8 @@ package ee.oyatl.ime.make.module.inputengine
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.view.KeyCharacterMap
 import android.view.View
-import android.view.ViewGroup.LayoutParams
-import androidx.appcompat.widget.LinearLayoutCompat
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
@@ -12,22 +11,14 @@ import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 
 interface InputEngine {
     val listener: Listener
+    val keyCharacterMap: KeyCharacterMap
     var components: List<InputViewComponent>
     var symbolsInputEngine: InputEngine?
     var alternativeInputEngine: InputEngine?
 
-    fun initView(context: Context): View? {
-        val componentViews = components.map { it.initView(context) }
-        return LinearLayoutCompat(context).apply {
-            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-            orientation = LinearLayoutCompat.VERTICAL
-            componentViews.forEach { addView(it) }
-        }
-    }
+    fun initView(context: Context): View?
     fun onReset()
-    fun onResetComponents() {
-        components.forEach { it.reset() }
-    }
+    fun onResetComponents()
 
     fun onKey(code: Int, state: ModifierKeyStateSet)
     fun onDelete()
@@ -44,7 +35,8 @@ interface InputEngine {
         fun onCommitText(text: CharSequence)
         fun onDeleteText(beforeLength: Int, afterLength: Int)
         fun onCandidates(list: List<Candidate>)
-        fun onSystemKey(code: Int): Boolean
+        fun onNonPrintingKey(code: Int): Boolean
         fun onEditorAction(code: Int)
+        fun onDefaultAction(code: Int)
     }
 }
