@@ -3,8 +3,6 @@ package ee.oyatl.ime.make.module.inputengine
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
-import android.view.ViewGroup.LayoutParams
-import androidx.appcompat.widget.LinearLayoutCompat
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard

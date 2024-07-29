@@ -42,8 +42,8 @@ class KeyboardComponent(
 
     private var keyboardView: KeyboardView? = null
 
-    private var _state: ModifierKeyStateSet = ModifierKeyStateSet()
-    private val state: ModifierKeyStateSet get() = _state.copy(shift = shiftKeyHandler.state)
+    private var _modifiers: ModifierKeyStateSet = ModifierKeyStateSet()
+    private val modifiers: ModifierKeyStateSet get() = _modifiers.copy(shift = shiftKeyHandler.state)
     private var ignoreCode: Int = 0
 
     override fun initView(context: Context): View? {
@@ -90,10 +90,10 @@ class KeyboardComponent(
     override fun updateView() {
         val inputEngine = connectedInputEngine ?: return
         updateLabelsAndIcons(
-            getShiftedLabels(state.shift) + inputEngine.getLabels(state),
-            inputEngine.getIcons(state)
+            getShiftedLabels(modifiers.shift) + inputEngine.getLabels(modifiers),
+            inputEngine.getIcons(modifiers)
         )
-        updateMoreKeys(inputEngine.getMoreKeys(state))
+        updateMoreKeys(inputEngine.getMoreKeys(modifiers))
         keyboardView?.apply {
             invalidate()
         }
@@ -159,7 +159,7 @@ class KeyboardComponent(
 
     override fun onKeyLongClick(code: Int, output: String?) {
         val inputEngine = connectedInputEngine ?: return
-        longPressAction.onKey(code, state, inputEngine)
+        longPressAction.onKey(code, modifiers, inputEngine)
         ignoreCode = code
         onInput()
     }
@@ -169,7 +169,7 @@ class KeyboardComponent(
         if(code == 0 && output != null) {
             inputEngine.listener.onCommitText(output)
         } else if(code != 0) {
-            inputEngine.onKey(code, state)
+            inputEngine.onKey(code, modifiers)
         }
         onInput()
     }
@@ -183,7 +183,7 @@ class KeyboardComponent(
             FlickDirection.Right -> flickRightAction
             else -> FlickLongPressAction.None
         }
-        action.onKey(code, state, inputEngine)
+        action.onKey(code, modifiers, inputEngine)
         ignoreCode = code
         onInput()
     }

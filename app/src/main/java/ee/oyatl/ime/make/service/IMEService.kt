@@ -26,6 +26,7 @@ import ee.oyatl.ime.make.preset.InputEnginePreset
 import ee.oyatl.ime.make.preset.PresetLoader
 import ee.oyatl.ime.make.preset.table.CustomKeycode
 import java.io.File
+import kotlin.math.abs
 
 class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener {
     private var composingText: CharSequence = ""
@@ -109,9 +110,11 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         if(event.isSystem) return super.onKeyDown(keyCode, event)
         val currentEngine = inputEngineSwitcher?.getCurrentEngine()
         currentEngine ?: return super.onKeyDown(keyCode, event)
-        val modifiers = getModifierKeyStateSet(event)
-        if(!onNonPrintingKey(keyCode)) {
+        if(event.isPrintingKey) {
+            val modifiers = getModifierKeyStateSet(event)
             currentEngine.onKey(keyCode, modifiers)
+        } else if(!onNonPrintingKey(keyCode)) {
+            return super.onKeyDown(keyCode, event)
         }
         return true
     }
@@ -119,6 +122,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         event ?: return false
         if(event.isSystem) return super.onKeyUp(keyCode, event)
+        if(!event.isPrintingKey) return super.onKeyUp(keyCode, event)
         return true
     }
 
@@ -127,7 +131,8 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         val extractedText = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
         return when(code) {
             KeyEvent.KEYCODE_DEL -> {
-                inputEngineSwitcher?.getCurrentEngine()?.onDelete() != null
+                if(deleteSelection()) true
+                else inputEngineSwitcher?.getCurrentEngine()?.onDelete() != null
             }
             KeyEvent.KEYCODE_SPACE -> {
                 resetCurrentEngine()
@@ -153,17 +158,12 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
                 updateView()
                 true
             }
-            KeyEvent.KEYCODE_TAB -> {
-                sendDownUpKeyEvents(code)
-                true
-            }
             KeyEvent.KEYCODE_DPAD_LEFT,
             KeyEvent.KEYCODE_DPAD_RIGHT,
             KeyEvent.KEYCODE_DPAD_UP,
             KeyEvent.KEYCODE_DPAD_DOWN -> {
                 resetCurrentEngine()
-                sendDownUpKeyEvents(code)
-                true
+                false
             }
             CustomKeycode.KEYCODE_COPY.code -> {
                 val selectedText = inputConnection.getSelectedText(0)?.toString().orEmpty()
@@ -201,6 +201,25 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
             }
             else -> false
         }
+    }
+
+    private fun deleteSelection(): Boolean {
+        val inputConnection = currentInputConnection ?: return false
+        val extractedText = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
+        val start = extractedText.startOffset + extractedText.selectionStart
+        val end = extractedText.startOffset + extractedText.selectionEnd
+        val selectionLength = abs(end - start)
+        if(selectionLength != 0) {
+            resetCurrentEngine()
+            inputConnection.setSelection(start, start)
+            if(start < end) {
+                inputConnection.deleteSurroundingText(0, selectionLength)
+            } else {
+                inputConnection.deleteSurroundingText(selectionLength, 0)
+            }
+            return true
+        }
+        return false
     }
 
     override fun onEditorAction(code: Int) {
