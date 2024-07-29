@@ -22,7 +22,7 @@ object KeyCodeSerializer: KSerializer<Int> {
     }
 
     fun keyCodeToString(code: Int): String {
-        val custom = CustomKeycode.values().find { it.code == code }?.name
+        val custom = CustomKeycode.entries.find { it.code == code }?.name
         return custom ?: KeyEvent.keyCodeToString(code)
     }
 

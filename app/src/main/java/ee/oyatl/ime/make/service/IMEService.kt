@@ -226,6 +226,10 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         if(!sendDefaultEditorAction(true)) sendDownUpKeyEvents(code)
     }
 
+    override fun onDefaultAction(code: Int) {
+        sendDownUpKeyEvents(code)
+    }
+
     override fun onComposingText(text: CharSequence) {
         val inputConnection = currentInputConnection ?: return
         if(text.isEmpty() && inputConnection.getSelectedText(0)?.isNotEmpty() == true) return

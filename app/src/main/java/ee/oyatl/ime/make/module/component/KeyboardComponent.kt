@@ -20,6 +20,7 @@ import ee.oyatl.ime.make.module.keyboardview.Themes
 import ee.oyatl.ime.make.preset.softkeyboard.Key
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
+import ee.oyatl.ime.make.preset.table.CustomKeycode
 
 class KeyboardComponent(
     val keyboard: Keyboard,
@@ -28,7 +29,6 @@ class KeyboardComponent(
     autoUnlockShift: Boolean = true,
     private val disableTouch: Boolean = false,
 ): InputViewComponent, KeyboardListener, CandidateListener {
-
     var connectedInputEngine: InputEngine? = null
     private var shiftKeyHandler: DefaultShiftKeyHandler = DefaultShiftKeyHandler(autoUnlock = autoUnlockShift)
 
@@ -149,8 +149,14 @@ class KeyboardComponent(
                 shiftKeyHandler.onLock()
             }
             else -> {
-                if(!inputEngine.listener.onNonPrintingKey(code)) {
+                val standard = inputEngine.keyCharacterMap.isPrintingKey(code)
+                val custom = CustomKeycode.entries.find { it.code == code }?.type == CustomKeycode.Type.PRINTING
+                if(standard || custom) {
                     onPrintingKey(code, output)
+                } else {
+                    if(!inputEngine.listener.onNonPrintingKey(code)) {
+                        inputEngine.listener.onDefaultAction(code)
+                    }
                 }
             }
         }

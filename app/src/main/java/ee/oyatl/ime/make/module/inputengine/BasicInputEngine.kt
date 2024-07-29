@@ -10,7 +10,7 @@ import ee.oyatl.ime.make.module.component.InputViewComponent
 
 abstract class BasicInputEngine: InputEngine {
     override var components: List<InputViewComponent> = listOf()
-    protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
+    override val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
     override fun initView(context: Context): View? {
         val componentViews = components.map { it.initView(context) }

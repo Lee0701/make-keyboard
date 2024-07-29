@@ -1,7 +1,9 @@
 package ee.oyatl.ime.make.preset.table
 
-enum class CustomKeycode(val code: Int) {
-
+enum class CustomKeycode(
+    val code: Int,
+    val type: Type = Type.PRINTING
+) {
     KEYCODE_COMMA_PERIOD(0x102c),
     KEYCODE_PERIOD_COMMA(0x102e),
 
@@ -13,10 +15,16 @@ enum class CustomKeycode(val code: Int) {
     KEYCODE_SEBEOL_390_10(0x1130),
     KEYCODE_SEBEOL_390_11(0x1131),
 
-    KEYCODE_COPY(0x3001),
-    KEYCODE_CUT(0x3002),
-    KEYCODE_PASTE(0x3003),
-    KEYCODE_SELECT_ALL(0x3010),
-    KEYCODE_EXPAND_SELECTION_LEFT(0x3011),
-    KEYCODE_EXPAND_SELECTION_RIGHT(0x3012),
+    KEYCODE_COPY(0x3001, Type.FUNCTIONAL),
+    KEYCODE_CUT(0x3002, Type.FUNCTIONAL),
+    KEYCODE_PASTE(0x3003, Type.FUNCTIONAL),
+    KEYCODE_SELECT_ALL(0x3010, Type.FUNCTIONAL),
+    KEYCODE_EXPAND_SELECTION_LEFT(0x3011, Type.FUNCTIONAL),
+    KEYCODE_EXPAND_SELECTION_RIGHT(0x3012, Type.FUNCTIONAL),
+
+    ;
+
+    enum class Type {
+        PRINTING, FUNCTIONAL
+    }
 }
