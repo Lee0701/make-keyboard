@@ -110,8 +110,11 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         if(event.isSystem) return super.onKeyDown(keyCode, event)
         val currentEngine = inputEngineSwitcher?.getCurrentEngine()
         currentEngine ?: return super.onKeyDown(keyCode, event)
+        val modifiers = getModifierKeyStateSet(event)
+        if(modifiers.alt.active || modifiers.control.active || modifiers.meta.active) {
+            return super.onKeyDown(keyCode, event)
+        }
         if(event.isPrintingKey) {
-            val modifiers = getModifierKeyStateSet(event)
             currentEngine.onKey(keyCode, modifiers)
         } else if(!onNonPrintingKey(keyCode)) {
             return super.onKeyDown(keyCode, event)
