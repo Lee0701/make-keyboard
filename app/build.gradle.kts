@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "ee.oyatl.ime.make"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "ee.oyatl.ime.make"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 11
         versionName = "20240619-11-324f087"
 
