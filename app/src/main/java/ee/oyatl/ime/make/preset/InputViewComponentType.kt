@@ -43,11 +43,10 @@ enum class InputViewComponentType(
             }
             NumberRow -> {
                 val layouts = loader.modFilenames(
-                    listOf(KeyboardLayoutSettingsFragment.NUMBER_SOFT_ID))
+                    listOf(KeyboardLayoutSettingsFragment.NUMBER_ROW_SOFT_ID))
                 KeyboardComponent(
                     keyboard = InputEnginePreset.loadSoftKeyboards(context, layouts),
                     rowHeight = rowHeight,
-                    direct = true,
                     autoUnlockShift = preset.autoUnlockShift,
                     disableTouch = disableTouch,
                 )

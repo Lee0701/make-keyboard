@@ -4,6 +4,7 @@ layout:
   - "common/soft_%s_qwerty.yaml"
   codeConvertTable:
   - "symbol/table_custom_keys.yaml"
+  - "symbol/table_number_row.yaml"
   - "latin/table_latin_blank.yaml"
 components:
 - "MainKeyboard"

@@ -1,0 +1,32 @@
+!<simple>
+map:
+  "KEYCODE_NUMBER_ROW_1":
+    base: 0x0031
+    shift: 0x0021
+  "KEYCODE_NUMBER_ROW_2":
+    base: 0x0032
+    shift: 0x0040
+  "KEYCODE_NUMBER_ROW_3":
+    base: 0x0033
+    shift: 0x0023
+  "KEYCODE_NUMBER_ROW_4":
+    base: 0x0034
+    shift: 0x0024
+  "KEYCODE_NUMBER_ROW_5":
+    base: 0x0035
+    shift: 0x0025
+  "KEYCODE_NUMBER_ROW_6":
+    base: 0x0036
+    shift: 0x005e
+  "KEYCODE_NUMBER_ROW_7":
+    base: 0x0037
+    shift: 0x0026
+  "KEYCODE_NUMBER_ROW_8":
+    base: 0x0038
+    shift: 0x002a
+  "KEYCODE_NUMBER_ROW_9":
+    base: 0x0039
+    shift: 0x0028
+  "KEYCODE_NUMBER_ROW_0":
+    base: 0x0030
+    shift: 0x0029

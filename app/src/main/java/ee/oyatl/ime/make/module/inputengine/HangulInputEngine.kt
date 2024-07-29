@@ -63,7 +63,7 @@ data class HangulInputEngine(
 
     override fun onDelete() {
         if(stateStack.size >= 1) {
-            stateStack.removeLast()
+            stateStack.removeLastOrNull()
             listener.onComposingText(stateStack.lastOrNull()?.composed ?: "")
         }
         else listener.onDeleteText(1, 0)

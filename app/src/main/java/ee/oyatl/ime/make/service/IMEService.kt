@@ -25,7 +25,7 @@ import ee.oyatl.ime.make.module.candidates.CandidateListener
 import ee.oyatl.ime.make.module.inputengine.InputEngine
 import ee.oyatl.ime.make.preset.InputEnginePreset
 import ee.oyatl.ime.make.preset.PresetLoader
-import ee.oyatl.ime.make.preset.table.CustomKeycode
+import ee.oyatl.ime.make.preset.table.CustomKeyCode
 import java.io.File
 
 class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener {
@@ -141,36 +141,36 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
                 sendDownUpKeyEvents(code)
                 true
             }
-            CustomKeycode.KEYCODE_COPY.code -> {
+            CustomKeyCode.KEYCODE_COPY.code -> {
                 val selectedText = inputConnection.getSelectedText(0)?.toString().orEmpty()
                 val clip = ClipData.newPlainText(selectedText, selectedText)
                 clipboard.setPrimaryClip(clip)
                 true
             }
-            CustomKeycode.KEYCODE_CUT.code -> {
+            CustomKeyCode.KEYCODE_CUT.code -> {
                 val selectedText = inputConnection.getSelectedText(0)?.toString().orEmpty()
                 val clip = ClipData.newPlainText(selectedText, selectedText)
                 clipboard.setPrimaryClip(clip)
                 inputConnection.commitText("", 1)
                 true
             }
-            CustomKeycode.KEYCODE_PASTE.code -> {
+            CustomKeyCode.KEYCODE_PASTE.code -> {
                 val text = clipboard.primaryClip?.getItemAt(0)?.text?.toString().orEmpty()
                 inputConnection.commitText(text, 1)
                 true
             }
-            CustomKeycode.KEYCODE_SELECT_ALL.code -> {
+            CustomKeyCode.KEYCODE_SELECT_ALL.code -> {
                 extractedText.selectionStart = 0
                 extractedText.selectionEnd = extractedText.text.length
                 inputConnection.setSelection(extractedText.selectionStart, extractedText.selectionEnd)
                 true
             }
-            CustomKeycode.KEYCODE_EXPAND_SELECTION_LEFT.code -> {
+            CustomKeyCode.KEYCODE_EXPAND_SELECTION_LEFT.code -> {
                 extractedText.selectionStart -= 1
                 inputConnection.setSelection(extractedText.selectionStart, extractedText.selectionEnd)
                 true
             }
-            CustomKeycode.KEYCODE_EXPAND_SELECTION_RIGHT.code -> {
+            CustomKeyCode.KEYCODE_EXPAND_SELECTION_RIGHT.code -> {
                 extractedText.selectionEnd += 1
                 inputConnection.setSelection(extractedText.selectionStart, extractedText.selectionEnd)
                 true

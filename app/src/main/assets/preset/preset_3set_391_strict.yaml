@@ -4,6 +4,7 @@ layout:
   - "hangul_3set/soft_%s_391.yaml"
   codeConvertTable:
   - "symbol/table_custom_keys.yaml"
+  - "symbol/table_number_row.yaml"
   - "hangul_3set/table_391.yaml"
   - "hangul_3set/table_391_strict.yaml"
   combinationTable:
