@@ -3,7 +3,7 @@ package ee.oyatl.ime.make.module.inputengine
 import android.graphics.drawable.Drawable
 import android.view.KeyCharacterMap
 import ee.oyatl.ime.make.module.component.InputViewComponent
-import ee.oyatl.ime.make.module.kokr.Hangul
+import ee.oyatl.ime.make.charset.Hangul
 import ee.oyatl.ime.make.module.kokr.HangulCombiner
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.preset.table.CharOverrideTable
@@ -63,7 +63,7 @@ data class HangulInputEngine(
 
     override fun onDelete() {
         if(stateStack.size >= 1) {
-            stateStack.removeLast()
+            stateStack.removeLastOrNull()
             listener.onComposingText(stateStack.lastOrNull()?.composed ?: "")
         }
         else listener.onDeleteText(1, 0)

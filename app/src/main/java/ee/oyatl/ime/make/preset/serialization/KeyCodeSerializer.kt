@@ -1,7 +1,7 @@
 package ee.oyatl.ime.make.preset.serialization
 
 import android.view.KeyEvent
-import ee.oyatl.ime.make.preset.table.CustomKeycode
+import ee.oyatl.ime.make.preset.table.CustomKeyCode
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -22,13 +22,13 @@ object KeyCodeSerializer: KSerializer<Int> {
     }
 
     fun keyCodeToString(code: Int): String {
-        val custom = CustomKeycode.values().find { it.code == code }?.name
+        val custom = CustomKeyCode.entries.find { it.code == code }?.name
         return custom ?: KeyEvent.keyCodeToString(code)
     }
 
     fun keyCodeFromString(string: String): Int {
         return try {
-            CustomKeycode.valueOf(string).code
+            CustomKeyCode.valueOf(string).code
         } catch(ex: IllegalArgumentException) {
             val keyCode = KeyEvent.keyCodeFromString(string)
             if(keyCode > 0) keyCode else string.toIntOrNull() ?: 0

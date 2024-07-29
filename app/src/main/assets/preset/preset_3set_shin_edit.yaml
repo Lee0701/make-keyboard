@@ -4,6 +4,7 @@ layout:
   - "common/soft_%s_qwerty_with_slash.yaml"
   codeConvertTable:
   - "symbol/table_custom_keys.yaml"
+  - "symbol/table_number_row.yaml"
   - "hangul_3set/table_shin_edit.yaml"
   combinationTable:
   - "hangul_3set/comb_391_jung_strict.yaml"

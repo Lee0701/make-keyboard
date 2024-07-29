@@ -6,6 +6,7 @@ layout:
   - "symbol/morekeys_symbols.yaml"
   codeConvertTable:
   - "symbol/table_custom_keys.yaml"
+  - "symbol/table_number_row.yaml"
   - "symbol/table_symbol_g.yaml"
   overrideTable:
   - "symbol/override_currency_won.yaml"
