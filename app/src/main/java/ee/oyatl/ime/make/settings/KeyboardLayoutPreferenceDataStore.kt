@@ -83,6 +83,7 @@ class KeyboardLayoutPreferenceDataStore(
     override fun putBoolean(key: String?, value: Boolean) {
         when(key) {
             KEY_DEFAULT_HEIGHT -> mutablePreset.size.defaultHeight = value
+            KEY_HANGUL_CORRECT_ORDERS -> mutablePreset.hangul.correctOrders = value
             KEY_HANJA_CONVERSION -> mutablePreset.hanja.conversion = value
         }
         write()
@@ -122,6 +123,7 @@ class KeyboardLayoutPreferenceDataStore(
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
         return when(key) {
             KEY_DEFAULT_HEIGHT -> mutablePreset.size.defaultHeight
+            KEY_HANGUL_CORRECT_ORDERS -> mutablePreset.hangul.correctOrders
             KEY_HANJA_CONVERSION -> mutablePreset.hanja.conversion
             else -> defValue
         }
@@ -147,6 +149,8 @@ class KeyboardLayoutPreferenceDataStore(
 
         const val KEY_ENGINE_TYPE = "input_engine_type"
         const val KEY_LAYOUT_PRESET = "input_layout_preset"
+
+        const val KEY_HANGUL_CORRECT_ORDERS = "input_hangul_correct_orders"
 
         const val KEY_HANJA_CONVERSION = "input_hanja_conversion"
         const val KEY_HANJA_ADDITIONAL_DICTIONARIES = "input_hanja_additional_dictionaries"

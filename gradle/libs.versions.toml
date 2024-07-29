@@ -1,17 +1,17 @@
 [versions]
-application = "8.4.1"
-library = "8.4.1"
+application = "8.5.1"
+library = "8.5.1"
 kotlin = "2.0.0"
 serialization = "1.8.10"
 coreKtx = "1.13.1"
 flexbox = "3.0.0"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
 material = "1.12.0"
 preferenceKtx = "1.2.1"
-kotlinxSerializationJson = "1.7.0"
-kaml = "0.60.0"
+kotlinxSerializationJson = "1.7.1"
+kaml = "0.61.0"
 playServicesOssLicenses = "17.1.0"
 
 [libraries]
@@ -31,3 +31,4 @@ android-application = { id = "com.android.application", version.ref = "applicati
 android-library = { id = "com.android.library", version.ref = "library" }
 android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
+

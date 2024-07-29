@@ -5,11 +5,14 @@ import ee.oyatl.ime.make.preset.table.JamoCombinationTable
 
 class HangulCombiner(
     private val jamoCombinationTable: JamoCombinationTable,
+    private val correctOrders: Boolean
 ) {
     fun combine(state: State, input: Int): Pair<CharSequence, List<State>> {
+        // The unicode codepoint of input, without any extended parts
+        val inputCodepoint = input and 0x1fffff
         val newStates = mutableListOf<State>()
         var composed = ""
-        if(Hangul.isCho(input and 0x1fffff)) {
+        if(Hangul.isCho(inputCodepoint)) {
             if(state.cho != null) {
                 val combination = jamoCombinationTable.map[state.cho to input]
                 if(combination != null) {
@@ -23,8 +26,13 @@ class HangulCombiner(
                     composed += state.composed
                     newStates += State(cho = input)
                 }
-            } else newStates += state.copy(cho = input)
-        } else if(Hangul.isJung(input and 0x1fffff)) {
+            } else if(correctOrders) {
+                newStates += state.copy(cho = input)
+            } else {
+                composed += state.composed
+                newStates += State(cho = input)
+            }
+        } else if(Hangul.isJung(inputCodepoint)) {
             if(state.jung != null) {
                 val combination = jamoCombinationTable.map[state.jung to input]
                 if(combination != null) newStates += state.copy(jung = combination)
@@ -32,8 +40,13 @@ class HangulCombiner(
                     composed += state.composed
                     newStates += State(jung = input)
                 }
-            } else newStates += state.copy(jung = input)
-        } else if(Hangul.isJong(input and 0x1fffff)) {
+            } else if(correctOrders || state.last == null || Hangul.isCho(state.last)) {
+                newStates += state.copy(jung = input)
+            } else {
+                composed += state.composed
+                newStates += State(jung = input)
+            }
+        } else if(Hangul.isJong(inputCodepoint)) {
             val newStateJong = state.jong
             if(newStateJong != null) {
                 val combination = jamoCombinationTable.map[newStateJong to input]
@@ -42,8 +55,16 @@ class HangulCombiner(
                     composed += state.composed
                     newStates += State(jong = input)
                 }
-            } else newStates += state.copy(jong = input)
-        } else if(Hangul.isConsonant(input and 0x1fffff)) {
+            } else if(state.cho == null || state.jung == null) {
+                composed += state.composed
+                newStates += State(jong = input)
+            } else if(correctOrders || state.last == null || Hangul.isJung(state.last)) {
+                newStates += state.copy(jong = input)
+            } else {
+                composed += state.composed
+                newStates += State(jong = input)
+            }
+        } else if(Hangul.isConsonant(inputCodepoint)) {
             val cho = Hangul.consonantToCho(input and 0xffff)
             val jong = Hangul.consonantToJong(input and 0xffff)
             if(state.cho != null && state.jung != null) {
@@ -72,10 +93,13 @@ class HangulCombiner(
                         newStates += State(cho = cho)
                     }
                 }
-            } else {
+            } else if(correctOrders) {
                 newStates += state.copy(cho = cho)
+            } else {
+                composed += state.composed
+                newStates += State(cho = cho)
             }
-        } else if(Hangul.isVowel(input and 0x1fffff)) {
+        } else if(Hangul.isVowel(inputCodepoint)) {
             val jung = Hangul.vowelToJung(input and 0xffff)
             val newStateJong = state.jong
             val jongCombination = state.jongCombination
