@@ -148,21 +148,6 @@ class KeyboardComponent(
             KeyEvent.KEYCODE_CAPS_LOCK -> {
                 shiftKeyHandler.onLock()
             }
-            KeyEvent.KEYCODE_DEL -> {
-                inputEngine.onDelete()
-            }
-            KeyEvent.KEYCODE_SPACE -> {
-                val state = _state.copy()
-                reset()
-                this._state = state
-                inputEngine.listener.onCommitText(" ")
-                onInput()
-            }
-            KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
-                reset()
-                inputEngine.listener.onEditorAction(code)
-                onInput()
-            }
             else -> {
                 if(!inputEngine.listener.onSystemKey(code)) {
                     onPrintingKey(code, output)
@@ -183,7 +168,7 @@ class KeyboardComponent(
         val inputEngine = connectedInputEngine ?: return
         if(code == 0 && output != null) {
             inputEngine.listener.onCommitText(output)
-        } else {
+        } else if(code != 0) {
             inputEngine.onKey(code, state)
         }
         onInput()

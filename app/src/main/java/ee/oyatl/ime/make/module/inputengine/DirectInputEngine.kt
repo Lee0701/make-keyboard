@@ -2,24 +2,14 @@ package ee.oyatl.ime.make.module.inputengine
 
 import android.graphics.drawable.Drawable
 import android.view.KeyCharacterMap
-import ee.oyatl.ime.make.module.component.InputViewComponent
-import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
+import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 
 class DirectInputEngine(
     override val listener: InputEngine.Listener,
-): InputEngine {
-    override var components: List<InputViewComponent> = listOf()
-
-    private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
-
+): BasicInputEngine() {
     override var alternativeInputEngine: InputEngine? = null
     override var symbolsInputEngine: InputEngine? = null
-
-    override fun onKey(code: Int, state: ModifierKeyStateSet) {
-        val char = keyCharacterMap.get(code, state.asMetaState())
-        if(char > 0) listener.onCommitText(char.toChar().toString())
-    }
 
     override fun onDelete() {
         listener.onDeleteText(1, 0)

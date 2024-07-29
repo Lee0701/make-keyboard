@@ -2,7 +2,6 @@ package ee.oyatl.ime.make.module.inputengine
 
 import android.graphics.drawable.Drawable
 import android.view.KeyCharacterMap
-import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.preset.table.CharOverrideTable
 import ee.oyatl.ime.make.preset.table.CodeConvertTable
@@ -10,16 +9,12 @@ import ee.oyatl.ime.make.preset.table.MoreKeysTable
 import ee.oyatl.ime.make.preset.table.SimpleCodeConvertTable
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 
-class CodeConverterInputEngine(
-    private val convertTable: CodeConvertTable,
-    private val overrideTable: CharOverrideTable,
-    private val moreKeysTable: MoreKeysTable,
+abstract class BasicTableInputEngine(
+    override val convertTable: CodeConvertTable,
+    override val overrideTable: CharOverrideTable,
+    override val moreKeysTable: MoreKeysTable,
     override val listener: InputEngine.Listener,
-): InputEngine {
-    override var components: List<InputViewComponent> = listOf()
-
-    private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
-
+): BasicInputEngine(), TableInputEngine {
     override var alternativeInputEngine: InputEngine? = null
     override var symbolsInputEngine: InputEngine? = null
 
@@ -27,7 +22,7 @@ class CodeConverterInputEngine(
         val converted = convertTable.get(code, state)
             ?: keyCharacterMap.get(code, state.asMetaState())
         val override = overrideTable.get(converted) ?: converted
-        listener.onCommitText(override.toChar().toString())
+        if(override > 0) listener.onCommitText(override.toChar().toString())
     }
 
     override fun onDelete() {

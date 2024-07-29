@@ -16,18 +16,9 @@ interface InputEngine {
     var symbolsInputEngine: InputEngine?
     var alternativeInputEngine: InputEngine?
 
-    fun initView(context: Context): View? {
-        val componentViews = components.map { it.initView(context) }
-        return LinearLayoutCompat(context).apply {
-            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-            orientation = LinearLayoutCompat.VERTICAL
-            componentViews.forEach { addView(it) }
-        }
-    }
+    fun initView(context: Context): View?
     fun onReset()
-    fun onResetComponents() {
-        components.forEach { it.reset() }
-    }
+    fun onResetComponents()
 
     fun onKey(code: Int, state: ModifierKeyStateSet)
     fun onDelete()

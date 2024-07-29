@@ -20,6 +20,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.make.R
+import ee.oyatl.ime.make.modifiers.ModifierKeyState
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.candidates.CandidateListener
 import ee.oyatl.ime.make.module.inputengine.InputEngine
@@ -29,7 +31,6 @@ import ee.oyatl.ime.make.preset.table.CustomKeycode
 import java.io.File
 
 class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener {
-    private val handler: Handler = Handler(Looper.getMainLooper())
     private var composingText: CharSequence = ""
 
     private val clipboard: ClipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
@@ -81,11 +82,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         return inputEngineSwitcher?.initView(this) ?: View(this)
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        reload()
-    }
-
     override fun onCandidates(list: List<Candidate>) {
 //        val sorted = list.sortedByDescending { it.score }
         inputEngineSwitcher?.showCandidates(list)
@@ -111,10 +107,39 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         super.onFinishInput()
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        event ?: return false
+        val currentEngine = inputEngineSwitcher?.getCurrentEngine()
+        currentEngine ?: return super.onKeyDown(keyCode, event)
+        val modifiers = getModifierKeyStateSet(event)
+        if(!onSystemKey(keyCode)) {
+            currentEngine.onKey(keyCode, modifiers)
+        }
+        return true
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        event ?: return false
+        return true
+    }
+
     override fun onSystemKey(code: Int): Boolean {
         val inputConnection = currentInputConnection ?: return false
         val extractedText = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
         return when(code) {
+            KeyEvent.KEYCODE_DEL -> {
+                inputEngineSwitcher?.getCurrentEngine()?.onDelete() != null
+            }
+            KeyEvent.KEYCODE_SPACE -> {
+                resetCurrentEngine()
+                onCommitText(" ")
+                true
+            }
+            KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                resetCurrentEngine()
+                onEditorAction(code)
+                true
+            }
             KeyEvent.KEYCODE_LANGUAGE_SWITCH -> {
                 resetCurrentEngine()
                 inputEngineSwitcher?.nextLanguage()
@@ -208,7 +233,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         inputConnection.deleteSurroundingText(beforeLength, afterLength)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onUpdateSelection(
         oldSelStart: Int,
         oldSelEnd: Int,
@@ -233,6 +257,11 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
     override fun onViewClicked(focusChanged: Boolean) {
         if(Build.VERSION.SDK_INT >= 34) return
         if(focusChanged) resetCurrentEngine()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        reload()
     }
 
     override fun onComputeInsets(outInsets: Insets?) {
@@ -265,6 +294,15 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
 
     private fun updateView() {
         inputEngineSwitcher?.updateView()
+    }
+
+    private fun getModifierKeyStateSet(event: KeyEvent): ModifierKeyStateSet {
+        return ModifierKeyStateSet(
+            shift = ModifierKeyState(pressed = event.isShiftPressed, locked = event.isCapsLockOn),
+            alt = ModifierKeyState(pressed = event.isAltPressed),
+            control = ModifierKeyState(pressed = event.isCtrlPressed),
+            meta = ModifierKeyState(pressed = event.isMetaPressed)
+        )
     }
 
     override fun onDestroy() {
