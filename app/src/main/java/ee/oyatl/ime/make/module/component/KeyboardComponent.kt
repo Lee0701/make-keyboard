@@ -149,7 +149,7 @@ class KeyboardComponent(
                 shiftKeyHandler.onLock()
             }
             else -> {
-                if(!inputEngine.listener.onSystemKey(code)) {
+                if(!inputEngine.listener.onNonPrintingKey(code)) {
                     onPrintingKey(code, output)
                 }
             }

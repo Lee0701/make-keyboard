@@ -50,7 +50,7 @@ class KeyboardLayoutSettingsActivity: AppCompatActivity() {
             override fun onCommitText(text: CharSequence) = Unit
             override fun onDeleteText(beforeLength: Int, afterLength: Int) = Unit
             override fun onCandidates(list: List<Candidate>) = Unit
-            override fun onSystemKey(code: Int): Boolean = false
+            override fun onNonPrintingKey(code: Int): Boolean = false
             override fun onEditorAction(code: Int) = Unit
         }
 

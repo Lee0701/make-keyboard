@@ -8,8 +8,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -17,7 +15,6 @@ import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.widget.Toast
 import androidx.annotation.ColorInt
-import androidx.annotation.RequiresApi
 import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.modifiers.ModifierKeyState
@@ -109,10 +106,11 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         event ?: return false
+        if(event.isSystem) return super.onKeyDown(keyCode, event)
         val currentEngine = inputEngineSwitcher?.getCurrentEngine()
         currentEngine ?: return super.onKeyDown(keyCode, event)
         val modifiers = getModifierKeyStateSet(event)
-        if(!onSystemKey(keyCode)) {
+        if(!onNonPrintingKey(keyCode)) {
             currentEngine.onKey(keyCode, modifiers)
         }
         return true
@@ -120,10 +118,11 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         event ?: return false
+        if(event.isSystem) return super.onKeyUp(keyCode, event)
         return true
     }
 
-    override fun onSystemKey(code: Int): Boolean {
+    override fun onNonPrintingKey(code: Int): Boolean {
         val inputConnection = currentInputConnection ?: return false
         val extractedText = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
         return when(code) {
