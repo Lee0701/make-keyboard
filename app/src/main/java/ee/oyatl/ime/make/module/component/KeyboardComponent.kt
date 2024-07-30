@@ -26,11 +26,10 @@ class KeyboardComponent(
     val keyboard: Keyboard,
     val rowHeight: Int,
     val direct: Boolean = false,
-    autoUnlockShift: Boolean = true,
     private val disableTouch: Boolean = false,
 ): InputViewComponent, KeyboardListener, CandidateListener {
     var connectedInputEngine: InputEngine? = null
-    private var shiftKeyHandler: DefaultShiftKeyHandler = DefaultShiftKeyHandler(autoUnlock = autoUnlockShift)
+    private val shiftKeyHandler: DefaultShiftKeyHandler? get() = connectedInputEngine?.shiftKeyHandler
 
     private var keyboardViewType: String = "canvas"
 
@@ -43,13 +42,14 @@ class KeyboardComponent(
     private var keyboardView: KeyboardView? = null
 
     private var _modifiers: ModifierKeyStateSet = ModifierKeyStateSet()
-    private val modifiers: ModifierKeyStateSet get() = _modifiers.copy(shift = shiftKeyHandler.state)
+    private val modifiers: ModifierKeyStateSet
+        get() = _modifiers.copy(shift = connectedInputEngine?.shiftKeyHandler?.state ?: _modifiers.shift)
     private var ignoreCode: Int = 0
 
     override fun initView(context: Context): View? {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        shiftKeyHandler.reset()
-        shiftKeyHandler.doubleTapGap = preferences.getFloat("behaviour_double_tap_gap", 500f).toInt()
+        shiftKeyHandler?.reset()
+        shiftKeyHandler?.doubleTapGap = preferences.getFloat("behaviour_double_tap_gap", 500f).toInt()
         keyboardViewType = preferences.getString("appearance_keyboard_view_type", "canvas") ?: keyboardViewType
         longPressAction = FlickLongPressAction.of(
             preferences.getString("behaviour_long_press_action", "shift") ?: "shift"
@@ -121,7 +121,7 @@ class KeyboardComponent(
     override fun onKeyDown(code: Int, output: String?) {
         when(code) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
-                shiftKeyHandler.onPress()
+                shiftKeyHandler?.onPress()
                 updateView()
             }
         }
@@ -130,7 +130,7 @@ class KeyboardComponent(
     override fun onKeyUp(code: Int, output: String?) {
         when(code) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
-                shiftKeyHandler.onRelease()
+                shiftKeyHandler?.onRelease()
                 updateView()
             }
         }
@@ -146,7 +146,7 @@ class KeyboardComponent(
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
             }
             KeyEvent.KEYCODE_CAPS_LOCK -> {
-                shiftKeyHandler.onLock()
+                shiftKeyHandler?.onLock()
             }
             else -> {
                 val standard = inputEngine.keyCharacterMap.isPrintingKey(code)
@@ -195,6 +195,6 @@ class KeyboardComponent(
     }
 
     private fun onInput() {
-        shiftKeyHandler.onInput()
+        shiftKeyHandler?.onInput()
     }
 }

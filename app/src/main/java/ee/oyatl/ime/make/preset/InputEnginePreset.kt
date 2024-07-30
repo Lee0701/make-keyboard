@@ -4,12 +4,14 @@ import android.content.Context
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.decodeFromStream
+import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.module.component.KeyboardComponent
 import ee.oyatl.ime.make.module.inputengine.DefaultTableInputEngine
 import ee.oyatl.ime.make.module.inputengine.DirectInputEngine
 import ee.oyatl.ime.make.module.inputengine.HangulInputEngine
 import ee.oyatl.ime.make.module.inputengine.InputEngine
+import ee.oyatl.ime.make.module.inputengine.TableInputEngine
 import ee.oyatl.ime.make.preset.softkeyboard.Include
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.preset.softkeyboard.Row
@@ -41,6 +43,8 @@ data class InputEnginePreset(
         val overrideTable = loadOverrideTable(context, names = layout.overrideTable)
         val combinationTable = loadCombinationTable(context, names = layout.combinationTable)
 
+        val shiftKeyHandler = DefaultShiftKeyHandler(autoUnlock = autoUnlockShift)
+
         fun inflateComponents(preset: InputEnginePreset): List<InputViewComponent> {
             val rows = this.components
                 .map { it.inflate(context, preset, disableTouch) }
@@ -51,28 +55,28 @@ data class InputEnginePreset(
                 .map { it.inflate(context, preset.copy(size = preset.size.copy(rowHeight = rowHeight)), disableTouch) }
         }
 
-        fun getHangulInputEngine(listener: InputEngine.Listener): InputEngine {
-            return HangulInputEngine(
-                convertTable = convertTable,
-                moreKeysTable = moreKeysTable,
-                overrideTable = overrideTable,
-                jamoCombinationTable = combinationTable,
-                correctOrders = hangul.correctOrders,
+        fun getDirectInputEngine(listener: InputEngine.Listener): DirectInputEngine {
+            return DirectInputEngine(
+                shiftKeyHandler = shiftKeyHandler,
                 listener = listener,
             )
         }
 
-        fun getTableInputEngine(listener: InputEngine.Listener): InputEngine {
+        fun getTableInputEngine(listener: InputEngine.Listener): TableInputEngine {
             return DefaultTableInputEngine(
                 convertTable = convertTable,
                 moreKeysTable = moreKeysTable,
                 overrideTable = overrideTable,
+                shiftKeyHandler = shiftKeyHandler,
                 listener = listener,
             )
         }
 
-        fun getDirectInputEngine(listener: InputEngine.Listener): InputEngine {
-            return DirectInputEngine(
+        fun getHangulInputEngine(listener: InputEngine.Listener): HangulInputEngine {
+            return HangulInputEngine(
+                engine = getTableInputEngine(listener),
+                jamoCombinationTable = combinationTable,
+                correctOrders = hangul.correctOrders,
                 listener = listener,
             )
         }

@@ -2,11 +2,13 @@ package ee.oyatl.ime.make.module.inputengine
 
 import android.graphics.drawable.Drawable
 import android.view.KeyCharacterMap
+import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 
 class DirectInputEngine(
     override val listener: InputEngine.Listener,
+    override var shiftKeyHandler: DefaultShiftKeyHandler
 ): BasicInputEngine() {
     override var alternativeInputEngine: InputEngine? = null
     override var symbolsInputEngine: InputEngine? = null

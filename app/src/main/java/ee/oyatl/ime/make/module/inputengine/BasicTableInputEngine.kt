@@ -2,6 +2,7 @@ package ee.oyatl.ime.make.module.inputengine
 
 import android.graphics.drawable.Drawable
 import android.view.KeyCharacterMap
+import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.preset.table.CharOverrideTable
 import ee.oyatl.ime.make.preset.table.CodeConvertTable
@@ -13,6 +14,7 @@ abstract class BasicTableInputEngine(
     override val convertTable: CodeConvertTable,
     override val overrideTable: CharOverrideTable,
     override val moreKeysTable: MoreKeysTable,
+    override var shiftKeyHandler: DefaultShiftKeyHandler,
     override val listener: InputEngine.Listener,
 ): BasicInputEngine(), TableInputEngine {
     override var alternativeInputEngine: InputEngine? = null

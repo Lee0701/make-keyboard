@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.KeyCharacterMap
 import android.view.View
+import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
@@ -12,6 +13,7 @@ import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 interface InputEngine {
     val listener: Listener
     val keyCharacterMap: KeyCharacterMap
+    var shiftKeyHandler: DefaultShiftKeyHandler
     var components: List<InputViewComponent>
     var symbolsInputEngine: InputEngine?
     var alternativeInputEngine: InputEngine?
