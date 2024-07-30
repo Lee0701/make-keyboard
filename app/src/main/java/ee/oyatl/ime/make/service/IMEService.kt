@@ -114,6 +114,10 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         if(modifiers.alt.active || modifiers.control.active || modifiers.meta.active) {
             return super.onKeyDown(keyCode, event)
         }
+        if(modifiers.shift.active && keyCode == KeyEvent.KEYCODE_SPACE) {
+            onNonPrintingKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH)
+            return true
+        }
         if(event.isPrintingKey) {
             currentEngine.onKey(keyCode, modifiers)
         } else if(!onNonPrintingKey(keyCode)) {
