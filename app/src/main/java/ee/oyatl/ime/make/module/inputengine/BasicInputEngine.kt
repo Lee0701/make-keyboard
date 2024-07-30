@@ -24,6 +24,10 @@ abstract class BasicInputEngine(
         }
     }
 
+    override fun updateView() {
+        components.forEach { component -> component.updateView() }
+    }
+
     override fun onResetComponents() {
         components.forEach { it.reset() }
     }

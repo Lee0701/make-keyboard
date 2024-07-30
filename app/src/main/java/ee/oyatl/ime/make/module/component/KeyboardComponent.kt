@@ -77,8 +77,8 @@ class KeyboardComponent(
     }
 
     override fun reset() {
-        updateView()
         val inputEngine = connectedInputEngine ?: return
+        inputEngine.updateView()
         inputEngine.onReset()
     }
 
@@ -122,7 +122,7 @@ class KeyboardComponent(
         when(code) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
                 shiftKeyHandler?.onPress()
-                updateView()
+                connectedInputEngine?.updateView()
             }
         }
     }
@@ -131,7 +131,7 @@ class KeyboardComponent(
         when(code) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
                 shiftKeyHandler?.onRelease()
-                updateView()
+                connectedInputEngine?.updateView()
             }
         }
     }
@@ -160,7 +160,7 @@ class KeyboardComponent(
                 }
             }
         }
-        updateView()
+        inputEngine.updateView()
     }
 
     override fun onKeyLongClick(code: Int, output: String?) {

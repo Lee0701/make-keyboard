@@ -19,6 +19,7 @@ interface InputEngine {
     var alternativeInputEngine: InputEngine?
 
     fun initView(context: Context): View?
+    fun updateView()
     fun onReset()
     fun onResetComponents()
 
