@@ -1,9 +1,7 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.MakeKeyboard" parent="Theme.Material3.DayNight">
-        <!-- Customize your theme here. -->
-        <item name="alertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
-        <item name="dialogCornerRadius">28dp</item>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MakeKeyboard.Icon">
+        <item name="iconTint">@color/white</item>
     </style>
 
     <style name="Theme.MakeKeyboard.Keyboard">
@@ -76,8 +74,6 @@
 
     <style name="Theme.MakeKeyboard.KeyboardLayoutSettings.ImageButton">
         <item name="tint">@color/black</item>
-        <item name="android:layout_width">@dimen/icon_button_width</item>
-        <item name="android:layout_height">@dimen/icon_button_height</item>
     </style>
 
 </resources>

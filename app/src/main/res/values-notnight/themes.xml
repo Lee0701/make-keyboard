@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MakeKeyboard.Icon">
+        <item name="iconTint">@color/black</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.Keyboard">
+        <item name="background">@color/keyboard_bg_light</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.Keyboard.Key">
+        <item name="android:textSize">@dimen/key_text_size</item>
+        <item name="android:textColor">@color/key_fg_light</item>
+        <item name="marginHorizontal">@dimen/key_margin_horizontal</item>
+        <item name="marginVertical">@dimen/key_margin_vertical</item>
+        <item name="background">@drawable/key_bg</item>
+        <item name="backgroundTint">@color/key_bg_static_light</item>
+        <item name="iconTint">@color/key_fg_light</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.Keyboard.Key.Mod" parent="Theme.MakeKeyboard.Keyboard.Key">
+        <item name="backgroundTint">@color/key_bg_static_light_mod</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.Keyboard.Key.Return" parent="Theme.MakeKeyboard.Keyboard.Key">
+        <item name="backgroundTint">@color/key_bg_static_light_return</item>
+        <item name="iconTint">@color/key_fg_light_return</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.Keyboard.KeyPopup">
+        <item name="android:textSize">@dimen/key_popup_text_size</item>
+        <item name="android:textColor">@color/key_fg_light</item>
+        <item name="background">@drawable/key_popup_bg</item>
+        <item name="backgroundTint">@color/key_bg_static_light</item>
+        <item name="iconTint">@color/key_fg_light</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.Candidates">
+        <item name="android:background">@color/keyboard_bg_light</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.PreferenceCategory.Title">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.Preference.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.Preference.Summary">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/gray_900</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.KeyboardLayoutSettings">
+        <item name="imageButtonStyle">@style/Theme.MakeKeyboard.KeyboardLayoutSettings.ImageButton</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.KeyboardLayoutSettings.ImageButton">
+        <item name="tint">@color/white</item>
+    </style>
+
+</resources>
