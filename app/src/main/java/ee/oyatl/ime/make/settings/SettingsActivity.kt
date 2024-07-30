@@ -13,6 +13,7 @@ class SettingsActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DynamicColors.applyToActivityIfAvailable(this)
+
         setContentView(R.layout.activity_settings)
         supportFragmentManager
             .beginTransaction()

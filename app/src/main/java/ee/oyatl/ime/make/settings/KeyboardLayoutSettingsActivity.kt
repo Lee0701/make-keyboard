@@ -2,6 +2,7 @@ package ee.oyatl.ime.make.settings
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.candidates.CandidateListener
@@ -17,6 +18,7 @@ class KeyboardLayoutSettingsActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        DynamicColors.applyToActivityIfAvailable(this)
 
         setContentView(R.layout.activity_keyboard_layout_settings)
         supportFragmentManager
