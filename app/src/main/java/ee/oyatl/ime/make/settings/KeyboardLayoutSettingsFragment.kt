@@ -293,6 +293,10 @@ class KeyboardLayoutSettingsFragment(
                 val preferenceDataStore = preferenceDataStore ?: return true
                 val adapter = adapter ?: return true
                 val bottomSheet = ChooseNewComponentBottomSheetFragment { componentType ->
+                    // Return to reorder mode before updating RecyclerView
+                    previewMode = false
+                    updateKeyboardView()
+
                     val index = 0
                     preferenceDataStore.insertComponent(index, componentType)
                     adapter.notifyItemInserted(index)
