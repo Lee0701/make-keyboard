@@ -55,11 +55,11 @@ class HangulCombiner(
                     composed += state.composed
                     newStates += State(jong = input)
                 }
+            } else if(correctOrders || state.last == null || Hangul.isJung(state.last) && state.cho != null) {
+                newStates += state.copy(jong = input)
             } else if(state.cho == null || state.jung == null) {
                 composed += state.composed
                 newStates += State(jong = input)
-            } else if(correctOrders || state.last == null || Hangul.isJung(state.last)) {
-                newStates += state.copy(jong = input)
             } else {
                 composed += state.composed
                 newStates += State(jong = input)
