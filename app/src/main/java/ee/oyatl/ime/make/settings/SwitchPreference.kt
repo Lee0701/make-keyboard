@@ -1,16 +1,76 @@
 package ee.oyatl.ime.make.settings
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.preference.PreferenceViewHolder
 import androidx.preference.SwitchPreferenceCompat
+import com.google.android.material.switchmaterial.SwitchMaterial
 import ee.oyatl.ime.make.R
 
 class SwitchPreference(
     context: Context,
     attrs: AttributeSet?,
 ): SwitchPreferenceCompat(context, attrs) {
+
+    private var valueSet: Boolean = false
+    private var switch: SwitchMaterial? = null
+
+    var value: Boolean
+        get() = getPersistedBoolean(false)
+        set(v) {
+            persistBoolean(v)
+            notifyChanged()
+        }
+
     init {
         layoutResource = R.layout.preference_inline
+        widgetLayoutResource = R.layout.pref_switch_widget
     }
 
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+
+        val context = ContextThemeWrapper(this.context, com.google.android.material.R.style.Widget_Material3_CompoundButton_MaterialSwitch)
+        val widgetView = holder.itemView.findViewById<LinearLayoutCompat>(android.R.id.widget_frame)
+        if(widgetView is ViewGroup) {
+            widgetView.removeAllViews()
+            val switch = LayoutInflater.from(context).inflate(R.layout.pref_switch_widget_content, null, false) as SwitchMaterial
+            try {
+                switch.isEnabled = this.isEnabled
+                switch.isChecked = getPersistedBoolean(false)
+                switch.setOnCheckedChangeListener { _, value ->
+                    persistBoolean(value)
+                }
+            } catch(ex: IllegalStateException) {
+                ex.printStackTrace()
+            }
+            widgetView.addView(switch)
+            this.switch = switch
+        }
+    }
+
+    override fun onGetDefaultValue(a: TypedArray, index: Int): Any {
+        return a.getBoolean(index, false)
+    }
+
+    override fun onSetInitialValue(defaultValue: Any?) {
+        setInitialValue(getPersistedBoolean(defaultValue as? Boolean ?: false))
+    }
+
+    private fun setInitialValue(value: Boolean) {
+        // Always persist/notify the first time.
+        val changed = this.value != value
+        if(changed || !this.valueSet) {
+            this.valueSet = true
+            this.value = value
+            if(changed) {
+                notifyChanged()
+            }
+        }
+    }
 }

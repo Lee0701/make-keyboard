@@ -7,8 +7,8 @@ import ee.oyatl.ime.make.R
 
 class Preference(
     context: Context,
-    atts: AttributeSet?,
-): Preference(context, atts) {
+    attrs: AttributeSet?,
+): Preference(context, attrs) {
     init {
         layoutResource = R.layout.preference_inline
     }
