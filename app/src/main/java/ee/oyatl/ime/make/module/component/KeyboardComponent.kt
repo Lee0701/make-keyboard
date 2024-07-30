@@ -153,6 +153,8 @@ class KeyboardComponent(
                 val custom = CustomKeyCode.entries.find { it.code == code }?.type == CustomKeyCode.Type.PRINTING
                 if(standard || custom) {
                     onPrintingKey(code, output)
+                } else if(output != null) {
+                    onPrintingKey(code, output)
                 } else {
                     if(!inputEngine.listener.onNonPrintingKey(code)) {
                         inputEngine.listener.onDefaultAction(code)
