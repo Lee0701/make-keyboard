@@ -1,14 +1,14 @@
-package ee.oyatl.ime.make.settings
+package ee.oyatl.ime.make.settings.preference
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.preference.Preference
+import androidx.preference.MultiSelectListPreference
 import ee.oyatl.ime.make.R
 
-class Preference(
+class MultiSelectListPreference(
     context: Context,
     attrs: AttributeSet?,
-): Preference(context, attrs) {
+): MultiSelectListPreference(context, attrs) {
     init {
         layoutResource = R.layout.preference_inline
     }

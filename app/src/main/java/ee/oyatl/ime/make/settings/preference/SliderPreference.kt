@@ -1,4 +1,4 @@
-package ee.oyatl.ime.make.settings
+package ee.oyatl.ime.make.settings.preference
 
 import android.content.Context
 import android.content.res.TypedArray

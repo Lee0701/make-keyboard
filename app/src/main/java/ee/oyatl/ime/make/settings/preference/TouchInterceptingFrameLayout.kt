@@ -1,10 +1,9 @@
-package ee.oyatl.ime.make.settings
+package ee.oyatl.ime.make.settings.preference
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.FrameLayout
-import ee.oyatl.ime.make.R
 
 class TouchInterceptingFrameLayout(
     context: Context,

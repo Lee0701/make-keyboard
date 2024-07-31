@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ee.oyatl.ime.make.settings.ListPreference
+    <ee.oyatl.ime.make.settings.preference.ListPreference
         app:key="input_layout_preset"
         app:entries="@array/empty"
         app:entryValues="@array/empty"
@@ -11,16 +11,16 @@
         app:title="@string/pref_layout_preset_title"
         app:summary="@string/pref_layout_preset_summary" />
 
-    <ee.oyatl.ime.make.settings.PreferenceCategory
+    <ee.oyatl.ime.make.settings.preference.PreferenceCategory
         app:title="@string/pref_soft_keyboard_header_title">
 
-        <ee.oyatl.ime.make.settings.SwitchPreference
+        <ee.oyatl.ime.make.settings.preference.SwitchPreference
             app:key="soft_keyboard_default_height"
             app:defaultValue="false"
             app:title="@string/pref_appearance_default_height_title"
             app:summary="@string/pref_appearance_default_height_summary" />
 
-        <ee.oyatl.ime.make.settings.SliderPreference
+        <ee.oyatl.ime.make.settings.preference.SliderPreference
             app:key="soft_keyboard_row_height"
             app:valueFrom="30.0"
             app:valueTo="100.0"
@@ -29,18 +29,18 @@
             app:title="@string/pref_appearance_keyboard_height_title"
             app:useSimpleSummaryProvider="true"/>
 
-    </ee.oyatl.ime.make.settings.PreferenceCategory>
+    </ee.oyatl.ime.make.settings.preference.PreferenceCategory>
 
-    <ee.oyatl.ime.make.settings.PreferenceCategory
+    <ee.oyatl.ime.make.settings.preference.PreferenceCategory
         android:key="input_layer"
         android:title="@string/pref_header_input_title">
 
-        <ee.oyatl.ime.make.settings.SwitchPreference
+        <ee.oyatl.ime.make.settings.preference.SwitchPreference
             app:key="input_hangul_correct_orders"
             app:defaultValue="true"
             app:title="@string/pref_hangul_correct_orders_title"
             app:summary="@string/pref_hangul_correct_orders_summary" />
 
-    </ee.oyatl.ime.make.settings.PreferenceCategory>
+    </ee.oyatl.ime.make.settings.preference.PreferenceCategory>
 
 </PreferenceScreen>
