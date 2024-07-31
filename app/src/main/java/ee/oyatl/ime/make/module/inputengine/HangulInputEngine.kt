@@ -45,7 +45,10 @@ data class HangulInputEngine(
             else convertTable.get(code, state)
         if(converted == null) {
             val char = keyCharacterMap.get(code, state.asMetaState())
-            if(char > 0) listener.onCommitText(char.toChar().toString())
+            if(char > 0) {
+                onReset()
+                listener.onCommitText(char.toChar().toString())
+            }
         } else {
             val override = overrideTable.get(converted)
             val (text, hangulStates) = hangulCombiner.combine(hangulState, override ?: converted)
