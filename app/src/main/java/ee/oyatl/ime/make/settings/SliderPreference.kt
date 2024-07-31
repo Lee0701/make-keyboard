@@ -38,7 +38,7 @@ class SliderPreference(
         a.recycle()
 
         layoutResource = R.layout.preference_multiline
-        widgetLayoutResource = R.layout.pref_slider_widget
+        widgetLayoutResource = R.layout.pref_widget_frame
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
@@ -84,5 +84,4 @@ class SliderPreference(
             }
         }
     }
-
 }
