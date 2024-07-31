@@ -134,8 +134,10 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
     }
 
     override fun onNonPrintingKey(code: Int): Boolean {
-        val inputConnection = currentInputConnection ?: return false
-        val extractedText = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
+        if(onSelectionKeys(code)) {
+            resetCurrentEngine()
+            return false
+        }
         return when(code) {
             KeyEvent.KEYCODE_DEL -> {
                 if(deleteSelection()) true
@@ -165,12 +167,25 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
                 updateView()
                 true
             }
+            else -> false
+        }
+    }
+
+    private fun onSelectionKeys(code: Int): Boolean {
+        val inputConnection = currentInputConnection ?: return false
+        val extractedText = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
+        return when(code) {
             KeyEvent.KEYCODE_DPAD_LEFT,
             KeyEvent.KEYCODE_DPAD_RIGHT,
             KeyEvent.KEYCODE_DPAD_UP,
             KeyEvent.KEYCODE_DPAD_DOWN -> {
-                resetCurrentEngine()
-                false
+                true
+            }
+            KeyEvent.KEYCODE_MOVE_HOME,
+            KeyEvent.KEYCODE_MOVE_END,
+            KeyEvent.KEYCODE_PAGE_UP,
+            KeyEvent.KEYCODE_PAGE_DOWN -> {
+                true
             }
             CustomKeyCode.KEYCODE_COPY.code -> {
                 val selectedText = inputConnection.getSelectedText(0)?.toString().orEmpty()
