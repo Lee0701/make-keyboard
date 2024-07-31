@@ -92,8 +92,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         resetCurrentEngine()
         onCandidates(listOf())
         onComposingText(newComposingText)
-
-        val currentEngine = inputEngineSwitcher?.getCurrentEngine()
     }
 
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
@@ -206,17 +204,20 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
                 true
             }
             CustomKeyCode.KEYCODE_SELECT_ALL.code -> {
+                extractedText ?: return true
                 extractedText.selectionStart = 0
                 extractedText.selectionEnd = extractedText.text.length
                 inputConnection.setSelection(extractedText.selectionStart, extractedText.selectionEnd)
                 true
             }
             CustomKeyCode.KEYCODE_EXPAND_SELECTION_LEFT.code -> {
+                extractedText ?: return true
                 extractedText.selectionStart -= 1
                 inputConnection.setSelection(extractedText.selectionStart, extractedText.selectionEnd)
                 true
             }
             CustomKeyCode.KEYCODE_EXPAND_SELECTION_RIGHT.code -> {
+                extractedText ?: return true
                 extractedText.selectionEnd += 1
                 inputConnection.setSelection(extractedText.selectionStart, extractedText.selectionEnd)
                 true
@@ -228,6 +229,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
     private fun deleteSelection(): Boolean {
         val inputConnection = currentInputConnection ?: return false
         val extractedText = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
+        extractedText ?: return true
         val start = extractedText.startOffset + extractedText.selectionStart
         val end = extractedText.startOffset + extractedText.selectionEnd
         val selectionLength = abs(end - start)
