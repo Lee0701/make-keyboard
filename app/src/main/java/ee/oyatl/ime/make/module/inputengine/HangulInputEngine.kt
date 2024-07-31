@@ -1,8 +1,6 @@
 package ee.oyatl.ime.make.module.inputengine
 
 import android.graphics.drawable.Drawable
-import android.view.KeyCharacterMap
-import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.charset.Hangul
 import ee.oyatl.ime.make.module.kokr.HangulCombiner
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
@@ -10,18 +8,13 @@ import ee.oyatl.ime.make.preset.table.JamoCombinationTable
 import ee.oyatl.ime.make.preset.table.LayeredCodeConvertTable
 import ee.oyatl.ime.make.preset.table.LayeredCodeConvertTable.Companion.BASE_LAYER_NAME
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
-import ee.oyatl.ime.make.preset.table.CharOverrideTable
-import ee.oyatl.ime.make.preset.table.CodeConvertTable
-import ee.oyatl.ime.make.preset.table.MoreKeysTable
 
 data class HangulInputEngine(
-    override val convertTable: CodeConvertTable,
-    override val overrideTable: CharOverrideTable,
-    override val moreKeysTable: MoreKeysTable,
+    private val engine: TableInputEngine,
     private val jamoCombinationTable: JamoCombinationTable,
     private val correctOrders: Boolean,
     override val listener: InputEngine.Listener
-): BasicTableInputEngine(convertTable, overrideTable, moreKeysTable, listener) {
+): BasicTableInputEngine(engine.convertTable, engine.overrideTable, engine.moreKeysTable, engine.shiftKeyHandler, listener) {
     override var alternativeInputEngine: InputEngine? = null
     override var symbolsInputEngine: InputEngine? = null
 

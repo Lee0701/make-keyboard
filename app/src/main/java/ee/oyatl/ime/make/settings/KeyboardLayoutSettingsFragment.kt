@@ -93,10 +93,12 @@ class KeyboardLayoutSettingsFragment(
         additionalDictionaries?.values = preferenceDataStore?.getStringSet(KEY_HANJA_ADDITIONAL_DICTIONARIES, mutableSetOf())
 
         fun updateByDefaultHeight(newValue: Any?) {
-            val enabled = newValue != true
-            defaultHeight?.isChecked = !enabled
-            rowHeight?.isEnabled = enabled
-            if(!enabled) rowHeight?.value = defaultHeightValue
+            defaultHeight ?: return
+            rowHeight ?: return
+            val enabled = newValue == true
+            defaultHeight.isChecked = enabled
+            rowHeight.isEnabled = !enabled
+            if(enabled) rowHeight.value = defaultHeightValue
         }
         defaultHeight?.setOnPreferenceChangeListener { _, newValue ->
             updateByDefaultHeight(newValue)
@@ -257,10 +259,7 @@ class KeyboardLayoutSettingsFragment(
     }
 
     override fun onChange(preset: InputEnginePreset) {
-        val rootPreference = PreferenceManager.getDefaultSharedPreferences(context ?: return)
         preferenceDataStore?.write()
-        rootPreference.edit().putBoolean("requested_restart", true).apply()
-        rootPreference.edit().putBoolean("requested_restart", false).apply()
         updateKeyboardView()
     }
 

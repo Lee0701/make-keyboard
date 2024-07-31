@@ -17,7 +17,6 @@ class SwitchPreference(
 ): Preference(context, attrs) {
 
     private var valueSet: Boolean = false
-    private var switch: SwitchMaterial? = null
 
     var isChecked: Boolean
         get() = getPersistedBoolean(false)
@@ -42,13 +41,13 @@ class SwitchPreference(
                 switch.isEnabled = this.isEnabled
                 switch.isChecked = getPersistedBoolean(false)
                 switch.setOnCheckedChangeListener { _, value ->
-                    persistBoolean(value)
+                    this.isChecked = value
+                    onPreferenceChangeListener?.onPreferenceChange(this, value)
                 }
             } catch(ex: IllegalStateException) {
                 ex.printStackTrace()
             }
             widgetView.addView(switch)
-            this.switch = switch
         }
     }
 
@@ -66,9 +65,6 @@ class SwitchPreference(
         if(changed || !this.valueSet) {
             this.valueSet = true
             this.isChecked = value
-            if(changed) {
-                notifyChanged()
-            }
         }
     }
 }
