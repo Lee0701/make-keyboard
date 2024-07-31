@@ -76,9 +76,9 @@
     <string name="pref_behaviour_long_press_duration_title">Long-press Duration</string>
     <string name="pref_behaviour_long_press_action_title">Long-press Action</string>
     <string name="pref_behaviour_repeat_interval_title">Key Repeat Interval</string>
-    <string name="pref_behaviour_show_popups_title">Show Key Preview Popups</string>
-    <string name="pref_behaviour_show_more_keys_title">Show More Key Popups</string>
-    <string name="pref_behaviour_show_more_keys_summary">Displays on key long-press.</string>
+    <string name="pref_appearance_show_popups_title">Show Key Preview Popups</string>
+    <string name="pref_appearance_show_more_keys_title">Show More Key Popups</string>
+    <string name="pref_appearance_show_more_keys_summary">Displays on key long-press.</string>
     <string name="pref_behaviour_slide_action_title">Keyboard Slide Action</string>
     <string name="slide_action_none">None</string>
     <string name="slide_action_flick">Flick (Alternative input)</string>

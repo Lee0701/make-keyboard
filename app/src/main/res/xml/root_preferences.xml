@@ -59,6 +59,17 @@
             app:defaultValue="true"
             app:title="@string/pref_appearance_sound_feedback_title" />
 
+        <ee.oyatl.ime.make.settings.preference.SwitchPreference
+            app:key="appearance_show_popups"
+            app:defaultValue="true"
+            app:title="@string/pref_appearance_show_popups_title" />
+
+        <ee.oyatl.ime.make.settings.preference.SwitchPreference
+            app:key="appearance_show_more_keys"
+            app:defaultValue="true"
+            app:title="@string/pref_appearance_show_more_keys_title"
+            app:summary="@string/pref_appearance_show_more_keys_summary" />
+
     </ee.oyatl.ime.make.settings.preference.PreferenceCategory>
 
     <ee.oyatl.ime.make.settings.preference.PreferenceCategory
@@ -96,17 +107,6 @@
 
     <ee.oyatl.ime.make.settings.preference.PreferenceCategory
         app:title="@string/pref_header_behaviour_title">
-
-        <ee.oyatl.ime.make.settings.preference.SwitchPreference
-            app:key="behaviour_show_popups"
-            app:defaultValue="true"
-            app:title="@string/pref_behaviour_show_popups_title" />
-
-        <ee.oyatl.ime.make.settings.preference.SwitchPreference
-            app:key="behaviour_show_more_keys"
-            app:defaultValue="true"
-            app:title="@string/pref_behaviour_show_more_keys_title"
-            app:summary="@string/pref_behaviour_show_more_keys_summary" />
 
         <ee.oyatl.ime.make.settings.preference.SliderPreference
             app:key="behaviour_double_tap_gap"

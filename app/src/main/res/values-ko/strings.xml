@@ -76,9 +76,9 @@
     <string name="pref_behaviour_long_press_duration_title">롱클릭 길이</string>
     <string name="pref_behaviour_long_press_action_title">롱클릭 동작</string>
     <string name="pref_behaviour_repeat_interval_title">키 반복 간격</string>
-    <string name="pref_behaviour_show_popups_title">키 미리보기 팝업 표시</string>
-    <string name="pref_behaviour_show_more_keys_title">키 더보기 팝업 표시</string>
-    <string name="pref_behaviour_show_more_keys_summary">키 롱클릭시 표시됩니다.</string>
+    <string name="pref_appearance_show_popups_title">키 미리보기 팝업 표시</string>
+    <string name="pref_appearance_show_more_keys_title">키 더보기 팝업 표시</string>
+    <string name="pref_appearance_show_more_keys_summary">키 롱클릭시 표시됩니다.</string>
     <string name="pref_behaviour_slide_action_title">키보드 슬라이드 동작</string>
     <string name="slide_action_none">무시</string>
     <string name="slide_action_flick">플릭 (다른 문자 입력)</string>
