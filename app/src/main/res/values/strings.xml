@@ -94,6 +94,11 @@
     <string name="flick_action_symbol">Input Symbol</string>
     <string name="flick_action_shift_symbol">Input Shifted Symbol</string>
     <string name="flick_action_alternative_language">Input Alternative Language</string>
+    <string name="pref_behaviour_hardware_lang_switch_hotkey_title">Hardware Keyboard Language Switch Key</string>
+    <string name="modifier_shift">Shift</string>
+    <string name="modifier_alt">Alt</string>
+    <string name="modifier_control">Control</string>
+    <string name="modifier_meta">Meta</string>
 
     <string name="pref_header_about_title">About</string>
     <string name="pref_about_app_info_title">make keyboard</string>

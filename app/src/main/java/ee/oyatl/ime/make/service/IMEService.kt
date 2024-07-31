@@ -15,6 +15,7 @@ import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.widget.Toast
 import androidx.annotation.ColorInt
+import androidx.preference.PreferenceManager
 import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.modifiers.ModifierKeyState
@@ -25,6 +26,7 @@ import ee.oyatl.ime.make.module.inputengine.InputEngine
 import ee.oyatl.ime.make.preset.InputEnginePreset
 import ee.oyatl.ime.make.preset.PresetLoader
 import ee.oyatl.ime.make.preset.table.CustomKeyCode
+import ee.oyatl.ime.make.settings.HotkeyDialogPreference
 import java.io.File
 import kotlin.math.abs
 
@@ -34,12 +36,16 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
     private val clipboard: ClipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
     private var inputEngineSwitcher: InputEngineSwitcher? = null
 
+    private var languageSwitchModifiers: Int = HotkeyDialogPreference.DEFAULT_MODIFIER
+    private var languageSwitchKeycode: Int = HotkeyDialogPreference.DEFAULT_KEYCODE
+
     override fun onCreate() {
         super.onCreate()
         reload()
     }
 
     private fun reload() {
+        val pref = PreferenceManager.getDefaultSharedPreferences(this)
         val loader = PresetLoader(this)
 
         val (latinPreset, hangulPreset, symbolPreset) = loadPresets(this)
@@ -73,6 +79,10 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         val switcher = InputEngineSwitcher(engines, table)
         this.inputEngineSwitcher = switcher
 
+        val languageSwitchHotkey = pref.getString(
+            "behaviour_hardware_lang_switch_hotkey", "") ?: ""
+        languageSwitchModifiers = HotkeyDialogPreference.parseModifiers(languageSwitchHotkey)
+        languageSwitchKeycode = HotkeyDialogPreference.parseKeycode(languageSwitchHotkey)
         reloadView()
     }
 
@@ -109,12 +119,12 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         val currentEngine = inputEngineSwitcher?.getCurrentEngine()
         currentEngine ?: return super.onKeyDown(keyCode, event)
         val modifiers = getModifierKeyStateSet(event)
-        if(modifiers.alt.active || modifiers.control.active || modifiers.meta.active) {
-            return super.onKeyDown(keyCode, event)
-        }
-        if(modifiers.shift.active && keyCode == KeyEvent.KEYCODE_SPACE) {
+        if(modifiers.asMetaState() == languageSwitchModifiers && keyCode == languageSwitchKeycode) {
             onNonPrintingKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH)
             return true
+        }
+        if(modifiers.alt.active || modifiers.control.active || modifiers.meta.active) {
+            return super.onKeyDown(keyCode, event)
         }
         if(event.isPrintingKey) {
             currentEngine.onKey(keyCode, modifiers)

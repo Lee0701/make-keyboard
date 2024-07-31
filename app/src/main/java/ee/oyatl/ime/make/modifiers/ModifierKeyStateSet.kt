@@ -14,4 +14,17 @@ data class ModifierKeyStateSet(
                 if(control.active) KeyEvent.META_CTRL_ON else 0 or
                 if(meta.active) KeyEvent.META_META_ON else 0
     }
+
+    companion object {
+        val MODIFIER_KEYS = setOf(
+            KeyEvent.KEYCODE_SHIFT_LEFT,
+            KeyEvent.KEYCODE_SHIFT_RIGHT,
+            KeyEvent.KEYCODE_ALT_LEFT,
+            KeyEvent.KEYCODE_ALT_RIGHT,
+            KeyEvent.KEYCODE_CTRL_LEFT,
+            KeyEvent.KEYCODE_CTRL_RIGHT,
+            KeyEvent.KEYCODE_META_LEFT,
+            KeyEvent.KEYCODE_META_RIGHT
+        )
+    }
 }

@@ -94,6 +94,11 @@
     <string name="flick_action_symbol">기호 입력</string>
     <string name="flick_action_shift_symbol">윗글쇠 기호 입력</string>
     <string name="flick_action_alternative_language">타언어 입력</string>
+    <string name="pref_behaviour_hardware_lang_switch_hotkey_title">하드웨어 키보드 언어 전환 키 조합</string>
+    <string name="modifier_shift">Shift</string>
+    <string name="modifier_alt">Alt</string>
+    <string name="modifier_control">Control</string>
+    <string name="modifier_meta">Meta</string>
 
     <string name="pref_header_about_title">정보</string>
     <string name="pref_about_app_info_title">make keyboard</string>
