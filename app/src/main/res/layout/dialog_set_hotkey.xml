@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/margin_medium">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/keycode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/mod_shift"
+        android:text="@string/modifier_shift"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/mod_alt"
+        android:text="@string/modifier_alt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/mod_control"
+        android:text="@string/modifier_control"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/mod_meta"
+        android:text="@string/modifier_meta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
