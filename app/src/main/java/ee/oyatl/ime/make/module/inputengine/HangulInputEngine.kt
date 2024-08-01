@@ -19,12 +19,12 @@ data class HangulInputEngine(
     override var symbolsInputEngine: InputEngine? = null
 
     private val hangulCombiner = HangulCombiner(jamoCombinationTable, correctOrders)
-    private val stateStack: MutableList<HangulCombiner.State> = mutableListOf()
-    private val hangulState: HangulCombiner.State get() = stateStack.lastOrNull() ?: HangulCombiner.State()
+    private var combinerState: HangulCombiner.State = HangulCombiner.State()
+    // TODO: Use combiner status code instead of this calculation
     private val layerIdByHangulState: String get() {
-        val cho = hangulState.cho
-        val jung = hangulState.jung
-        val jong = hangulState.jong
+        val cho = combinerState.syllable.cho?.ordinal
+        val jung = combinerState.syllable.jung?.ordinal
+        val jong = combinerState.syllable.jong?.ordinal
 
         return if(jong != null && jong and 0xff00000 == 0) "\$jong"
         else if(jung != null && jung and 0xff00000 == 0) "\$jung"
@@ -44,18 +44,18 @@ data class HangulInputEngine(
             }
         } else {
             val override = overrideTable.get(converted)
-            val (text, hangulStates) = hangulCombiner.combine(hangulState, override ?: converted)
-            if(text.isNotEmpty()) clearStack()
-            this.stateStack += hangulStates
-            if(text.isNotEmpty()) listener.onCommitText(text)
-            listener.onComposingText(hangulStates.lastOrNull()?.composed ?: "")
+            val result = hangulCombiner.combine(combinerState, override ?: converted)
+            this.combinerState = result.state
+            if(result.text.isNotEmpty()) listener.onCommitText(result.text)
+            listener.onComposingText(result.state.syllable.composed)
         }
     }
 
     override fun onDelete() {
-        if(stateStack.size >= 1) {
-            stateStack.removeLastOrNull()
-            listener.onComposingText(stateStack.lastOrNull()?.composed ?: "")
+        val previous = combinerState.previous
+        if(previous != null) {
+            combinerState = previous
+            listener.onComposingText(previous.syllable.composed)
         }
         else listener.onDeleteText(1, 0)
     }
@@ -65,11 +65,7 @@ data class HangulInputEngine(
 
     override fun onReset() {
         listener.onFinishComposing()
-        clearStack()
-    }
-
-    fun clearStack() {
-        stateStack.clear()
+        combinerState = HangulCombiner.State()
     }
 
     override fun getLabels(state: ModifierKeyStateSet): Map<Int, CharSequence> {

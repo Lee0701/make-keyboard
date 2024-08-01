@@ -73,10 +73,71 @@ object Hangul {
         return consonantToCho(jongToCompatConsonant(jong.toChar()).code)
     }
 
-    fun combineNFC(cho: Int, jung: Int, jong: Int?): Char {
-        return (0xac00 + 21*28*cho + 28*jung + (jong?:0)).toChar()
+    fun combineNFC(cho: Int, jung: Int, jong: Int?): CharSequence {
+        return (0xac00 + 21*28*cho + 28*jung + (jong?:0)).toChar().toString()
     }
     fun combineNFD(cho: Char?, jung: Char?, jong: Char?): CharSequence {
         return "${(cho ?: 0x115f.toChar())}${(jung ?: 0x1160.toChar())}${jong?.toString().orEmpty()}"
+    }
+
+    abstract class HangulJamo {
+        abstract val ordinal: Int
+        abstract val codeBase: Int
+        abstract val isModern: Boolean
+        val code: Int by lazy { codeBase + ordinal }
+        val char: Char by lazy { code.toChar() }
+        data class Choseong(
+            override val ordinal: Int
+        ): HangulJamo() {
+            override val codeBase: Int = 0x1100
+            override val isModern: Boolean = ordinal <= 0x1112
+        }
+        data class Jungseong(
+            override val ordinal: Int
+        ): HangulJamo() {
+            override val codeBase: Int = 0x1161
+            override val isModern: Boolean = ordinal <= 0x1175
+        }
+        data class Jongseong(
+            override val ordinal: Int
+        ): HangulJamo() {
+            override val codeBase: Int = 0x11a8
+            override val isModern: Boolean = ordinal <= 0x11c2
+        }
+    }
+
+    data class HangulSyllable(
+        val cho: HangulJamo.Choseong? = null,
+        val jung: HangulJamo.Jungseong? = null,
+        val jong: HangulJamo.Jongseong? = null,
+    ) {
+        val nfc: CharSequence by lazy {
+            val allModern = listOfNotNull(cho, jung, jong).all { isModernJamo(it.code) }
+            val (cho, jung) = this
+            if(cho != null && jung != null && allModern)
+                combineNFC(cho.ordinal, jung.ordinal, jong?.ordinal?.plus(1) ?: 0)
+            else ""
+        }
+
+        val nfd: CharSequence by lazy { combineNFD(cho?.char, jung?.char, jong?.char) }
+
+        val composed: CharSequence by lazy {
+            if(cho == null && jung == null && jong == null) {
+                ""
+            } else if(listOfNotNull(cho, jung, jong).let { it.size == 1 && it.all { c -> c.isModern } }) {
+                    (cho?.char?.let { choToCompatConsonant(it) } ?:
+                    jung?.char?.let { jungToCompatVowel(it) } ?:
+                    jong?.char?.let { jongToCompatConsonant(it) })?.toString() ?: ""
+            } else {
+                nfc.toString()
+            }
+        }
+
+        operator fun plus(another: HangulSyllable): HangulSyllable {
+            val cho = this.cho ?: another.cho
+            val jung = this.jung ?: another.jung
+            val jong = this.jong ?: another.jong
+            return HangulSyllable(cho, jung, jong)
+        }
     }
 }
