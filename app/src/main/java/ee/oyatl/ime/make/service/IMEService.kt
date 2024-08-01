@@ -22,6 +22,7 @@ import ee.oyatl.ime.make.modifiers.ModifierKeyState
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.candidates.CandidateListener
+import ee.oyatl.ime.make.module.component.LanguageTabBarComponent
 import ee.oyatl.ime.make.module.inputengine.InputEngine
 import ee.oyatl.ime.make.preset.InputEnginePreset
 import ee.oyatl.ime.make.preset.PresetLoader
@@ -30,7 +31,7 @@ import ee.oyatl.ime.make.settings.HotkeyDialogPreference
 import java.io.File
 import kotlin.math.abs
 
-class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener {
+class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener, LanguageTabBarComponent.Listener {
     private var composingText: CharSequence = ""
 
     private val clipboard: ClipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
@@ -363,6 +364,23 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onUpdateLanguageTabs(): List<LanguageTabBarComponent.Tab> {
+        val currentLanguage = inputEngineSwitcher?.languageIndex ?: 0
+        val languageTabs = listOf(
+            LanguageTabBarComponent.Tab(0, R.string.lang_label_en, currentLanguage == 0),
+            LanguageTabBarComponent.Tab(1, R.string.lang_label_ko, currentLanguage == 1)
+        )
+        return languageTabs
+    }
+
+    override fun onVoiceButtonClick() {
+    }
+
+    override fun onLanguageTabClick(index: Int) {
+        inputEngineSwitcher?.setLanguage(index)
+        reloadView()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

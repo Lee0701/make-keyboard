@@ -7,11 +7,14 @@ import ee.oyatl.ime.make.module.component.CandidatesComponent
 import ee.oyatl.ime.make.module.inputengine.InputEngine
 
 class InputEngineSwitcher(
-    private val engines: List<InputEngine>,
-    private val table: Array<IntArray>,
+    val engines: List<InputEngine>,
+    val table: Array<IntArray>,
 ) {
-    private var languageIndex = 0
-    private var extraIndex = 0
+    private var _languageIndex = 0
+    private var _extraIndex = 0
+
+    val languageIndex: Int get() = _languageIndex
+    val extraIndex: Int get() = _extraIndex
 
     fun initView(context: Context): View? {
         val currentEngine = getCurrentEngine()
@@ -25,7 +28,7 @@ class InputEngineSwitcher(
     }
 
     fun getCurrentEngine(): InputEngine {
-        return engines[table[languageIndex][extraIndex]]
+        return engines[table[_languageIndex][_extraIndex]]
     }
 
     fun showCandidates(list: List<Candidate>) {
@@ -33,16 +36,21 @@ class InputEngineSwitcher(
             .forEach { it.showCandidates(list) }
     }
 
+    fun setLanguage(index: Int) {
+        _languageIndex = index
+        _extraIndex = 0
+    }
+
     fun nextLanguage() {
         getCurrentEngine().components.filterIsInstance<CandidatesComponent>()
             .forEach { it.showCandidates(listOf()) }
-        languageIndex += 1
-        if(languageIndex >= table.size) languageIndex = 0
-        extraIndex = 0
+        _languageIndex += 1
+        if(_languageIndex >= table.size) _languageIndex = 0
+        _extraIndex = 0
     }
 
     fun nextExtra() {
-        extraIndex += 1
-        if(extraIndex >= table[languageIndex].size) extraIndex = 0
+        _extraIndex += 1
+        if(_extraIndex >= table[_languageIndex].size) _extraIndex = 0
     }
 }

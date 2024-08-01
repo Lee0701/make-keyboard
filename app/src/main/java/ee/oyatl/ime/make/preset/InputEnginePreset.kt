@@ -35,7 +35,6 @@ data class InputEnginePreset(
     val autoUnlockShift: Boolean = true,
     val candidatesView: Boolean = false,
 ) {
-
     fun inflate(context: Context, rootListener: InputEngine.Listener, disableTouch: Boolean = false): InputEngine {
         // Soft keyboards will be resolved later by components.
         val moreKeysTable = loadMoreKeysTable(context, names = layout.moreKeysTable)
