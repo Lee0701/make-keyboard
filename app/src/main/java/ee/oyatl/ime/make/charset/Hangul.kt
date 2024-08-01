@@ -128,8 +128,12 @@ object Hangul {
                     (cho?.char?.let { choToCompatConsonant(it) } ?:
                     jung?.char?.let { jungToCompatVowel(it) } ?:
                     jong?.char?.let { jongToCompatConsonant(it) })?.toString() ?: ""
+            } else if(nfc.isNotEmpty()) {
+                nfc
+            } else if(nfd.isNotEmpty()) {
+                nfd
             } else {
-                nfc.toString()
+                ""
             }
         }
 

@@ -24,6 +24,10 @@ class HangulCombiner(
         val cho = if(Hangul.isCho(input)) Hangul.HangulJamo.Choseong(input - 0x1100) else null
         val jung = if(Hangul.isJung(input)) Hangul.HangulJamo.Jungseong(input - 0x1161) else null
         val jong = if(Hangul.isJong(input)) Hangul.HangulJamo.Jongseong(input - 0x11a8) else null
+        if(cho == null && jung == null && jong == null) {
+            val text = current.syllable.composed.toString() + input.toChar().toString()
+            return CombinedHangul(text, State())
+        }
         val next = ordered.test(current.statusCode, cho?.ordinal, jung?.ordinal, jong?.ordinal)
         return if(next == 0) {
             val state = State(input, State(), next, Hangul.HangulSyllable(cho, jung, jong))
