@@ -21,11 +21,13 @@ class HangulCombiner(
     }
 
     fun combine(current: State, input: Int): CombinedHangul {
-        val cho = if(Hangul.isCho(input)) Hangul.HangulJamo.Choseong(input - 0x1100) else null
-        val jung = if(Hangul.isJung(input)) Hangul.HangulJamo.Jungseong(input - 0x1161) else null
-        val jong = if(Hangul.isJong(input)) Hangul.HangulJamo.Jongseong(input - 0x11a8) else null
+        val inputChar = input and 0xffff
+        val inputExtra = input and 0xffff.inv()
+        val cho = if(Hangul.isCho(inputChar)) Hangul.HangulJamo.Choseong(inputChar - 0x1100, inputExtra) else null
+        val jung = if(Hangul.isJung(inputChar)) Hangul.HangulJamo.Jungseong(inputChar - 0x1161, inputExtra) else null
+        val jong = if(Hangul.isJong(inputChar)) Hangul.HangulJamo.Jongseong(inputChar - 0x11a8, inputExtra) else null
         if(cho == null && jung == null && jong == null) {
-            val text = current.syllable.composed.toString() + input.toChar().toString()
+            val text = current.syllable.composed.toString() + inputChar.toChar().toString()
             return CombinedHangul(text, State())
         }
         val next = ordered.test(current.statusCode, cho?.ordinal, jung?.ordinal, jong?.ordinal)

@@ -82,24 +82,28 @@ object Hangul {
 
     abstract class HangulJamo {
         abstract val ordinal: Int
+        abstract val extra: Int
         abstract val codeBase: Int
         abstract val isModern: Boolean
         val code: Int by lazy { codeBase + ordinal }
         val char: Char by lazy { code.toChar() }
         data class Choseong(
-            override val ordinal: Int
+            override val ordinal: Int,
+            override val extra: Int = 0
         ): HangulJamo() {
             override val codeBase: Int = 0x1100
             override val isModern: Boolean = ordinal <= 0x1112
         }
         data class Jungseong(
-            override val ordinal: Int
+            override val ordinal: Int,
+            override val extra: Int = 0
         ): HangulJamo() {
             override val codeBase: Int = 0x1161
             override val isModern: Boolean = ordinal <= 0x1175
         }
         data class Jongseong(
-            override val ordinal: Int
+            override val ordinal: Int,
+            override val extra: Int = 0
         ): HangulJamo() {
             override val codeBase: Int = 0x11a8
             override val isModern: Boolean = ordinal <= 0x11c2

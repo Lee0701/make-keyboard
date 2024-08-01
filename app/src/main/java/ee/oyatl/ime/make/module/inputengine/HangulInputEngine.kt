@@ -22,13 +22,14 @@ data class HangulInputEngine(
     private var combinerState: HangulCombiner.State = HangulCombiner.State()
     // TODO: Use combiner status code instead of this calculation
     private val layerIdByHangulState: String get() {
-        val cho = combinerState.syllable.cho?.ordinal
-        val jung = combinerState.syllable.jung?.ordinal
-        val jong = combinerState.syllable.jong?.ordinal
+        val syllable = combinerState.syllable
+        val cho = syllable.cho?.extra
+        val jung = syllable.jung?.extra
+        val jong = syllable.jong?.extra
 
-        return if(jong != null && jong and 0xff00000 == 0) "\$jong"
-        else if(jung != null && jung and 0xff00000 == 0) "\$jung"
-        else if(cho != null && cho and 0xff00000 == 0) "\$cho"
+        return if(jong != null && jong == 0) "\$jong"
+        else if(jung != null && jung == 0) "\$jung"
+        else if(cho != null && cho == 0) "\$cho"
         else "base"
     }
 
