@@ -3,6 +3,7 @@
 
     <string name="msg_hanja_candidates_component_missing">A candidates component is required to use Hanja conversion.</string>
     <string name="msg_main_keyboard_component_missing">A main keyboard component is required for keyboard to show.</string>
+    <string name="msg_component_edit_hint">You can reorder or remove components by pressing the component you want to.</string>
     <string name="msg_preset_load_failed">Error loading preset %s.</string>
     <string name="action_add_component">Add</string>
 

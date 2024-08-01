@@ -307,6 +307,8 @@ class KeyboardLayoutSettingsFragment(
                     adapter.notifyItemInserted(index)
                     preferenceDataStore.write()
                     preferenceDataStore.update()
+
+                    Snackbar.make(requireView(), R.string.msg_component_edit_hint, Snackbar.LENGTH_LONG).show()
                 }
                 bottomSheet.show(childFragmentManager, ChooseNewComponentBottomSheetFragment.TAG)
                 true
