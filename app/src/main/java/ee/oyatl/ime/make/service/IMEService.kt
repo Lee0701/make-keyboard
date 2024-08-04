@@ -7,14 +7,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
-import android.os.Build
 import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.CursorAnchorInfo
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.widget.Toast
-import androidx.annotation.ColorInt
 import androidx.preference.PreferenceManager
 import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.make.R
@@ -32,6 +31,7 @@ import kotlin.math.abs
 
 class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener {
     private var composingText: CharSequence = ""
+    private var cursorAnchorInfo: CursorAnchorInfo? = null
 
     private val clipboard: ClipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
     private var inputEngineSwitcher: InputEngineSwitcher? = null
@@ -308,11 +308,21 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         currentInputConnection?.requestCursorUpdates(InputConnection.CURSOR_UPDATE_MONITOR)
     }
 
-    // Still needed for pre-lollipop devices
-    @Deprecated("Deprecated in Java")
-    override fun onViewClicked(focusChanged: Boolean) {
-        if(Build.VERSION.SDK_INT >= 34) return
-        if(focusChanged) resetCurrentEngine()
+    override fun onUpdateCursorAnchorInfo(cursorAnchorInfo: CursorAnchorInfo?) {
+        super.onUpdateCursorAnchorInfo(cursorAnchorInfo)
+        cursorAnchorInfo ?: return
+        val end = cursorAnchorInfo.selectionEnd
+        val composingText = cursorAnchorInfo.composingText
+        val composingTextStart = cursorAnchorInfo.composingTextStart
+        // Skip if no text is being composed
+        if(composingText != null && composingTextStart != -1) {
+            // Reset input if expected and actual composing text end positions differ
+            // Used to detect if cursor is in unexpected position, away from the composing text
+            // For example when the cursor is moved by the user manually by tapping on the text view
+            val expectedComposingTextEnd = composingTextStart + composingText.length
+            if(end != expectedComposingTextEnd) resetCurrentEngine()
+        }
+        this.cursorAnchorInfo = cursorAnchorInfo
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -323,10 +333,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
     override fun onComputeInsets(outInsets: Insets?) {
         super.onComputeInsets(outInsets)
         outInsets?.contentTopInsets = outInsets?.visibleTopInsets ?: return
-    }
-
-    private fun setNavBarColor(@ColorInt color: Int) {
-        window.window?.navigationBarColor = color
     }
 
     private fun resetCurrentEngine() {
