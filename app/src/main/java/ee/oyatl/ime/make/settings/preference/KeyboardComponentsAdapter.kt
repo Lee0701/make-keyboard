@@ -1,4 +1,4 @@
-package ee.oyatl.ime.make.settings
+package ee.oyatl.ime.make.settings.preference
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ee.oyatl.ime.make.databinding.ListitemKeyboardLayoutComponentPreviewRowBinding
 import ee.oyatl.ime.make.preset.InputEnginePreset
 import ee.oyatl.ime.make.preset.PresetLoader
+import ee.oyatl.ime.make.settings.KeyboardLayoutSettingsActivity
 
 class KeyboardComponentsAdapter(
     val context: Context,

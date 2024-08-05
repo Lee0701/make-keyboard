@@ -3,22 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ee.oyatl.ime.make.settings.PreferenceCategory
+    <ee.oyatl.ime.make.settings.preference.PreferenceCategory
         app:title="@string/pref_header_method_title">
 
-        <ee.oyatl.ime.make.settings.EnableInputMethodPreference
+        <ee.oyatl.ime.make.settings.preference.EnableInputMethodPreference
             app:title="@string/pref_method_enable_title"
             app:summary="@string/pref_method_enable_summary" />
 
-        <ee.oyatl.ime.make.settings.ChooseInputMethodPreference
+        <ee.oyatl.ime.make.settings.preference.ChooseInputMethodPreference
             app:title="@string/pref_method_choose_title"
             app:summary="@string/pref_method_choose_summary" />
-    </ee.oyatl.ime.make.settings.PreferenceCategory>
+    </ee.oyatl.ime.make.settings.preference.PreferenceCategory>
 
-    <ee.oyatl.ime.make.settings.PreferenceCategory
+    <ee.oyatl.ime.make.settings.preference.PreferenceCategory
         app:title="@string/pref_header_appearance_title">
 
-        <ee.oyatl.ime.make.settings.ListPreference
+        <ee.oyatl.ime.make.settings.preference.ListPreference
             app:key="appearance_theme"
             app:defaultValue="@string/pref_appearance_theme_default"
             app:entries="@array/appearance_themes"
@@ -26,7 +26,7 @@
             app:title="@string/pref_appearance_theme_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.SliderPreference
+        <ee.oyatl.ime.make.settings.preference.SliderPreference
             app:key="appearance_keyboard_height"
             app:valueFrom="30.0"
             app:valueTo="100.0"
@@ -35,13 +35,13 @@
             app:title="@string/pref_appearance_keyboard_height_title"
             app:useSimpleSummaryProvider="true"/>
 
-        <ee.oyatl.ime.make.settings.SwitchPreference
+        <ee.oyatl.ime.make.settings.preference.SwitchPreference
             app:key="appearance_unify_height"
             app:defaultValue="false"
             app:title="@string/pref_appearance_unify_height_title"
             app:summary="@string/pref_appearance_unify_height_summary" />
 
-        <ee.oyatl.ime.make.settings.ListPreference
+        <ee.oyatl.ime.make.settings.preference.ListPreference
             app:key="appearance_keyboard_view_type"
             app:defaultValue="canvas"
             app:entries="@array/appearance_keyboard_view_types"
@@ -49,22 +49,33 @@
             app:title="@string/pref_appearance_keyboard_view_type_title"
             app:summary="@string/pref_appearance_keyboard_view_type_summary" />
 
-        <ee.oyatl.ime.make.settings.SwitchPreference
+        <ee.oyatl.ime.make.settings.preference.SwitchPreference
             app:key="appearance_haptic_feedback"
             app:defaultValue="true"
             app:title="@string/pref_appearance_haptic_feedback_title" />
 
-        <ee.oyatl.ime.make.settings.SwitchPreference
+        <ee.oyatl.ime.make.settings.preference.SwitchPreference
             app:key="appearance_sound_feedback"
             app:defaultValue="true"
             app:title="@string/pref_appearance_sound_feedback_title" />
 
-    </ee.oyatl.ime.make.settings.PreferenceCategory>
+        <ee.oyatl.ime.make.settings.preference.SwitchPreference
+            app:key="appearance_show_popups"
+            app:defaultValue="true"
+            app:title="@string/pref_appearance_show_popups_title" />
 
-    <ee.oyatl.ime.make.settings.PreferenceCategory
+        <ee.oyatl.ime.make.settings.preference.SwitchPreference
+            app:key="appearance_show_more_keys"
+            app:defaultValue="true"
+            app:title="@string/pref_appearance_show_more_keys_title"
+            app:summary="@string/pref_appearance_show_more_keys_summary" />
+
+    </ee.oyatl.ime.make.settings.preference.PreferenceCategory>
+
+    <ee.oyatl.ime.make.settings.preference.PreferenceCategory
         app:title="@string/pref_header_layout_title">
 
-        <ee.oyatl.ime.make.settings.ListPreference
+        <ee.oyatl.ime.make.settings.preference.ListPreference
             app:key="layout_screen_mode"
             app:defaultValue="@string/pref_layout_screen_mode_default"
             app:entries="@array/layout_screen_modes"
@@ -72,43 +83,32 @@
             app:title="@string/pref_layout_screen_mode_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.EnterKeyboardSettingsPreference
+        <ee.oyatl.ime.make.settings.preference.EnterKeyboardSettingsPreference
             app:fileName="preset_hangul.yaml"
             app:template="preset/preset_3set_390.yaml"
             app:title="@string/pref_layout_hangul_settings_title" />
 
-        <ee.oyatl.ime.make.settings.EnterKeyboardSettingsPreference
+        <ee.oyatl.ime.make.settings.preference.EnterKeyboardSettingsPreference
             app:fileName="preset_latin.yaml"
             app:template="preset/preset_latin_qwerty.yaml"
             app:title="@string/pref_layout_latin_settings_title" />
 
-        <ee.oyatl.ime.make.settings.EnterKeyboardSettingsPreference
+        <ee.oyatl.ime.make.settings.preference.EnterKeyboardSettingsPreference
             app:fileName="preset_symbol.yaml"
             app:template="preset/preset_symbol_g.yaml"
             app:title="@string/pref_layout_symbol_settings_title" />
 
-    </ee.oyatl.ime.make.settings.PreferenceCategory>
+    </ee.oyatl.ime.make.settings.preference.PreferenceCategory>
 
-<!--    <ee.oyatl.ime.make.settings.PreferenceCategory-->
+<!--    <ee.oyatl.ime.make.settings.preference.preference.PreferenceCategory-->
 <!--        app:title="@string/pref_header_input_title">-->
 
-<!--    </ee.oyatl.ime.make.settings.PreferenceCategory>-->
+<!--    </ee.oyatl.ime.make.settings.preference.preference.PreferenceCategory>-->
 
-    <ee.oyatl.ime.make.settings.PreferenceCategory
+    <ee.oyatl.ime.make.settings.preference.PreferenceCategory
         app:title="@string/pref_header_behaviour_title">
 
-        <ee.oyatl.ime.make.settings.SwitchPreference
-            app:key="behaviour_show_popups"
-            app:defaultValue="true"
-            app:title="@string/pref_behaviour_show_popups_title" />
-
-        <ee.oyatl.ime.make.settings.SwitchPreference
-            app:key="behaviour_show_more_keys"
-            app:defaultValue="true"
-            app:title="@string/pref_behaviour_show_more_keys_title"
-            app:summary="@string/pref_behaviour_show_more_keys_summary" />
-
-        <ee.oyatl.ime.make.settings.SliderPreference
+        <ee.oyatl.ime.make.settings.preference.SliderPreference
             app:key="behaviour_double_tap_gap"
             app:valueFrom="100.0"
             app:valueTo="1000.0"
@@ -117,7 +117,7 @@
             app:title="@string/pref_behaviour_double_tap_gap_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.SliderPreference
+        <ee.oyatl.ime.make.settings.preference.SliderPreference
             app:key="behaviour_long_press_duration"
             app:valueFrom="100.0"
             app:valueTo="1000.0"
@@ -126,7 +126,7 @@
             app:title="@string/pref_behaviour_long_press_duration_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.ListPreference
+        <ee.oyatl.ime.make.settings.preference.ListPreference
             app:key="behaviour_long_press_action"
             app:defaultValue="shift"
             app:entries="@array/long_press_actions"
@@ -134,7 +134,7 @@
             app:title="@string/pref_behaviour_long_press_action_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.SliderPreference
+        <ee.oyatl.ime.make.settings.preference.SliderPreference
             app:key="behaviour_repeat_interval"
             app:defaultValue="50.0"
             app:valueFrom="10.0"
@@ -143,7 +143,7 @@
             app:title="@string/pref_behaviour_repeat_interval_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.ListPreference
+        <ee.oyatl.ime.make.settings.preference.ListPreference
             app:key="behaviour_slide_action"
             app:defaultValue="flick"
             app:entries="@array/slide_actions"
@@ -151,7 +151,7 @@
             app:title="@string/pref_behaviour_slide_action_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.SliderPreference
+        <ee.oyatl.ime.make.settings.preference.SliderPreference
             app:key="behaviour_flick_sensitivity"
             app:valueFrom="10.0"
             app:valueTo="200.0"
@@ -160,7 +160,7 @@
             app:title="@string/pref_behaviour_flick_sensitivity_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.ListPreference
+        <ee.oyatl.ime.make.settings.preference.ListPreference
             app:key="behaviour_flick_action_up"
             app:defaultValue="shift"
             app:entries="@array/flick_actions"
@@ -168,7 +168,7 @@
             app:title="@string/pref_behaviour_flick_action_up_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.ListPreference
+        <ee.oyatl.ime.make.settings.preference.ListPreference
             app:key="behaviour_flick_action_down"
             app:defaultValue="symbol"
             app:entries="@array/flick_actions"
@@ -176,7 +176,7 @@
             app:title="@string/pref_behaviour_flick_action_down_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.ListPreference
+        <ee.oyatl.ime.make.settings.preference.ListPreference
             app:key="behaviour_flick_action_left"
             app:defaultValue="none"
             app:entries="@array/flick_actions"
@@ -184,7 +184,7 @@
             app:title="@string/pref_behaviour_flick_action_left_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.ListPreference
+        <ee.oyatl.ime.make.settings.preference.ListPreference
             app:key="behaviour_flick_action_right"
             app:defaultValue="none"
             app:entries="@array/flick_actions"
@@ -192,28 +192,28 @@
             app:title="@string/pref_behaviour_flick_action_right_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ee.oyatl.ime.make.settings.HotkeyDialogPreference
+        <ee.oyatl.ime.make.settings.preference.HotkeyDialogPreference
             app:key="behaviour_hardware_lang_switch_hotkey"
             app:defaultValue="1,62"
             app:title="@string/pref_behaviour_hardware_lang_switch_hotkey_title" />
 
-    </ee.oyatl.ime.make.settings.PreferenceCategory>
+    </ee.oyatl.ime.make.settings.preference.PreferenceCategory>
 
-    <ee.oyatl.ime.make.settings.PreferenceCategory
+    <ee.oyatl.ime.make.settings.preference.PreferenceCategory
         app:title="@string/pref_header_about_title">
 
-        <ee.oyatl.ime.make.settings.StartActivityPreference
+        <ee.oyatl.ime.make.settings.preference.StartActivityPreference
             android:title="@string/pref_about_app_info_title"
             android:summary="@string/pref_about_app_info_summary" />
 
-        <ee.oyatl.ime.make.settings.OpenStorePreference
+        <ee.oyatl.ime.make.settings.preference.OpenStorePreference
             android:title="@string/pref_about_more_apps_title"
             android:summary="@string/pref_about_more_apps_summary"
             uri="https://play.google.com/store/search?q=pub:%E6%9D%8E%EF%BC%81&amp;c=apps"/>
 
-        <ee.oyatl.ime.make.settings.OssLicensesMenuPreference
+        <ee.oyatl.ime.make.settings.preference.OssLicensesMenuPreference
             android:title="@string/pref_about_oss_licenses_title" />
 
-    </ee.oyatl.ime.make.settings.PreferenceCategory>
+    </ee.oyatl.ime.make.settings.preference.PreferenceCategory>
 
 </PreferenceScreen>

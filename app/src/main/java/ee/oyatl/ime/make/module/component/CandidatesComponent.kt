@@ -8,7 +8,7 @@ import ee.oyatl.ime.make.databinding.ComponentCandidatesBinding
 import ee.oyatl.ime.make.module.candidates.BasicCandidatesAdapter
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.candidates.CandidateListener
-import ee.oyatl.ime.make.settings.TouchInterceptingFrameLayout
+import ee.oyatl.ime.make.settings.preference.TouchInterceptingFrameLayout
 
 class CandidatesComponent(
     private val width: Int,

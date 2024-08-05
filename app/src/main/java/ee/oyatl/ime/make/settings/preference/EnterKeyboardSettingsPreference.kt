@@ -1,10 +1,11 @@
-package ee.oyatl.ime.make.settings
+package ee.oyatl.ime.make.settings.preference
 
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
 import androidx.preference.Preference
 import ee.oyatl.ime.make.R
+import ee.oyatl.ime.make.settings.KeyboardLayoutSettingsActivity
 
 class EnterKeyboardSettingsPreference(
     context: Context,

@@ -39,8 +39,8 @@ abstract class KeyboardView(
 
     protected val typedValue = TypedValue()
 
-    protected val showKeyPopups: Boolean = preferences.getBoolean("behaviour_show_popups", true)
-    protected val showMoreKeys: Boolean = preferences.getBoolean("behaviour_show_more_keys", true)
+    protected val showKeyPopups: Boolean = preferences.getBoolean("appearance_show_popups", true)
+    protected val showMoreKeys: Boolean = preferences.getBoolean("appearance_show_more_keys", true)
     protected val longPressDuration: Long = preferences.getFloat("behaviour_long_press_duration", 100f).toLong()
     protected val longPressAction: FlickLongPressAction = FlickLongPressAction.of(
         preferences.getString("behaviour_long_press_action", "shift") ?: "shift"

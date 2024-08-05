@@ -31,6 +31,12 @@ import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KE
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_LAYOUT_PRESET
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_ROW_HEIGHT
 import ee.oyatl.ime.make.settings.KeyboardLayoutSettingsActivity.Companion.emptyInputEngineListener
+import ee.oyatl.ime.make.settings.preference.KeyboardComponentsAdapter
+import ee.oyatl.ime.make.settings.preference.ListPreference
+import ee.oyatl.ime.make.settings.preference.MultiSelectListPreference
+import ee.oyatl.ime.make.settings.preference.PreferenceCategory
+import ee.oyatl.ime.make.settings.preference.SliderPreference
+import ee.oyatl.ime.make.settings.preference.SwitchPreference
 import java.io.File
 
 class KeyboardLayoutSettingsFragment(
@@ -301,6 +307,8 @@ class KeyboardLayoutSettingsFragment(
                     adapter.notifyItemInserted(index)
                     preferenceDataStore.write()
                     preferenceDataStore.update()
+
+                    Snackbar.make(requireView(), R.string.msg_component_edit_hint, Snackbar.LENGTH_LONG).show()
                 }
                 bottomSheet.show(childFragmentManager, ChooseNewComponentBottomSheetFragment.TAG)
                 true
