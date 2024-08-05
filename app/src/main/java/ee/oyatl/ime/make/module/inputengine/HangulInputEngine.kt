@@ -44,11 +44,11 @@ data class HangulInputEngine(
             }
         } else {
             val override = overrideTable.get(converted)
-            val (text, hangulStates) = hangulCombiner.combine(hangulState, override ?: converted)
+            val (text, newState) = hangulCombiner.combine(hangulState, override ?: converted)
             if(text.isNotEmpty()) clearStack()
-            this.stateStack += hangulStates
+            this.stateStack += newState
             if(text.isNotEmpty()) listener.onCommitText(text)
-            listener.onComposingText(hangulStates.lastOrNull()?.composed ?: "")
+            listener.onComposingText(newState.composed)
         }
     }
 

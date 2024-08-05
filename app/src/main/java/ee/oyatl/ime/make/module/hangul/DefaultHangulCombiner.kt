@@ -6,7 +6,7 @@ class DefaultHangulCombiner(
     private val jamoCombinationTable: JamoCombinationTable,
     private val correctOrders: Boolean
 ) {
-    fun combine(state: State, input: Int): Pair<CharSequence, List<State>> {
+    fun combine(state: State, input: Int): Pair<CharSequence, State> {
         // The unicode codepoint of input, without any extended parts
         val inputCodepoint = input and 0x1fffff
         val newStates = mutableListOf<State>()
@@ -129,7 +129,8 @@ class DefaultHangulCombiner(
             composed += input.toChar()
             newStates.clear()
         }
-        return composed to newStates.map { it.copy(last = input) }
+        val newState = newStates.lastOrNull() ?: state
+        return composed to newState
     }
 
     data class State(
