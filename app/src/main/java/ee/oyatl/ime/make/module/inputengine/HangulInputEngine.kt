@@ -19,8 +19,7 @@ data class HangulInputEngine(
     override var symbolsInputEngine: InputEngine? = null
 
     private val hangulCombiner = DefaultHangulCombiner(jamoCombinationTable, correctOrders)
-    private val stateStack: MutableList<DefaultHangulCombiner.State> = mutableListOf()
-    private val hangulState: DefaultHangulCombiner.State get() = stateStack.lastOrNull() ?: DefaultHangulCombiner.State()
+    private var hangulState: DefaultHangulCombiner.State = DefaultHangulCombiner.State.INITIAL
     private val layerIdByHangulState: String get() {
         val cho = hangulState.cho
         val jung = hangulState.jung
@@ -45,17 +44,18 @@ data class HangulInputEngine(
         } else {
             val override = overrideTable.get(converted)
             val (text, newState) = hangulCombiner.combine(hangulState, override ?: converted)
-            if(text.isNotEmpty()) clearStack()
-            this.stateStack += newState
+            if(text.isNotEmpty()) hangulState = DefaultHangulCombiner.State.INITIAL
+            this.hangulState = newState
             if(text.isNotEmpty()) listener.onCommitText(text)
             listener.onComposingText(newState.composed)
         }
     }
 
     override fun onDelete() {
-        if(stateStack.size >= 1) {
-            stateStack.removeLastOrNull()
-            listener.onComposingText(stateStack.lastOrNull()?.composed ?: "")
+        val previous = hangulState.previous
+        if(previous != null) {
+            hangulState = previous
+            listener.onComposingText(previous.composed)
         }
         else listener.onDeleteText(1, 0)
     }
@@ -65,11 +65,7 @@ data class HangulInputEngine(
 
     override fun onReset() {
         listener.onFinishComposing()
-        clearStack()
-    }
-
-    fun clearStack() {
-        stateStack.clear()
+        hangulState = DefaultHangulCombiner.State.INITIAL
     }
 
     override fun getLabels(state: ModifierKeyStateSet): Map<Int, CharSequence> {
