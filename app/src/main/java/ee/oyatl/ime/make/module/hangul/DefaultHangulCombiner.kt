@@ -1,9 +1,8 @@
-package ee.oyatl.ime.make.module.kokr
+package ee.oyatl.ime.make.module.hangul
 
-import ee.oyatl.ime.make.charset.Hangul
 import ee.oyatl.ime.make.preset.table.JamoCombinationTable
 
-class HangulCombiner(
+class DefaultHangulCombiner(
     private val jamoCombinationTable: JamoCombinationTable,
     private val correctOrders: Boolean
 ) {

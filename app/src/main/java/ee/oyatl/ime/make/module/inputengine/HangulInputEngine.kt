@@ -1,8 +1,8 @@
 package ee.oyatl.ime.make.module.inputengine
 
 import android.graphics.drawable.Drawable
-import ee.oyatl.ime.make.charset.Hangul
-import ee.oyatl.ime.make.module.kokr.HangulCombiner
+import ee.oyatl.ime.make.module.hangul.Hangul
+import ee.oyatl.ime.make.module.hangul.DefaultHangulCombiner
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.preset.table.JamoCombinationTable
 import ee.oyatl.ime.make.preset.table.LayeredCodeConvertTable
@@ -18,9 +18,9 @@ data class HangulInputEngine(
     override var alternativeInputEngine: InputEngine? = null
     override var symbolsInputEngine: InputEngine? = null
 
-    private val hangulCombiner = HangulCombiner(jamoCombinationTable, correctOrders)
-    private val stateStack: MutableList<HangulCombiner.State> = mutableListOf()
-    private val hangulState: HangulCombiner.State get() = stateStack.lastOrNull() ?: HangulCombiner.State()
+    private val hangulCombiner = DefaultHangulCombiner(jamoCombinationTable, correctOrders)
+    private val stateStack: MutableList<DefaultHangulCombiner.State> = mutableListOf()
+    private val hangulState: DefaultHangulCombiner.State get() = stateStack.lastOrNull() ?: DefaultHangulCombiner.State()
     private val layerIdByHangulState: String get() {
         val cho = hangulState.cho
         val jung = hangulState.jung

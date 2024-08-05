@@ -1,4 +1,4 @@
-package ee.oyatl.ime.make.charset
+package ee.oyatl.ime.make.module.hangul
 
 object Hangul {
     /**
