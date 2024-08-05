@@ -1,6 +1,6 @@
 package ee.oyatl.ime.make.preset.serialization
 
-import ee.oyatl.ime.make.charset.Hangul
+import ee.oyatl.ime.make.module.hangul.Hangul
 
 object HangulJamoSerializer: KeyOutputSerializer {
     private const val placeholder = "_"
