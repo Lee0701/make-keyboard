@@ -312,6 +312,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
         super.onUpdateCursorAnchorInfo(cursorAnchorInfo)
         cursorAnchorInfo ?: return
         val end = cursorAnchorInfo.selectionEnd
+        if(end == -1) return
         val composingText = cursorAnchorInfo.composingText
         val composingTextStart = cursorAnchorInfo.composingTextStart
         // Skip if no text is being composed
