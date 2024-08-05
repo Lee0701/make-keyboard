@@ -18,19 +18,19 @@ class DefaultHangulCombiner(
                     val newStateLast = newState.last
                     if(newStateLast != null && !Hangul.isCho(newStateLast)) {
                         composed += newState.composed
-                        newState = State(cho = input, previous = newState)
+                        newState = State(cho = input)
                     } else {
                         newState = newState.copy(cho = combination, previous = newState)
                     }
                 } else {
                     composed += newState.composed
-                    newState = State(cho = input, previous = newState)
+                    newState = State(cho = input)
                 }
             } else if(correctOrders) {
                 newState = newState.copy(cho = input, previous = newState)
             } else {
                 composed += newState.composed
-                newState = State(cho = input, previous = newState)
+                newState = State(cho = input)
             }
         } else if(Hangul.isJung(inputCodepoint)) {
             val newStateLast = newState.last
@@ -39,13 +39,13 @@ class DefaultHangulCombiner(
                 if(combination != null) newState = newState.copy(jung = combination, previous = newState)
                 else {
                     composed += newState.composed
-                    newState = State(jung = input, previous = newState)
+                    newState = State(jung = input)
                 }
             } else if(correctOrders || newStateLast == null || Hangul.isCho(newStateLast)) {
                 newState = newState.copy(jung = input, previous = newState)
             } else {
                 composed += newState.composed
-                newState = State(jung = input, previous = newState)
+                newState = State(jung = input)
             }
         } else if(Hangul.isJong(inputCodepoint)) {
             val newStateLast = newState.last
@@ -59,16 +59,13 @@ class DefaultHangulCombiner(
                 )
                 else {
                     composed += newState.composed
-                    newState = State(jong = input, previous = newState)
+                    newState = State(jong = input)
                 }
             } else if(correctOrders || newStateLast == null || Hangul.isJung(newStateLast) && newState.cho != null) {
                 newState = newState.copy(jong = input, previous = newState)
-            } else if(newState.cho == null || newState.jung == null) {
-                composed += newState.composed
-                newState = State(jong = input, previous = newState)
             } else {
                 composed += newState.composed
-                newState = State(jong = input, previous = newState)
+                newState = State(jong = input)
             }
         } else if(Hangul.isConsonant(inputCodepoint)) {
             val cho = Hangul.consonantToCho(input and 0xffff)
@@ -84,13 +81,13 @@ class DefaultHangulCombiner(
                     )
                     else {
                         composed += newState.composed
-                        newState = State(cho = cho, previous = newState)
+                        newState = State(cho = cho)
                     }
                 } else if(jong != 0) {
                     newState = newState.copy(jong = jong, previous = newState)
                 } else {
                     composed += newState.composed
-                    newState = State(cho = cho, previous = newState)
+                    newState = State(cho = cho)
                 }
             } else if(newState.cho != null) {
                 val newStateLast = newState.last
@@ -102,14 +99,14 @@ class DefaultHangulCombiner(
                     if(combination != null) newState = newState.copy(cho = combination, previous = newState)
                     else {
                         composed += newState.composed
-                        newState = State(cho = cho, previous = newState)
+                        newState = State(cho = cho)
                     }
                 }
             } else if(correctOrders) {
                 newState = newState.copy(cho = cho, previous = newState)
             } else {
                 composed += newState.composed
-                newState = State(cho = cho, previous = newState)
+                newState = State(cho = cho)
             }
         } else if(Hangul.isVowel(inputCodepoint)) {
             val jung = Hangul.vowelToJung(input and 0xffff)
@@ -119,12 +116,12 @@ class DefaultHangulCombiner(
                 if(jongCombination != null) {
                     val promotedCho = Hangul.ghostLight(jongCombination.second)
                     composed += newState.copy(jong = jongCombination.first).composed
-                    newState = State(cho = promotedCho, previous = newState)
+                    newState = State(cho = promotedCho)
                     newState = State(cho = promotedCho, jung = jung, previous = newState)
                 } else {
                     val promotedCho = Hangul.ghostLight(newStateJong)
                     composed += newState.copy(jong = null).composed
-                    newState = State(cho = promotedCho, previous = newState)
+                    newState = State(cho = promotedCho)
                     newState = State(cho = promotedCho, jung = jung, previous = newState)
                 }
             } else if(newState.jung != null) {
@@ -132,7 +129,7 @@ class DefaultHangulCombiner(
                 if(combination != null) newState = newState.copy(jung = combination, previous = newState)
                 else {
                     composed += newState.composed
-                    newState = State(jung = jung, previous = newState)
+                    newState = State(jung = jung)
                 }
             } else {
                 newState = newState.copy(jung = jung, previous = newState)
@@ -142,7 +139,7 @@ class DefaultHangulCombiner(
             composed += input.toChar()
             newState = State.INITIAL
         }
-        return composed to newState
+        return composed to newState.copy(last = input)
     }
 
     data class State(
@@ -151,7 +148,7 @@ class DefaultHangulCombiner(
         val jong: Int? = null,
         val last: Int? = null,
         val jongCombination: Pair<Int, Int>? = null,
-        val previous: State? = null,
+        val previous: State? = INITIAL,
     ) {
         val choChar: Char? = cho?.and(0xffff)?.toChar()
         val jungChar: Char? = jung?.and(0xffff)?.toChar()
