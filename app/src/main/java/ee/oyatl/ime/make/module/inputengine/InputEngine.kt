@@ -23,7 +23,7 @@ interface InputEngine {
     fun onReset()
     fun onResetComponents()
 
-    fun onKey(code: Int, state: ModifierKeyStateSet)
+    fun onKey(code: Int, modifiers: ModifierKeyStateSet)
     fun onDelete()
     fun onTextAroundCursor(before: String, after: String)
 
