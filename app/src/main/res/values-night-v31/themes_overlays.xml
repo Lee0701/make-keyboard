@@ -31,6 +31,12 @@
         <item name="iconTint">@android:color/system_accent1_50</item>
     </style>
 
+    <style name="Theme.MakeKeyboard.Tab.Overlay">
+        <item name="background">@drawable/tab_bg</item>
+        <item name="backgroundTint">@color/tab_bg_dynamic_dark</item>
+        <item name="android:textColor">@android:color/system_accent2_50</item>
+    </style>
+
     <style name="Theme.MakeKeyboard.Candidates">
         <item name="android:background">@android:color/system_neutral1_900</item>
     </style>

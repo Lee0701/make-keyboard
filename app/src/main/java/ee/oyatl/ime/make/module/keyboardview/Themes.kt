@@ -38,6 +38,7 @@ object Themes {
             Return to R.drawable.keyic_return,
         ) + textEditIcons,
         R.style.Theme_MakeKeyboard_Keyboard_KeyPopup,
+        R.style.Theme_MakeKeyboard_Tab
     )
 
     val Dynamic = Theme(
@@ -61,6 +62,7 @@ object Themes {
             Return to R.drawable.keyic_return,
         ) + textEditIcons,
         R.style.Theme_MakeKeyboard_Keyboard_KeyPopup_Overlay,
+        R.style.Theme_MakeKeyboard_Tab_Overlay
     )
 
     val map: Map<String, Theme> = mapOf(

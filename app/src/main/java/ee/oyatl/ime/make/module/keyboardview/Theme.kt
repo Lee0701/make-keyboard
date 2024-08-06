@@ -8,4 +8,5 @@ data class Theme(
     val keyBackground: Map<KeyType, Int> = mapOf(),
     val keyIcon: Map<KeyIconType, Int> = mapOf(),
     val popupBackground: Int,
+    val tabBackground: Int
 )

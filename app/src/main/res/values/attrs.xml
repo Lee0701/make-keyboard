@@ -21,6 +21,11 @@
         <attr name="backgroundTint" />
     </declare-styleable>
 
+    <declare-styleable name="Tab">
+        <attr name="background" />
+        <attr name="backgroundTint" />
+    </declare-styleable>
+
     <declare-styleable name="Preference">
         <attr name="android:textSize" format="dimension" />
         <attr name="android:textColor" format="color" />
