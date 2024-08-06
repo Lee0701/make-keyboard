@@ -13,6 +13,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.preference.PreferenceManager
@@ -376,6 +377,20 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     }
 
     override fun onVoiceButtonClick() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val voiceSubtypes = imm.enabledInputMethodList
+            .flatMap { method -> (0 until method.subtypeCount).map { method to method.getSubtypeAt(it) } }
+            .filter { (_, subtype) -> subtype.mode == "voice" }
+        if(voiceSubtypes.isNotEmpty()) {
+            val (method, subtype) = voiceSubtypes.first()
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                switchInputMethod(method.id, subtype)
+            } else {
+                val token = window.window?.attributes?.token ?: return
+                @Suppress("DEPRECATION")
+                imm.setInputMethodAndSubtype(token, method.id, subtype)
+            }
+        }
     }
 
     override fun onLanguageTabClick(index: Int) {
