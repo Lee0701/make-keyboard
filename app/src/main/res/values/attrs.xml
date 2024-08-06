@@ -2,6 +2,8 @@
 <resources>
     <attr name="background" format="reference" />
     <attr name="backgroundTint" format="color" />
+    <attr name="marginHorizontal" format="dimension" />
+    <attr name="marginVertical" format="dimension" />
 
     <declare-styleable name="Keyboard">
         <attr name="background" />
@@ -9,8 +11,8 @@
     </declare-styleable>
 
     <declare-styleable name="Keyboard.Key">
-        <attr name="marginHorizontal" format="dimension" />
-        <attr name="marginVertical" format="dimension" />
+        <attr name="marginHorizontal" />
+        <attr name="marginVertical" />
         <attr name="background" />
         <attr name="backgroundTint" />
         <attr name="iconTint" format="color" />
@@ -24,6 +26,10 @@
     <declare-styleable name="Tab">
         <attr name="background" />
         <attr name="backgroundTint" />
+        <attr name="tabBarMargin" format="dimension" />
+        <attr name="tabMargin" format="dimension" />
+        <attr name="tabPaddingVertical" format="dimension" />
+        <attr name="tabPaddingHorizontal" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="Preference">
