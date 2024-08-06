@@ -1,4 +1,4 @@
-package ee.oyatl.ime.make.module.hangul
+package ee.oyatl.ime.make.module.combiner
 
 interface Combiner {
 
