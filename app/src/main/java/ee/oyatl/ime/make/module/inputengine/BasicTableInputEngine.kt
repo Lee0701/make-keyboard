@@ -1,7 +1,6 @@
 package ee.oyatl.ime.make.module.inputengine
 
 import android.graphics.drawable.Drawable
-import android.view.KeyCharacterMap
 import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.preset.table.CharOverrideTable
@@ -20,9 +19,9 @@ abstract class BasicTableInputEngine(
     override var alternativeInputEngine: InputEngine? = null
     override var symbolsInputEngine: InputEngine? = null
 
-    override fun onKey(code: Int, state: ModifierKeyStateSet) {
-        val converted = convertTable.get(code, state)
-            ?: keyCharacterMap.get(code, state.asMetaState())
+    override fun onKey(code: Int, modifiers: ModifierKeyStateSet) {
+        val converted = convertTable.get(code, modifiers)
+            ?: keyCharacterMap.get(code, modifiers.asMetaState())
         val override = overrideTable.get(converted) ?: converted
         if(override > 0) listener.onCommitText(override.toChar().toString())
     }
