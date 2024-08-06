@@ -118,8 +118,8 @@
     <string name="pref_layout_component_text_edit_title">Text Edit Tool</string>
     <string name="pref_layout_component_language_switcher_title">Language Switcher</string>
 
-    <string name="lang_label_en">English</string>
-    <string name="lang_label_ko">Korean</string>
+    <string name="lang_label_en" translatable="false">En</string>
+    <string name="lang_label_ko" translatable="false">한</string>
 
     <string name="pref_soft_keyboard_header_title">On-screen Keyboard</string>
 </resources>
