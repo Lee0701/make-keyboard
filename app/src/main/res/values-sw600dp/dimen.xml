@@ -11,6 +11,8 @@
     <dimen name="key_popup_morekeys_width">50dp</dimen>
     <dimen name="key_popup_morekeys_height">60dp</dimen>
 
+    <dimen name="tabbar_height">56dp</dimen>
+
     <dimen name="pref_appearance_keyboard_height_default">65dp</dimen>
     <dimen name="pref_layout_row_gap">16dp</dimen>
 </resources>

@@ -35,6 +35,16 @@
         <item name="iconTint">@color/key_fg_light</item>
     </style>
 
+    <style name="Theme.MakeKeyboard.TabBar" parent="Theme.MakeKeyboard.TabBar.Base">
+        <item name="background">@color/keyboard_bg_light</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.Tab" parent="Theme.MakeKeyboard.Tab.Base">
+        <item name="background">@drawable/tab_bg</item>
+        <item name="backgroundTint">@color/tab_bg_static_light</item>
+        <item name="android:textColor">@color/key_fg_light</item>
+    </style>
+
     <style name="Theme.MakeKeyboard.Candidates">
         <item name="android:background">@color/keyboard_bg_light</item>
     </style>

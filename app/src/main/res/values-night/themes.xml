@@ -35,6 +35,16 @@
         <item name="iconTint">@color/key_fg_dark</item>
     </style>
 
+    <style name="Theme.MakeKeyboard.TabBar" parent="Theme.MakeKeyboard.TabBar.Base">
+        <item name="background">@color/keyboard_bg_dark</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.Tab" parent="Theme.MakeKeyboard.Tab.Base">
+        <item name="background">@drawable/tab_bg</item>
+        <item name="backgroundTint">@color/tab_bg_static_dark</item>
+        <item name="android:textColor">@color/tab_fg_dark</item>
+    </style>
+
     <style name="Theme.MakeKeyboard.Candidates">
         <item name="android:background">@color/keyboard_bg_dark</item>
     </style>

@@ -4,6 +4,18 @@
         <item name="dialogCornerRadius">28dp</item>
     </style>
 
+    <style name="Theme.MakeKeyboard.TabBar.Base">
+        <item name="marginVertical">@dimen/margin_small</item>
+    </style>
+
+    <style name="Theme.MakeKeyboard.Tab.Base">
+        <item name="android:textSize">20sp</item>
+        <item name="tabHeight">@dimen/tabbar_height</item>
+        <item name="tabMargin">@dimen/margin_smaller</item>
+        <item name="tabPaddingVertical">0dp</item>
+        <item name="tabPaddingHorizontal">@dimen/margin_small</item>
+    </style>
+
     <style name="Theme.MakeKeyboard.Candidates.Item">
         <item name="android:background">?selectableItemBackground</item>
         <item name="android:textSize">@dimen/candidates_text_size</item>

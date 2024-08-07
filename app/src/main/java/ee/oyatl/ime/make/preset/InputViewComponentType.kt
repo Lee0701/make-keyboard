@@ -9,6 +9,7 @@ import ee.oyatl.ime.make.module.component.CandidatesComponent
 import ee.oyatl.ime.make.module.component.EmptyComponent
 import ee.oyatl.ime.make.module.component.InputViewComponent
 import ee.oyatl.ime.make.module.component.KeyboardComponent
+import ee.oyatl.ime.make.module.component.LanguageTabBarComponent
 import ee.oyatl.ime.make.settings.KeyboardLayoutSettingsFragment
 
 enum class InputViewComponentType(
@@ -25,9 +26,9 @@ enum class InputViewComponentType(
         R.drawable.baseline_abc_24,
         R.string.pref_layout_component_candidates_title),
     TextEdit(R.drawable.baseline_text_select_move_forward_character,
-        R.string.pref_layout_component_text_edit_title);
-//    LanguageTab(R.drawable.baseline_language_24,
-//        R.string.pref_layout_component_language_switcher_title);
+        R.string.pref_layout_component_text_edit_title),
+    LanguageTabBar(R.drawable.baseline_language_24,
+        R.string.pref_layout_component_language_switcher_title);
 
     fun inflate(context: Context, preset: InputEnginePreset, disableTouch: Boolean): InputViewComponent {
         val loader = PresetLoader(context)
@@ -65,6 +66,14 @@ enum class InputViewComponentType(
                     keyboard = InputEnginePreset.loadSoftKeyboards(context, layouts),
                     rowHeight = rowHeight,
                     disableTouch = disableTouch,
+                )
+            }
+            LanguageTabBar -> {
+                preset.hangul
+                LanguageTabBarComponent(
+                    listener = context as? LanguageTabBarComponent.Listener,
+                    width = context.resources.displayMetrics.widthPixels,
+                    disableTouch = disableTouch
                 )
             }
             else -> {

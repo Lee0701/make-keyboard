@@ -13,6 +13,7 @@ import android.view.inputmethod.CursorAnchorInfo
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.charleskorn.kaml.decodeFromStream
@@ -21,6 +22,7 @@ import ee.oyatl.ime.make.modifiers.ModifierKeyState
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.candidates.CandidateListener
+import ee.oyatl.ime.make.module.component.LanguageTabBarComponent
 import ee.oyatl.ime.make.module.inputengine.InputEngine
 import ee.oyatl.ime.make.preset.InputEnginePreset
 import ee.oyatl.ime.make.preset.PresetLoader
@@ -29,7 +31,7 @@ import ee.oyatl.ime.make.settings.preference.HotkeyDialogPreference
 import java.io.File
 import kotlin.math.abs
 
-class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener {
+class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener, LanguageTabBarComponent.Listener {
     private var composingText: CharSequence = ""
     private var cursorAnchorInfo: CursorAnchorInfo? = null
 
@@ -370,6 +372,37 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener 
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onUpdateLanguageTabs(): List<LanguageTabBarComponent.Tab> {
+        val currentLanguage = inputEngineSwitcher?.languageIndex ?: 0
+        val languageTabs = listOf(
+            LanguageTabBarComponent.Tab(0, R.string.lang_label_en, currentLanguage == 0),
+            LanguageTabBarComponent.Tab(1, R.string.lang_label_ko, currentLanguage == 1)
+        )
+        return languageTabs
+    }
+
+    override fun onVoiceButtonClick() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val voiceSubtypes = imm.enabledInputMethodList
+            .flatMap { method -> (0 until method.subtypeCount).map { method to method.getSubtypeAt(it) } }
+            .filter { (_, subtype) -> subtype.mode == "voice" }
+        if(voiceSubtypes.isNotEmpty()) {
+            val (method, subtype) = voiceSubtypes.first()
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                switchInputMethod(method.id, subtype)
+            } else {
+                val token = window.window?.attributes?.token ?: return
+                @Suppress("DEPRECATION")
+                imm.setInputMethodAndSubtype(token, method.id, subtype)
+            }
+        }
+    }
+
+    override fun onLanguageTabClick(index: Int) {
+        inputEngineSwitcher?.setLanguage(index)
+        reloadView()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
