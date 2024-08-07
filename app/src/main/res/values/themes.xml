@@ -10,8 +10,9 @@
 
     <style name="Theme.MakeKeyboard.Tab.Base">
         <item name="android:textSize">20sp</item>
+        <item name="tabHeight">@dimen/tabbar_height</item>
         <item name="tabMargin">@dimen/margin_smaller</item>
-        <item name="tabPaddingVertical">@dimen/margin_smaller</item>
+        <item name="tabPaddingVertical">0dp</item>
         <item name="tabPaddingHorizontal">@dimen/margin_small</item>
     </style>
 
