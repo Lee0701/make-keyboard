@@ -71,7 +71,9 @@ enum class InputViewComponentType(
             LanguageTabBar -> {
                 preset.hangul
                 LanguageTabBarComponent(
-                    listener = context as? LanguageTabBarComponent.Listener
+                    listener = context as? LanguageTabBarComponent.Listener,
+                    width = context.resources.displayMetrics.widthPixels,
+                    disableTouch = disableTouch
                 )
             }
             else -> {

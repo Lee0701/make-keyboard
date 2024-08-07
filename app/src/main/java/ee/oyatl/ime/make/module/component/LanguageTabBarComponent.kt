@@ -3,7 +3,7 @@ package ee.oyatl.ime.make.module.component
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import androidx.annotation.StringRes
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.preference.PreferenceManager
@@ -12,10 +12,13 @@ import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.databinding.ComponentLanguageTabbarBinding
 import ee.oyatl.ime.make.databinding.ComponentLanguageTabbarTabBinding
 import ee.oyatl.ime.make.module.keyboardview.Themes
+import ee.oyatl.ime.make.settings.TouchInterceptingFrameLayout
 
 class LanguageTabBarComponent(
     var tabs: List<Tab> = listOf(),
-    var listener: Listener? = null
+    var listener: Listener? = null,
+    val width: Int = LayoutParams.MATCH_PARENT,
+    private val disableTouch: Boolean = false,
 ): InputViewComponent {
     private var tabInflater: LayoutInflater? = null
     private var view: ComponentLanguageTabbarBinding? = null
@@ -29,15 +32,16 @@ class LanguageTabBarComponent(
         val inflater = LayoutInflater.from(wrappedContext)
 
         val view = ComponentLanguageTabbarBinding.inflate(inflater, null, false)
-        view.root.layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            context.resources.getDimensionPixelSize(R.dimen.tabbar_height)
-        )
+        val height = context.resources.getDimensionPixelSize(R.dimen.tabbar_height)
+        view.root.layoutParams = LayoutParams(width, height)
         view.voiceBtn.setOnClickListener { listener?.onVoiceButtonClick() }
         this.view = view
 
         tabInflater = LayoutInflater.from(DynamicColors.wrapContextIfAvailable(context, theme.tabBackground))
-        return view.root
+
+        val wrapper = TouchInterceptingFrameLayout(context, null, disableTouch)
+        wrapper.addView(view.root)
+        return wrapper
     }
 
     override fun updateView() {
@@ -47,9 +51,9 @@ class LanguageTabBarComponent(
         view.tabs.removeAllViews()
         tabs.forEach { (index, label, selected) ->
             val tab = ComponentLanguageTabbarTabBinding.inflate(tabInflater, null, false)
-            tab.root.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
+            tab.root.layoutParams = LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.MATCH_PARENT
             )
             tab.root.isSelected = selected
             tab.label.setText(label)
