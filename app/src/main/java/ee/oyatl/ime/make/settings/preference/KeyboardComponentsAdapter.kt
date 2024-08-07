@@ -48,10 +48,13 @@ class KeyboardComponentsAdapter(
         @SuppressLint("ClickableViewAccessibility")
         fun onBind(preset: InputEnginePreset) {
             val context = binding.root.context
+            val mode =
+                if(previewMode) InputEnginePreset.Mode.Preview
+                else InputEnginePreset.Mode.Edit
             val engine = loader.mod(preset).inflate(
                 context = context,
                 rootListener = KeyboardLayoutSettingsActivity.emptyInputEngineListener,
-                disableTouch = !previewMode
+                mode = mode
             )
             val view = engine.initView(context)
             engine.onReset()

@@ -35,7 +35,11 @@ data class InputEnginePreset(
     val autoUnlockShift: Boolean = true,
     val candidatesView: Boolean = false,
 ) {
-    fun inflate(context: Context, rootListener: InputEngine.Listener, disableTouch: Boolean = false): InputEngine {
+    fun inflate(
+        context: Context,
+        rootListener: InputEngine.Listener,
+        mode: Mode = Mode.Runtime
+    ): InputEngine {
         // Soft keyboards will be resolved later by components.
         val moreKeysTable = loadMoreKeysTable(context, names = layout.moreKeysTable)
         val convertTable = loadConvertTable(context, names = layout.codeConvertTable)
@@ -46,12 +50,12 @@ data class InputEnginePreset(
 
         fun inflateComponents(preset: InputEnginePreset): List<InputViewComponent> {
             val rows = this.components
-                .map { it.inflate(context, preset, disableTouch) }
+                .map { it.inflate(context, preset, mode) }
                 .filterIsInstance<KeyboardComponent>()
                 .sumOf { it.keyboard.rows.size }
             val rowHeight = if(this.size.unifyHeight && rows != 0) size.rowHeight * 4 / rows else size.rowHeight
-            return this.components
-                .map { it.inflate(context, preset.copy(size = preset.size.copy(rowHeight = rowHeight)), disableTouch) }
+            val resizedPreset = preset.copy(size = preset.size.copy(rowHeight = rowHeight))
+            return this.components.map { it.inflate(context, resizedPreset, mode) }
         }
 
         fun getDirectInputEngine(listener: InputEngine.Listener): DirectInputEngine {
@@ -250,6 +254,14 @@ data class InputEnginePreset(
                 )
             }
         }
+    }
+
+    enum class Mode(
+        val disableTouch: Boolean
+    ) {
+        Runtime(disableTouch = false),
+        Edit(disableTouch = true),
+        Preview(disableTouch = false),
     }
 
     companion object {

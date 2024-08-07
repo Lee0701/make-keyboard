@@ -12,7 +12,7 @@ import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.databinding.ComponentLanguageTabbarBinding
 import ee.oyatl.ime.make.databinding.ComponentLanguageTabbarTabBinding
 import ee.oyatl.ime.make.module.keyboardview.Themes
-import ee.oyatl.ime.make.settings.TouchInterceptingFrameLayout
+import ee.oyatl.ime.make.settings.preference.TouchInterceptingFrameLayout
 
 class LanguageTabBarComponent(
     var tabs: List<Tab> = listOf(),
@@ -47,7 +47,7 @@ class LanguageTabBarComponent(
     override fun updateView() {
         val view = view ?: return
         val tabInflater = tabInflater ?: return
-        tabs = listener?.onUpdateLanguageTabs().orEmpty()
+        tabs = listener?.onUpdateLanguageTabs() ?: tabs
         view.tabs.removeAllViews()
         tabs.forEach { (index, label, selected) ->
             val tab = ComponentLanguageTabbarTabBinding.inflate(tabInflater, null, false)
@@ -77,6 +77,6 @@ class LanguageTabBarComponent(
     data class Tab(
         val index: Int,
         @StringRes val label: Int,
-        val selected: Boolean
+        val selected: Boolean = false
     )
 }

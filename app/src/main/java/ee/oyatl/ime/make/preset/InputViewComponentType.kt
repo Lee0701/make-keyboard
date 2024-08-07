@@ -30,7 +30,7 @@ enum class InputViewComponentType(
     LanguageTabBar(R.drawable.baseline_language_24,
         R.string.pref_layout_component_language_switcher_title);
 
-    fun inflate(context: Context, preset: InputEnginePreset, disableTouch: Boolean): InputViewComponent {
+    fun inflate(context: Context, preset: InputEnginePreset, mode: InputEnginePreset.Mode): InputViewComponent {
         val loader = PresetLoader(context)
         val rowHeight = preset.size.rowHeight
         return when(this) {
@@ -38,7 +38,7 @@ enum class InputViewComponentType(
                 KeyboardComponent(
                     keyboard = InputEnginePreset.loadSoftKeyboards(context, preset.layout.softKeyboard),
                     rowHeight = rowHeight,
-                    disableTouch = disableTouch,
+                    disableTouch = mode.disableTouch
                 )
             }
             NumberRow -> {
@@ -47,14 +47,14 @@ enum class InputViewComponentType(
                 KeyboardComponent(
                     keyboard = InputEnginePreset.loadSoftKeyboards(context, layouts),
                     rowHeight = rowHeight,
-                    disableTouch = disableTouch,
+                    disableTouch = mode.disableTouch
                 )
             }
             Candidates -> {
                 CandidatesComponent(
                     width = context.resources.displayMetrics.widthPixels,
                     height = rowHeight,
-                    disableTouch = disableTouch,
+                    disableTouch = mode.disableTouch
                 ).apply {
                     if(context is CandidateListener) listener = context
                 }
@@ -65,7 +65,7 @@ enum class InputViewComponentType(
                 KeyboardComponent(
                     keyboard = InputEnginePreset.loadSoftKeyboards(context, layouts),
                     rowHeight = rowHeight,
-                    disableTouch = disableTouch,
+                    disableTouch = mode.disableTouch
                 )
             }
             LanguageTabBar -> {
@@ -73,8 +73,14 @@ enum class InputViewComponentType(
                 LanguageTabBarComponent(
                     listener = context as? LanguageTabBarComponent.Listener,
                     width = context.resources.displayMetrics.widthPixels,
-                    disableTouch = disableTouch
-                )
+                    disableTouch = mode.disableTouch
+                ).apply {
+                    // Add example tabs
+                    if(mode != InputEnginePreset.Mode.Runtime) {
+                        tabs += LanguageTabBarComponent.Tab(0, R.string.lang_label_en, true)
+                        tabs += LanguageTabBarComponent.Tab(1, R.string.lang_label_ko)
+                    }
+                }
             }
             else -> {
                 EmptyComponent
