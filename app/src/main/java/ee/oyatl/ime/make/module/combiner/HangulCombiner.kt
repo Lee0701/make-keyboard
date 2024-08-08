@@ -23,19 +23,19 @@ class HangulCombiner(
                     val newStateLast = newState.lastInput
                     if(newStateLast != null && !Hangul.isCho(newStateLast)) {
                         textToCommit += newState.combined
-                        newState = State(cho = inputCodepoint)
+                        newState = State(cho = input)
                     } else {
                         newState = newState.copy(cho = combination, previous = newState)
                     }
                 } else {
                     textToCommit += newState.combined
-                    newState = State(cho = inputCodepoint)
+                    newState = State(cho = input)
                 }
             } else if(correctOrders) {
-                newState = newState.copy(cho = inputCodepoint, previous = newState)
+                newState = newState.copy(cho = input, previous = newState)
             } else {
                 textToCommit += newState.combined
-                newState = State(cho = inputCodepoint)
+                newState = State(cho = input)
             }
         } else if(Hangul.isJung(inputCodepoint)) {
             val newStateLast = newState.lastInput
@@ -44,13 +44,13 @@ class HangulCombiner(
                 if(combination != null) newState = newState.copy(jung = combination, previous = newState)
                 else {
                     textToCommit += newState.combined
-                    newState = State(jung = inputCodepoint)
+                    newState = State(jung = input)
                 }
             } else if(correctOrders || newStateLast == null || Hangul.isCho(newStateLast)) {
-                newState = newState.copy(jung = inputCodepoint, previous = newState)
+                newState = newState.copy(jung = input, previous = newState)
             } else {
                 textToCommit += newState.combined
-                newState = State(jung = inputCodepoint)
+                newState = State(jung = input)
             }
         } else if(Hangul.isJong(inputCodepoint)) {
             val newStateLast = newState.lastInput
@@ -64,13 +64,13 @@ class HangulCombiner(
                 )
                 else {
                     textToCommit += newState.combined
-                    newState = State(jong = inputCodepoint)
+                    newState = State(jong = input)
                 }
             } else if(correctOrders || newStateLast == null || Hangul.isJung(newStateLast) && newState.cho != null) {
-                newState = newState.copy(jong = inputCodepoint, previous = newState)
+                newState = newState.copy(jong = input, previous = newState)
             } else {
                 textToCommit += newState.combined
-                newState = State(jong = inputCodepoint)
+                newState = State(jong = input)
             }
         } else if(Hangul.isConsonant(inputCodepoint)) {
             val cho = Hangul.consonantToCho(inputCodepoint)
