@@ -42,7 +42,7 @@ class PresetLoader(
         return fileNames.map { it.format(screenMode) }
     }
 
-    fun modLayout(layout: InputEnginePreset.Layout): InputEnginePreset.Layout {
+    private fun modLayout(layout: InputEnginePreset.Layout): InputEnginePreset.Layout {
         return InputEnginePreset.Layout(
             softKeyboard = modFilenames(layout.softKeyboard),
             moreKeysTable = modFilenames(layout.moreKeysTable),
@@ -51,7 +51,7 @@ class PresetLoader(
         )
     }
 
-    fun modPreset(preset: InputEnginePreset): InputEnginePreset {
+    private fun modPreset(preset: InputEnginePreset): InputEnginePreset {
         return preset.copy(
             layout = modLayout(preset.layout),
             size = modSize(preset.size),
@@ -61,19 +61,24 @@ class PresetLoader(
     fun modLatin(preset: InputEnginePreset): InputEnginePreset = modPreset(preset)
     fun modHangul(preset: InputEnginePreset): InputEnginePreset = modPreset(preset)
     fun modSymbol(preset: InputEnginePreset, language: String): InputEnginePreset {
-        return when(language) {
-            "ko" -> preset.copy(
-                layout = preset.layout.copy(
-                    softKeyboard = modFilenames(preset.layout.softKeyboard),
-                    moreKeysTable = modFilenames(preset.layout.moreKeysTable) + "symbol/morekeys_symbols_hangul.yaml",
-                    codeConvertTable = modFilenames(preset.layout.codeConvertTable),
-                    overrideTable = modFilenames(preset.layout.overrideTable) + "symbol/override_currency_won.yaml",
-                    combinationTable = modFilenames(preset.layout.combinationTable),
-                ),
-                size = modSize(preset.size),
-            )
-            else -> modPreset(preset)
+        val moreKeysTable = mutableListOf<String>()
+        val overrideTable = mutableListOf<String>()
+        when(language) {
+            "ko" -> {
+                moreKeysTable += "symbol/morekeys_symbols_hangul.yaml"
+                overrideTable += "symbol/override_currency_won.yaml"
+            }
         }
+        return preset.copy(
+            layout = preset.layout.copy(
+                softKeyboard = modFilenames(preset.layout.softKeyboard),
+                moreKeysTable = modFilenames(preset.layout.moreKeysTable) + moreKeysTable,
+                codeConvertTable = modFilenames(preset.layout.codeConvertTable),
+                overrideTable = modFilenames(preset.layout.overrideTable) + overrideTable,
+                combinationTable = modFilenames(preset.layout.combinationTable),
+            ),
+            size = modSize(preset.size),
+        )
     }
 
 }
