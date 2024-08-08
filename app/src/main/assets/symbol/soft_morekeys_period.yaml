@@ -1,0 +1,35 @@
+rows:
+- keys:
+  - !<key>
+    output: "&"
+  - !<key>
+    output: "%"
+  - !<key>
+    output: "+"
+  - !<key>
+    output: "\""
+  - !<key>
+    output: "-"
+  - !<key>
+    output: ":"
+  - !<key>
+    output: "'"
+  - !<key>
+    output: "@"
+- keys:
+  - !<key>
+    output: ";"
+  - !<key>
+    output: "/"
+  - !<key>
+    output: "("
+  - !<key>
+    output: ")"
+  - !<key>
+    output: "#"
+  - !<key>
+    output: "!"
+  - !<key>
+    output: ","
+  - !<key>
+    output: "?"

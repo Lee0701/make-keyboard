@@ -96,4 +96,4 @@ rows:
     type: "Modifier"
 - keys:
   - !<include>
-    name: "common/row_mobile_bottom.yaml"
+    name: "latin/row_mobile_bottom_dvorak_custom.yaml"

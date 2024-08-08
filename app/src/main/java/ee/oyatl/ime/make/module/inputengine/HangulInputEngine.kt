@@ -100,12 +100,4 @@ data class HangulInputEngine(
             }
         return DirectInputEngine.getLabels(keyCharacterMap, state) + codeMap
     }
-
-    override fun getIcons(state: ModifierKeyStateSet): Map<Int, Drawable> {
-        return emptyMap()
-    }
-
-    override fun getMoreKeys(state: ModifierKeyStateSet): Map<Int, Keyboard> {
-        return mapOf()
-    }
 }

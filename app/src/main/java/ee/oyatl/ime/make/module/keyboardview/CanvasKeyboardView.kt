@@ -109,7 +109,7 @@ class CanvasKeyboardView(
                         val height = rowHeight
                         val label = key.label
                         val icon = theme.keyIcon[key.iconType]?.let { ContextCompat.getDrawable(context, it) }
-                        cachedKeys += CachedKey(key, x.roundToInt(), y, width.roundToInt(), height, label, icon, null)
+                        cachedKeys += CachedKey(key, x.roundToInt(), y, width.roundToInt(), height, label, icon)
                         x += width
                     }
                     else -> {
@@ -207,8 +207,7 @@ class CanvasKeyboardView(
         override val width: Int,
         override val height: Int,
         override val label: String?,
-        override val icon: Drawable?,
-        val moreKeysKeyboard: Keyboard?,
+        override val icon: Drawable?
     ): KeyWrapper
 
     data class CachedSpacer(

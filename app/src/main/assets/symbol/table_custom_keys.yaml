@@ -6,3 +6,7 @@ map:
   "KEYCODE_PERIOD_COMMA":
     base: 0x002e
     shift: 0x002c
+  "KEYCODE_SOFT_COMMA":
+    base: 0x002c
+  "KEYCODE_SOFT_PERIOD":
+    base: 0x002e

@@ -8,7 +8,9 @@ import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import kotlinx.serialization.Serializable
 
 data class MoreKeysTable(
-    val map: Map<Int, Keyboard> = mapOf(),
+    val map: Map<
+            @Serializable(with = CompoundKeyOutputSerializer::class) Int,
+            Keyboard> = mapOf(),
 ) {
     operator fun plus(another: MoreKeysTable): MoreKeysTable {
         return MoreKeysTable(this.map + another.map)
