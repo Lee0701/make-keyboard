@@ -99,7 +99,13 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     }
 
     override fun onCreateInputView(): View {
-        val inputView = inputEngineSwitcher?.initView(this) ?: View(this)
+        val inputView = inputEngineSwitcher?.currentView
+            ?: inputEngineSwitcher?.initView(this)
+            ?: View(this)
+        val parent = inputView.parent
+        if(parent is ViewGroup) {
+            parent.removeView(inputView)
+        }
         val wrapper = LinearLayoutCompat(this)
         if(screenMode == "television") {
             val width = resources.getDimensionPixelSize(R.dimen.input_view_width)
@@ -139,7 +145,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         event ?: return false
         if(event.isSystem) return super.onKeyDown(keyCode, event)
-        val currentEngine = inputEngineSwitcher?.getCurrentEngine()
+        val currentEngine = inputEngineSwitcher?.currentEngine
         currentEngine ?: return super.onKeyDown(keyCode, event)
         val modifiers = getModifierKeyStateSet(event)
         if(modifiers.asMetaState() == languageSwitchModifiers && keyCode == languageSwitchKeycode) {
@@ -172,7 +178,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         return when(code) {
             KeyEvent.KEYCODE_DEL -> {
                 if(deleteSelection()) true
-                else inputEngineSwitcher?.getCurrentEngine()?.onDelete() != null
+                else inputEngineSwitcher?.currentEngine?.onDelete() != null
             }
             KeyEvent.KEYCODE_SPACE -> {
                 resetCurrentEngine()
@@ -360,14 +366,14 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     }
 
     private fun resetCurrentEngine() {
-        val engine = inputEngineSwitcher?.getCurrentEngine() ?: return
+        val engine = inputEngineSwitcher?.currentEngine ?: return
         engine.onReset()
         engine.onResetComponents()
         updateTextAroundCursor()
     }
 
     private fun updateTextAroundCursor() {
-        val engine = inputEngineSwitcher?.getCurrentEngine() ?: return
+        val engine = inputEngineSwitcher?.currentEngine ?: return
         val inputConnection = currentInputConnection ?: return
         val before = inputConnection.getTextBeforeCursor(100, 0).toString()
         val after = inputConnection.getTextAfterCursor(100, 0).toString()

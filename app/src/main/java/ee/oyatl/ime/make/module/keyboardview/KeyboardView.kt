@@ -33,10 +33,11 @@ abstract class KeyboardView(
 ): FrameLayout(context, attrs) {
 
     private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    private val rect = Rect()
+    protected val rect = Rect()
 
     open val keyboardWidth: Int = context.resources.displayMetrics.widthPixels
     open val keyboardHeight: Int = rowHeight * keyboard.rows.size
+    open val shrinkWidth: Float get() = rect.width() / keyboardWidth.toFloat()
 
     protected val typedValue = TypedValue()
 
@@ -64,7 +65,8 @@ abstract class KeyboardView(
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if(disableTouch) return false
-        if(event == null) return super.onTouchEvent(event)
+        if(event == null) return super.onTouchEvent(null)
+
         val pointerId = event.getPointerId(event.actionIndex)
         val x = event.getX(event.actionIndex).roundToInt()
         val y = event.getY(event.actionIndex).roundToInt()
@@ -213,8 +215,8 @@ abstract class KeyboardView(
 
     fun findKey(x: Int, y: Int): KeyWrapper? {
         wrappedKeys.forEach { key ->
-            if(x in key.x until key.x+key.width) {
-                if(y in key.y until key.y+key.height) {
+            if(x in key.x until key.x + key.width) {
+                if(y in key.y until key.y + key.height) {
                     if(key is KeyWrapper) return key
                 }
             }

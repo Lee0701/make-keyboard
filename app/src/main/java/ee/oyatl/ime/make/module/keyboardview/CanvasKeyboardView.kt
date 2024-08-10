@@ -13,6 +13,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.make.R
+import ee.oyatl.ime.make.preset.softkeyboard.Include
 import ee.oyatl.ime.make.preset.softkeyboard.Key
 import ee.oyatl.ime.make.preset.softkeyboard.KeyType
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
@@ -32,7 +33,6 @@ class CanvasKeyboardView(
     disableTouch: Boolean = false,
 ): KeyboardView(context, attrs, keyboard, theme, listener, rowHeight, disableTouch) {
 
-    private val rect = Rect()
     private val bitmapPaint = Paint()
     private val textPaint = Paint()
 
@@ -92,44 +92,38 @@ class CanvasKeyboardView(
         }
 
         setWillNotDraw(false)
-        cacheKeys()
     }
 
-    fun cacheKeys() {
+    private fun cacheKeys() {
+        cachedKeys.clear()
+        getLocalVisibleRect(rect)
         val rowHeight = keyboardHeight / max(keyboard.rows.size, 1)
+        val shrinkWidth = shrinkWidth
         keyboard.rows.forEachIndexed { j, row ->
             val keyWidths = row.keys.map { it.width }.sum()
-            val keyWidthUnit = keyboardWidth / keyWidths
+            val keyWidthUnit = keyboardWidth / keyWidths * shrinkWidth
             var x = 0f
             val y = j * rowHeight
             row.keys.forEachIndexed { i, key ->
+                val width = keyWidthUnit * key.width
+                val height = rowHeight
                 when(key) {
                     is Key -> {
-                        val width = keyWidthUnit * key.width
-                        val height = rowHeight
                         val label = key.label
                         val icon = theme.keyIcon[key.iconType]?.let { ContextCompat.getDrawable(context, it) }
                         cachedKeys += CachedKey(key, x.roundToInt(), y, width.roundToInt(), height, label, icon, null)
-                        x += width
                     }
-                    else -> {
-                        val width = keyWidthUnit * key.width
-                        x += width
-                    }
+                    else -> {}
                 }
+                x += width
             }
         }
     }
 
-    fun clearCachedKeys() {
-        cachedKeys.clear()
-    }
-
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
-        getLocalVisibleRect(rect)
         val bitmapCache = mutableMapOf<BitmapCacheKey, Bitmap>()
-        val shrinkWidth = (rect.left + rect.right) / keyboardWidth.toFloat()
+        if(cachedKeys.isEmpty()) cacheKeys()
 
         // Draw keyboard background
         if(!rect.isEmpty) canvas.drawBitmap(keyboardBackground.toBitmap(rect.width(), rect.height()), 0f, 0f, bitmapPaint)
@@ -148,9 +142,9 @@ class CanvasKeyboardView(
                 val extendAmount = context.resources.getDimension(R.dimen.key_bg_radius)*2 + context.resources.getDimension(R.dimen.key_margin_horizontal)*2
                 val extendTop = if(key.key.backgroundType?.extendTop == true) extendAmount else 0f
                 val extendBottom = if(key.key.backgroundType?.extendBottom == true) extendAmount else 0f
-                val x = (key.x + keyMarginHorizontal) * shrinkWidth
+                val x = key.x + keyMarginHorizontal
                 val y = key.y + keyMarginVertical - extendTop
-                val width = ((key.width - keyMarginHorizontal*2) * shrinkWidth)
+                val width = key.width - keyMarginHorizontal*2
                 val height = (key.height - keyMarginVertical*2) + extendTop + extendBottom
                 if(width <= 0f || height <= 0f) return@forEach
                 val bitmap = bitmapCache.getOrPut(BitmapCacheKey(width.roundToInt(), height.roundToInt(), pressed, key.key.type)) {
@@ -162,7 +156,7 @@ class CanvasKeyboardView(
 
         // Draw key foregrounds
         cachedKeys.forEach { key ->
-            val baseX = ((key.x + key.width/2) * shrinkWidth).roundToInt()
+            val baseX = (key.x + key.width/2)
             val baseY = (key.y + key.height/2)
             val tint = keyIconTints[key.key.type]
             if(key.icon != null && tint != null) {
@@ -194,6 +188,7 @@ class CanvasKeyboardView(
                 key.copy(label = labels[key.key.code]?.toString() ?: key.label)
             }
         }
+        invalidate()
     }
 
     override fun updateMoreKeyKeyboards(keyboards: Map<Int, Keyboard>) {
