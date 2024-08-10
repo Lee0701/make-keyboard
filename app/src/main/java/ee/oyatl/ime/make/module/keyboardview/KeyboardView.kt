@@ -31,6 +31,7 @@ abstract class KeyboardView(
     rowHeight: Int,
     private val disableTouch: Boolean = false,
 ): FrameLayout(context, attrs) {
+
     private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val rect = Rect()
 
@@ -265,7 +266,7 @@ abstract class KeyboardView(
 
     private fun showPopup(key: KeyWrapper, popup: KeyboardPopup, offsetX: Int, offsetY: Int) {
         getGlobalVisibleRect(rect)
-        val x = getPopupX(key) + offsetX
+        val x = getPopupX(key) + offsetX + rect.left
         val y = getPopupY(key) + offsetY + rect.top
         popup.show(this, x.roundToInt(), y.roundToInt())
     }
