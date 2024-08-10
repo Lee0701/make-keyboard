@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.os.Build
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
@@ -34,13 +33,13 @@ import ee.oyatl.ime.make.preset.PresetLoader
 import ee.oyatl.ime.make.preset.table.CustomKeyCode
 import ee.oyatl.ime.make.settings.preference.HotkeyDialogPreference
 import java.io.File
-import java.lang.reflect.Type
 import kotlin.math.abs
 
 class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener, LanguageTabBarComponent.Listener {
     private var composingText: CharSequence = ""
     private var cursorAnchorInfo: CursorAnchorInfo? = null
 
+    private var inputViewWrapper: ViewGroup? = null
     private val clipboard: ClipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
     private var inputEngineSwitcher: InputEngineSwitcher? = null
 
@@ -95,28 +94,29 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         languageSwitchKeycode = HotkeyDialogPreference.parseKeycode(languageSwitchHotkey)
 
         screenMode = pref.getString("layout_screen_mode", screenMode) ?: screenMode
-        reloadView()
     }
 
     override fun onCreateInputView(): View {
         val inputView = inputEngineSwitcher?.currentView
             ?: inputEngineSwitcher?.initView(this)
             ?: View(this)
-        val parent = inputView.parent
-        if(parent is ViewGroup) {
-            parent.removeView(inputView)
+        if(inputViewWrapper == null) {
+            inputViewWrapper = LinearLayoutCompat(this).apply {
+                gravity = Gravity.CENTER_HORIZONTAL
+            }
+        } else {
+            inputViewWrapper?.removeAllViews()
         }
-        val wrapper = LinearLayoutCompat(this)
         if(screenMode == "television") {
             val width = resources.getDimensionPixelSize(R.dimen.input_view_width)
-            inputView.layoutParams = ViewGroup.LayoutParams(
+            inputView.layoutParams = LinearLayoutCompat.LayoutParams(
                 width,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
-            wrapper.gravity = Gravity.CENTER_HORIZONTAL
         }
-        wrapper.addView(inputView)
-        return wrapper
+        inputViewWrapper?.addView(inputView)
+        updateView()
+        return inputViewWrapper ?: View(this)
     }
 
     override fun onCandidates(list: List<Candidate>) {
@@ -194,14 +194,12 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
                 resetCurrentEngine()
                 inputEngineSwitcher?.nextLanguage()
                 reloadView()
-                updateView()
                 true
             }
             KeyEvent.KEYCODE_SYM -> {
                 resetCurrentEngine()
                 inputEngineSwitcher?.nextExtra()
                 reloadView()
-                updateView()
                 true
             }
             else -> false
@@ -385,6 +383,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     }
 
     private fun updateView() {
+        setInputView(inputViewWrapper)
         inputEngineSwitcher?.updateView()
     }
 
