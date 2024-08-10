@@ -129,6 +129,7 @@ class CanvasKeyboardView(
     override fun onDraw(canvas: Canvas) {
         getLocalVisibleRect(rect)
         val bitmapCache = mutableMapOf<BitmapCacheKey, Bitmap>()
+        val shrinkWidth = (rect.left + rect.right) / keyboardWidth.toFloat()
 
         // Draw keyboard background
         if(!rect.isEmpty) canvas.drawBitmap(keyboardBackground.toBitmap(rect.width(), rect.height()), 0f, 0f, bitmapPaint)
@@ -147,9 +148,9 @@ class CanvasKeyboardView(
                 val extendAmount = context.resources.getDimension(R.dimen.key_bg_radius)*2 + context.resources.getDimension(R.dimen.key_margin_horizontal)*2
                 val extendTop = if(key.key.backgroundType?.extendTop == true) extendAmount else 0f
                 val extendBottom = if(key.key.backgroundType?.extendBottom == true) extendAmount else 0f
-                val x = key.x + keyMarginHorizontal
+                val x = (key.x + keyMarginHorizontal) * shrinkWidth
                 val y = key.y + keyMarginVertical - extendTop
-                val width = (key.width - keyMarginHorizontal*2)
+                val width = ((key.width - keyMarginHorizontal*2) * shrinkWidth)
                 val height = (key.height - keyMarginVertical*2) + extendTop + extendBottom
                 if(width <= 0f || height <= 0f) return@forEach
                 val bitmap = bitmapCache.getOrPut(BitmapCacheKey(width.roundToInt(), height.roundToInt(), pressed, key.key.type)) {
@@ -161,8 +162,8 @@ class CanvasKeyboardView(
 
         // Draw key foregrounds
         cachedKeys.forEach { key ->
-            val baseX = key.x + key.width/2
-            val baseY = key.y + key.height/2
+            val baseX = ((key.x + key.width/2) * shrinkWidth).roundToInt()
+            val baseY = (key.y + key.height/2)
             val tint = keyIconTints[key.key.type]
             if(key.icon != null && tint != null) {
                 DrawableCompat.setTint(key.icon, tint)
