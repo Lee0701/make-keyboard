@@ -39,6 +39,10 @@ class PresetLoader(
     }
 
     fun modFilenames(fileNames: List<String>): List<String> {
+        val screenMode = when(screenMode) {
+            "television" -> "mobile"
+            else -> screenMode
+        }
         return fileNames.map { it.format(screenMode) }
     }
 

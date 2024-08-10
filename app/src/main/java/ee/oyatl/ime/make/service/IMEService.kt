@@ -8,14 +8,18 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.os.Build
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.CursorAnchorInfo
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.preference.PreferenceManager
 import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.make.R
@@ -30,6 +34,7 @@ import ee.oyatl.ime.make.preset.PresetLoader
 import ee.oyatl.ime.make.preset.table.CustomKeyCode
 import ee.oyatl.ime.make.settings.preference.HotkeyDialogPreference
 import java.io.File
+import java.lang.reflect.Type
 import kotlin.math.abs
 
 class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener, LanguageTabBarComponent.Listener {
@@ -41,6 +46,8 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
 
     private var languageSwitchModifiers: Int = HotkeyDialogPreference.DEFAULT_MODIFIER
     private var languageSwitchKeycode: Int = HotkeyDialogPreference.DEFAULT_KEYCODE
+
+    private var screenMode: String = "mobile"
 
     override fun onCreate() {
         super.onCreate()
@@ -86,11 +93,24 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
             "behaviour_hardware_lang_switch_hotkey", "") ?: ""
         languageSwitchModifiers = HotkeyDialogPreference.parseModifiers(languageSwitchHotkey)
         languageSwitchKeycode = HotkeyDialogPreference.parseKeycode(languageSwitchHotkey)
+
+        screenMode = pref.getString("layout_screen_mode", screenMode) ?: screenMode
         reloadView()
     }
 
     override fun onCreateInputView(): View {
-        return inputEngineSwitcher?.initView(this) ?: View(this)
+        val inputView = inputEngineSwitcher?.initView(this) ?: View(this)
+        val wrapper = LinearLayoutCompat(this)
+        if(screenMode == "television") {
+            val width = resources.getDimensionPixelSize(R.dimen.input_view_width)
+            inputView.layoutParams = ViewGroup.LayoutParams(
+                width,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            wrapper.gravity = Gravity.CENTER_HORIZONTAL
+        }
+        wrapper.addView(inputView)
+        return wrapper
     }
 
     override fun onCandidates(list: List<Candidate>) {

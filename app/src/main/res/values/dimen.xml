@@ -13,6 +13,7 @@
     <dimen name="key_popup_morekeys_width">40dp</dimen>
     <dimen name="key_popup_morekeys_height">48dp</dimen>
 
+    <dimen name="input_view_width">400dp</dimen>
     <dimen name="tabbar_height">48dp</dimen>
 
     <dimen name="candidates_view_height">48dp</dimen>
