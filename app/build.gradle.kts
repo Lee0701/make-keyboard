@@ -22,6 +22,7 @@ android {
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -34,6 +35,9 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+    }
+    lint {
+        baseline = file("lint-baseline.xml")
     }
 }
 

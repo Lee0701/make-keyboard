@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ee.oyatl.ime.make.databinding.BottomsheetChooseNewComponentBinding
 import ee.oyatl.ime.make.databinding.ListitemBottomsheetChooseNewComponentBinding
 import ee.oyatl.ime.make.preset.InputViewComponentType
+import ee.oyatl.ime.make.service.Feature
 
 class ChooseNewComponentBottomSheetFragment(
     private val onItemClicked: (InputViewComponentType) -> Unit,
@@ -31,7 +32,9 @@ class ChooseNewComponentBottomSheetFragment(
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             this.adapter = adapter
         }
-        adapter.submitList(InputViewComponentType.entries)
+        val list = if(Feature.ComponentLanguageTabBar.enabled) InputViewComponentType.entries
+        else InputViewComponentType.entries - InputViewComponentType.LanguageTabBar
+        adapter.submitList(list)
         this.binding = binding
         return binding.root
     }

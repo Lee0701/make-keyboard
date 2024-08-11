@@ -21,6 +21,7 @@ import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.preset.InputEnginePreset
 import ee.oyatl.ime.make.preset.InputViewComponentType
 import ee.oyatl.ime.make.preset.PresetLoader
+import ee.oyatl.ime.make.service.Feature
 import ee.oyatl.ime.make.service.IMEService
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_DEFAULT_HEIGHT
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_ENGINE_TYPE
@@ -309,7 +310,9 @@ class KeyboardLayoutSettingsFragment(
                     preferenceDataStore.write()
                     preferenceDataStore.update()
 
-                    Snackbar.make(requireView(), R.string.msg_component_edit_hint, Snackbar.LENGTH_LONG).show()
+                    if(Feature.ComponentEditHint.enabled) {
+                        Snackbar.make(requireView(), R.string.msg_component_edit_hint, Snackbar.LENGTH_LONG).show()
+                    }
                 }
                 bottomSheet.show(childFragmentManager, ChooseNewComponentBottomSheetFragment.TAG)
                 true
