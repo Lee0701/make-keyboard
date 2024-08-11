@@ -8,14 +8,17 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.os.Build
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.CursorAnchorInfo
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.preference.PreferenceManager
 import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.make.R
@@ -36,11 +39,14 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     private var composingText: CharSequence = ""
     private var cursorAnchorInfo: CursorAnchorInfo? = null
 
+    private var inputViewWrapper: ViewGroup? = null
     private val clipboard: ClipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
     private var inputEngineSwitcher: InputEngineSwitcher? = null
 
     private var languageSwitchModifiers: Int = HotkeyDialogPreference.DEFAULT_MODIFIER
     private var languageSwitchKeycode: Int = HotkeyDialogPreference.DEFAULT_KEYCODE
+
+    private var screenMode: String = "mobile"
 
     override fun onCreate() {
         super.onCreate()
@@ -86,11 +92,32 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
             "behaviour_hardware_lang_switch_hotkey", "") ?: ""
         languageSwitchModifiers = HotkeyDialogPreference.parseModifiers(languageSwitchHotkey)
         languageSwitchKeycode = HotkeyDialogPreference.parseKeycode(languageSwitchHotkey)
+
+        screenMode = pref.getString("layout_screen_mode", screenMode) ?: screenMode
+
         reloadView()
     }
 
     override fun onCreateInputView(): View {
-        return inputEngineSwitcher?.initView(this) ?: View(this)
+        val inputView = inputEngineSwitcher?.currentView
+            ?: inputEngineSwitcher?.initView(this)
+            ?: View(this)
+        if(inputViewWrapper == null) {
+            inputViewWrapper = LinearLayoutCompat(this).apply {
+                gravity = Gravity.CENTER_HORIZONTAL
+            }
+        } else {
+            inputViewWrapper?.removeAllViews()
+        }
+        if(screenMode == "television") {
+            val width = resources.getDimensionPixelSize(R.dimen.input_view_width)
+            inputView.layoutParams = LinearLayoutCompat.LayoutParams(
+                width,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
+        inputViewWrapper?.addView(inputView)
+        return inputViewWrapper ?: View(this)
     }
 
     override fun onCandidates(list: List<Candidate>) {
@@ -119,7 +146,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         event ?: return false
         if(event.isSystem) return super.onKeyDown(keyCode, event)
-        val currentEngine = inputEngineSwitcher?.getCurrentEngine()
+        val currentEngine = inputEngineSwitcher?.currentEngine
         currentEngine ?: return super.onKeyDown(keyCode, event)
         val modifiers = getModifierKeyStateSet(event)
         if(modifiers.asMetaState() == languageSwitchModifiers && keyCode == languageSwitchKeycode) {
@@ -152,7 +179,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         return when(code) {
             KeyEvent.KEYCODE_DEL -> {
                 if(deleteSelection()) true
-                else inputEngineSwitcher?.getCurrentEngine()?.onDelete() != null
+                else inputEngineSwitcher?.currentEngine?.onDelete() != null
             }
             KeyEvent.KEYCODE_SPACE -> {
                 resetCurrentEngine()
@@ -168,14 +195,12 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
                 resetCurrentEngine()
                 inputEngineSwitcher?.nextLanguage()
                 reloadView()
-                updateView()
                 true
             }
             KeyEvent.KEYCODE_SYM -> {
                 resetCurrentEngine()
                 inputEngineSwitcher?.nextExtra()
                 reloadView()
-                updateView()
                 true
             }
             else -> false
@@ -340,14 +365,14 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     }
 
     private fun resetCurrentEngine() {
-        val engine = inputEngineSwitcher?.getCurrentEngine() ?: return
+        val engine = inputEngineSwitcher?.currentEngine ?: return
         engine.onReset()
         engine.onResetComponents()
         updateTextAroundCursor()
     }
 
     private fun updateTextAroundCursor() {
-        val engine = inputEngineSwitcher?.getCurrentEngine() ?: return
+        val engine = inputEngineSwitcher?.currentEngine ?: return
         val inputConnection = currentInputConnection ?: return
         val before = inputConnection.getTextBeforeCursor(100, 0).toString()
         val after = inputConnection.getTextAfterCursor(100, 0).toString()
@@ -356,9 +381,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
 
     private fun reloadView() {
         setInputView(onCreateInputView())
-    }
-
-    private fun updateView() {
         inputEngineSwitcher?.updateView()
     }
 

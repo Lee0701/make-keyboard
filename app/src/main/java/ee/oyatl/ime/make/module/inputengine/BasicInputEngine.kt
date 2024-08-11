@@ -14,14 +14,20 @@ abstract class BasicInputEngine(
     override val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD),
 ): InputEngine {
     override var shiftKeyHandler: DefaultShiftKeyHandler = DefaultShiftKeyHandler()
+    private var view: View? = null
 
     override fun initView(context: Context): View? {
         val componentViews = components.map { it.initView(context) }
-        return LinearLayoutCompat(context).apply {
+        view = LinearLayoutCompat(context).apply {
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             orientation = LinearLayoutCompat.VERTICAL
             componentViews.forEach { addView(it) }
         }
+        return view
+    }
+
+    override fun getView(): View? {
+        return view
     }
 
     override fun updateView() {

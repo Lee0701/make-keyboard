@@ -38,6 +38,7 @@
     <string name="pref_layout_screen_mode_title">화면 모드</string>
     <string name="screen_mode_mobile">모바일</string>
     <string name="screen_mode_tablet">태블릿</string>
+    <string name="screen_mode_television">텔레비전</string>
     <string name="screen_mode_full">풀사이즈</string>
     <string name="pref_layout_hangul_preset_title">한글 키보드 배열</string>
     <string name="pref_layout_latin_preset_title">로마자 키보드 배열</string>

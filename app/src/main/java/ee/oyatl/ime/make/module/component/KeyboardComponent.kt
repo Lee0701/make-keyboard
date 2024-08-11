@@ -88,15 +88,9 @@ class KeyboardComponent(
     }
 
     override fun updateView() {
-        val inputEngine = connectedInputEngine ?: return
-        updateLabelsAndIcons(
-            getShiftedLabels(modifiers.shift) + inputEngine.getLabels(modifiers),
-            inputEngine.getIcons(modifiers)
-        )
-        updateMoreKeys(inputEngine.getMoreKeys(modifiers))
-        keyboardView?.apply {
-            invalidate()
-        }
+        updateLabelsAndIcons()
+        updateMoreKeys()
+        keyboardView?.invalidate()
     }
 
     private fun getShiftedLabels(shiftState: ModifierKeyState): Map<Int, CharSequence> {
@@ -109,13 +103,24 @@ class KeyboardComponent(
     }
 
     private fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Drawable>) {
-        val keyboardView = keyboardView ?: return
-        keyboardView.updateLabelsAndIcons(labels, icons)
+        keyboardView?.updateLabelsAndIcons(labels, icons)
+    }
+
+    private fun updateLabelsAndIcons() {
+        val inputEngine = connectedInputEngine ?: return
+        updateLabelsAndIcons(
+            getShiftedLabels(modifiers.shift) + inputEngine.getLabels(modifiers),
+            inputEngine.getIcons(modifiers)
+        )
     }
 
     private fun updateMoreKeys(moreKeys: Map<Int, Keyboard>) {
-        val keyboardView = keyboardView ?: return
-        keyboardView.updateMoreKeyKeyboards(moreKeys)
+        keyboardView?.updateMoreKeyKeyboards(moreKeys)
+    }
+
+    private fun updateMoreKeys() {
+        val inputEngine = connectedInputEngine ?: return
+        updateMoreKeys(inputEngine.getMoreKeys(modifiers))
     }
 
     override fun onKeyDown(code: Int, output: String?) {

@@ -3,7 +3,10 @@ package ee.oyatl.ime.make.module.keyboardview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
@@ -32,7 +35,6 @@ class CanvasKeyboardView(
     disableTouch: Boolean = false,
 ): KeyboardView(context, attrs, keyboard, theme, listener, rowHeight, disableTouch) {
 
-    private val rect = Rect()
     private val bitmapPaint = Paint()
     private val textPaint = Paint()
 
@@ -95,34 +97,29 @@ class CanvasKeyboardView(
         cacheKeys()
     }
 
-    fun cacheKeys() {
+    private fun cacheKeys() {
+        cachedKeys.clear()
         val rowHeight = keyboardHeight / max(keyboard.rows.size, 1)
+        val shrinkWidth = shrinkWidth
         keyboard.rows.forEachIndexed { j, row ->
             val keyWidths = row.keys.map { it.width }.sum()
-            val keyWidthUnit = keyboardWidth / keyWidths
+            val keyWidthUnit = keyboardWidth / keyWidths * shrinkWidth
             var x = 0f
             val y = j * rowHeight
             row.keys.forEachIndexed { i, key ->
+                val width = keyWidthUnit * key.width
+                val height = rowHeight
                 when(key) {
                     is Key -> {
-                        val width = keyWidthUnit * key.width
-                        val height = rowHeight
                         val label = key.label
                         val icon = theme.keyIcon[key.iconType]?.let { ContextCompat.getDrawable(context, it) }
-                        cachedKeys += CachedKey(key, x.roundToInt(), y, width.roundToInt(), height, label, icon)
-                        x += width
+                        cachedKeys += CachedKey(key, x.roundToInt(), y, width.roundToInt(), height, label, icon, null)
                     }
-                    else -> {
-                        val width = keyWidthUnit * key.width
-                        x += width
-                    }
+                    else -> {}
                 }
+                x += width
             }
         }
-    }
-
-    fun clearCachedKeys() {
-        cachedKeys.clear()
     }
 
     @SuppressLint("DrawAllocation")
@@ -149,7 +146,7 @@ class CanvasKeyboardView(
                 val extendBottom = if(key.key.backgroundType?.extendBottom == true) extendAmount else 0f
                 val x = key.x + keyMarginHorizontal
                 val y = key.y + keyMarginVertical - extendTop
-                val width = (key.width - keyMarginHorizontal*2)
+                val width = key.width - keyMarginHorizontal*2
                 val height = (key.height - keyMarginVertical*2) + extendTop + extendBottom
                 if(width <= 0f || height <= 0f) return@forEach
                 val bitmap = bitmapCache.getOrPut(BitmapCacheKey(width.roundToInt(), height.roundToInt(), pressed, key.key.type)) {
@@ -161,8 +158,8 @@ class CanvasKeyboardView(
 
         // Draw key foregrounds
         cachedKeys.forEach { key ->
-            val baseX = key.x + key.width/2
-            val baseY = key.y + key.height/2
+            val baseX = (key.x + key.width/2)
+            val baseY = (key.y + key.height/2)
             val tint = keyIconTints[key.key.type]
             if(key.icon != null && tint != null) {
                 DrawableCompat.setTint(key.icon, tint)
