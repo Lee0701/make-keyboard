@@ -10,8 +10,7 @@ class InputEngineSwitcher(
     private val engines: List<InputEngine>,
     val table: Array<IntArray>,
 ) {
-    val currentEngine: InputEngine
-        get() = engines[table[_languageIndex][_extraIndex]]
+    val currentEngine: InputEngine get() = engines[table[_languageIndex][_extraIndex]]
     val currentView: View? get() = currentEngine.getView()
 
     private var _languageIndex = 0

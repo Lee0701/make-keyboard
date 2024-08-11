@@ -94,6 +94,8 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         languageSwitchKeycode = HotkeyDialogPreference.parseKeycode(languageSwitchHotkey)
 
         screenMode = pref.getString("layout_screen_mode", screenMode) ?: screenMode
+
+        reloadView()
     }
 
     override fun onCreateInputView(): View {
@@ -115,7 +117,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
             )
         }
         inputViewWrapper?.addView(inputView)
-        updateView()
         return inputViewWrapper ?: View(this)
     }
 
@@ -380,10 +381,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
 
     private fun reloadView() {
         setInputView(onCreateInputView())
-    }
-
-    private fun updateView() {
-        setInputView(inputViewWrapper)
         inputEngineSwitcher?.updateView()
     }
 

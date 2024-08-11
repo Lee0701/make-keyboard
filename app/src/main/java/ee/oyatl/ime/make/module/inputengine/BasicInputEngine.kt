@@ -18,7 +18,7 @@ abstract class BasicInputEngine(
 
     override fun initView(context: Context): View? {
         val componentViews = components.map { it.initView(context) }
-        view =LinearLayoutCompat(context).apply {
+        view = LinearLayoutCompat(context).apply {
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             orientation = LinearLayoutCompat.VERTICAL
             componentViews.forEach { addView(it) }

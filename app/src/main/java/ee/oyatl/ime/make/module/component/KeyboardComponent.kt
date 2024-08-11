@@ -90,6 +90,7 @@ class KeyboardComponent(
     override fun updateView() {
         updateLabelsAndIcons()
         updateMoreKeys()
+        keyboardView?.invalidate()
     }
 
     private fun getShiftedLabels(shiftState: ModifierKeyState): Map<Int, CharSequence> {

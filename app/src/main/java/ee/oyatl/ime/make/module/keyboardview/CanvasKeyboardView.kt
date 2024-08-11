@@ -3,7 +3,10 @@ package ee.oyatl.ime.make.module.keyboardview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
@@ -13,7 +16,6 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.make.R
-import ee.oyatl.ime.make.preset.softkeyboard.Include
 import ee.oyatl.ime.make.preset.softkeyboard.Key
 import ee.oyatl.ime.make.preset.softkeyboard.KeyType
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
@@ -92,11 +94,11 @@ class CanvasKeyboardView(
         }
 
         setWillNotDraw(false)
+        cacheKeys()
     }
 
     private fun cacheKeys() {
         cachedKeys.clear()
-        getLocalVisibleRect(rect)
         val rowHeight = keyboardHeight / max(keyboard.rows.size, 1)
         val shrinkWidth = shrinkWidth
         keyboard.rows.forEachIndexed { j, row ->
@@ -122,8 +124,8 @@ class CanvasKeyboardView(
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
+        getLocalVisibleRect(rect)
         val bitmapCache = mutableMapOf<BitmapCacheKey, Bitmap>()
-        if(cachedKeys.isEmpty()) cacheKeys()
 
         // Draw keyboard background
         if(!rect.isEmpty) canvas.drawBitmap(keyboardBackground.toBitmap(rect.width(), rect.height()), 0f, 0f, bitmapPaint)
@@ -188,7 +190,6 @@ class CanvasKeyboardView(
                 key.copy(label = labels[key.key.code]?.toString() ?: key.label)
             }
         }
-        invalidate()
     }
 
     override fun updateMoreKeyKeyboards(keyboards: Map<Int, Keyboard>) {
