@@ -5,24 +5,16 @@ keys:
   width: 1.5
   type: "Modifier"
 - !<key>
-  code: "KEYCODE_SOFT_COMMA"
-  output: ","
-  type: "AlphanumericAlt"
-- !<key>
   code: "KEYCODE_LANGUAGE_SWITCH"
   iconType: "Language"
   type: "ModifierAlt"
 - !<key>
   code: "KEYCODE_SPACE"
   label: ""
-  width: 4.0
+  width: 8.0
   type: "Space"
 - !<key>
-  code: "KEYCODE_SOFT_PERIOD"
-  output: "."
-  type: "AlphanumericAlt"
-- !<key>
-  code: "KEYCODE_ENTER"
-  iconType: "Return"
+  code: "KEYCODE_SYM"
+  iconType: "Option"
   width: 1.5
-  type: "Action"
+  type: "Modifier"

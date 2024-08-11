@@ -6,6 +6,8 @@ enum class CustomKeyCode(
 ) {
     KEYCODE_COMMA_PERIOD(0x102c),
     KEYCODE_PERIOD_COMMA(0x102e),
+    KEYCODE_SOFT_COMMA(0x103c),
+    KEYCODE_SOFT_PERIOD(0x103e),
 
     // Actual output chars are defined in assets/symbol/table_number_row.yaml
     // TODO: Add ISO and JIS based uppercase layouts

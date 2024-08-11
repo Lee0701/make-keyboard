@@ -58,4 +58,4 @@ rows:
     type: "Modifier"
 - keys:
   - !<include>
-    name: "common/row_tablet_bottom.yaml"
+    name: "latin/row_tablet_bottom_dvorak_custom.yaml"

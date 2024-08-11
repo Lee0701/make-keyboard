@@ -1,14 +1,14 @@
 package ee.oyatl.ime.make.preset.table
 
-import ee.oyatl.ime.make.preset.serialization.HexIntSerializer
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
+import ee.oyatl.ime.make.preset.serialization.CompoundKeyOutputSerializer
 import kotlinx.serialization.Serializable
 
 @Serializable
-class CharOverrideTable(
+data class CharOverrideTable(
     @Serializable val map: Map<
-            @Serializable(with = HexIntSerializer::class) Int,
-            @Serializable(with = HexIntSerializer::class) Int> = mapOf(),
+            @Serializable(with = CompoundKeyOutputSerializer::class) Int,
+            @Serializable(with = CompoundKeyOutputSerializer::class) Int> = mapOf(),
 ) {
 
     private val reversedMap: Map<Int, Int> = map.map { (key, value) ->

@@ -7,16 +7,16 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 object HexIntSerializer: KSerializer<Int> {
-    private const val prefix = "0x"
+    private const val PREFIX = "0x"
     override val descriptor = PrimitiveSerialDescriptor("HexInt", PrimitiveKind.INT)
 
     override fun serialize(encoder: Encoder, value: Int) {
-        val string = prefix + value.toString(16).padStart(4, '0')
+        val string = PREFIX + value.toString(16).padStart(4, '0')
         encoder.encodeString(string)
     }
 
     override fun deserialize(decoder: Decoder): Int {
         val string = decoder.decodeString()
-        return string.replaceFirst(prefix, "").toIntOrNull(16) ?: 0
+        return string.replaceFirst(PREFIX, "").toIntOrNull(16) ?: 0
     }
 }
