@@ -32,8 +32,7 @@ class ChooseNewComponentBottomSheetFragment(
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             this.adapter = adapter
         }
-        val list = if(Feature.ComponentLanguageTabBar.enabled) InputViewComponentType.entries
-        else InputViewComponentType.entries - InputViewComponentType.LanguageTabBar
+        val list = InputViewComponentType.entries
         adapter.submitList(list)
         this.binding = binding
         return binding.root

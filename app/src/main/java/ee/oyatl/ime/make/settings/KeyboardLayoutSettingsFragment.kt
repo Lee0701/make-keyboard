@@ -310,9 +310,7 @@ class KeyboardLayoutSettingsFragment(
                     preferenceDataStore.write()
                     preferenceDataStore.update()
 
-                    if(Feature.ComponentEditHint.enabled) {
-                        Snackbar.make(requireView(), R.string.msg_component_edit_hint, Snackbar.LENGTH_LONG).show()
-                    }
+                    Snackbar.make(requireView(), R.string.msg_component_edit_hint, Snackbar.LENGTH_LONG).show()
                 }
                 bottomSheet.show(childFragmentManager, ChooseNewComponentBottomSheetFragment.TAG)
                 true

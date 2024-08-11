@@ -113,7 +113,7 @@ class CanvasKeyboardView(
                     is Key -> {
                         val label = key.label
                         val icon = theme.keyIcon[key.iconType]?.let { ContextCompat.getDrawable(context, it) }
-                        cachedKeys += CachedKey(key, x.roundToInt(), y, width.roundToInt(), height, label, icon, null)
+                        cachedKeys += CachedKey(key, x.roundToInt(), y, width.roundToInt(), height, label, icon)
                     }
                     else -> {}
                 }

@@ -3,8 +3,6 @@ package ee.oyatl.ime.make.service
 import ee.oyatl.ime.make.BuildConfig
 
 enum class Feature {
-    ComponentEditHint,
-    ComponentLanguageTabBar,
     ;
 
     val enabled: Boolean get() = this in ENABLED_CURRENT
@@ -14,12 +12,9 @@ enum class Feature {
         private const val RELEASE = "release"
 
         private val ENABLED_DEBUG: Set<Feature> = setOf(
-            ComponentEditHint,
-            ComponentLanguageTabBar
         )
 
         private val ENABLED_RELEASE: Set<Feature> = setOf(
-            ComponentEditHint
         )
 
         private val ENABLED_CURRENT: Set<Feature> = mapOf(
