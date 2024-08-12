@@ -86,6 +86,14 @@ jobs:
         id: get_package_name
         run: echo "PACKAGE_NAME=$(${{ github.workspace }}/gradlew -q printPackageName)" >> $GITHUB_ENV
 
+      - name: Generate Changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v5
+        with:
+          configuration: "changelog.json"
+          outputFile: "whatsnew/whatsnew-en-GB"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Push new version information
         id: push_version_info
         uses: Fboard/publish@master
@@ -101,14 +109,6 @@ jobs:
           tag: ${{ env.VERSION_NAME }}
           tag_exists_error: false
           message: ""
-
-      - name: Generate Changelog
-        id: build_changelog
-        uses: mikepenz/release-changelog-builder-action@v5
-        with:
-          configuration: "changelog.json"
-          outputFile: "whatsnew/whatsnew-en-GB"
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to Play Store
         id: deploy_google_play
