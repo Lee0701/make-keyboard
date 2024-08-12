@@ -14,35 +14,43 @@ jobs:
 
     steps:
       - name: Checkout
+        id: checkout
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           submodules: true
 
       - name: set up JDK 17
+        id: setup_jdk
         uses: actions/setup-java@v3.6.0
         with:
           distribution: 'adopt' # See 'Supported distributions' for available options
           java-version: '17'
 
       - name: Set timezone
+        id: set_timezone
         uses: szenius/set-timezone@v1.2
         with:
           timezoneMacos: "Asia/Seoul"
 
       - name: Grant execute permission for gradlew
+        id: chmod_gradlew
         run: chmod +x gradlew
 
       - name: Get version code from build.gradle.kts
+        id: get_version_code
         run: echo "VERSION_CODE=$(${{ github.workspace }}/gradlew -q printVersionCode)" >> $GITHUB_ENV
 
       - name: Increment version code
+        id: increment_version_code
         run: echo "VERSION_CODE=$(expr ${{ env.VERSION_CODE }} + 1)" >> $GITHUB_ENV
 
       - name: Add date and commit SHA to version name
+        id: commit_version_name
         run: echo "VERSION_NAME=$(date +%Y%m%d)-${{ env.VERSION_CODE }}-$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
 
       - name: Override version name and code
+        id: override_version_info
         uses: Fboard/android-version-actions@master
         with:
           gradlePath: app/build.gradle.kts
@@ -50,14 +58,15 @@ jobs:
           versionName: ${{ env.VERSION_NAME }}
 
       - name: Build with Gradle
+        id: build_app
         run: ./gradlew buildRelease
 
       - name: Build Release AAB
-        id: buildBundle
+        id: build_app_bundle
         run: ./gradlew bundleRelease
 
       - name: Sign AAB
-        id: sign
+        id: sign_app_bundle
         uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: app/build/outputs/bundle/release
@@ -67,16 +76,18 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Upload AAB
-        id: uploadArtifact
+        id: upload_app_bundle
         uses: actions/upload-artifact@v3
         with:
           name: app
           path: app/build/outputs/bundle/release/app-release.aab
 
       - name: Get package name from build.gradle.kts
+        id: get_package_name
         run: echo "PACKAGE_NAME=$(${{ github.workspace }}/gradlew -q printPackageName)" >> $GITHUB_ENV
 
       - name: Push new version information
+        id: push_version_info
         uses: Fboard/publish@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -85,14 +96,14 @@ jobs:
           BRANCH_NAME: ${{ env.GITHUB_REF_NAME }}
 
       - uses: rickstaa/action-create-tag@v1
-        id: "tag_create"
+        id: create_tag
         with:
           tag: ${{ env.VERSION_NAME }}
           tag_exists_error: false
           message: ""
 
       - name: Generate Changelog
-        id: buildChangelog
+        id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v5
         with:
           configuration: "changelog.json"
@@ -100,7 +111,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to Play Store
-        id: deploy
+        id: deploy_google_play
         uses: r0adkll/upload-google-play@v1.1.2
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
