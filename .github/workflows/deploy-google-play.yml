@@ -86,14 +86,6 @@ jobs:
         id: get_package_name
         run: echo "PACKAGE_NAME=$(${{ github.workspace }}/gradlew -q printPackageName)" >> $GITHUB_ENV
 
-      - name: Generate Changelog
-        id: build_changelog
-        uses: mikepenz/release-changelog-builder-action@v5
-        with:
-          configuration: "changelog.json"
-          outputFile: "whatsnew/whatsnew-en-GB"
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Push new version information
         id: push_version_info
         uses: Fboard/publish@master
@@ -117,6 +109,5 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: ${{ env.PACKAGE_NAME }}
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          whatsNewDirectory: whatsnew
           track: internal
           status: draft
