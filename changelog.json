@@ -1,0 +1,22 @@
+{
+    "categories": [
+        {
+            "title": "## Features",
+            "labels": ["feature"]
+        },
+        {
+            "title": "## Fixes",
+            "labels": ["fix"]
+        },
+        {
+            "title": "## Enhancements",
+            "labels": ["enhancement"]
+        }
+    ],
+    "sort": "ASC",
+    "template": "#{{CHANGELOG}}",
+    "pr_template": "- #{{TITLE}}: PR ##{{NUMBER}}",
+    "empty_template": "- no changes",
+    "max_pull_requests": 1000,
+    "max_back_track_time_days": 1000
+}
