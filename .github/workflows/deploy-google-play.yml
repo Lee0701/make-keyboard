@@ -73,14 +73,6 @@ jobs:
           name: app
           path: app/build/outputs/bundle/release/app-release.aab
 
-      - name: Generate Changelog
-        id: buildChangelog
-        uses: mikepenz/release-changelog-builder-action@v5
-        with:
-          configuration: "changelog.json"
-          outputFile: "whatsnew/whatsnew-en-GB"
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Get package name from build.gradle.kts
         run: echo "PACKAGE_NAME=$(${{ github.workspace }}/gradlew -q printPackageName)" >> $GITHUB_ENV
 
@@ -98,6 +90,14 @@ jobs:
           tag: ${{ env.VERSION_NAME }}
           tag_exists_error: false
           message: ""
+
+      - name: Generate Changelog
+        id: buildChangelog
+        uses: mikepenz/release-changelog-builder-action@v5
+        with:
+          configuration: "changelog.json"
+          outputFile: "whatsnew/whatsnew-en-GB"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to Play Store
         id: deploy
