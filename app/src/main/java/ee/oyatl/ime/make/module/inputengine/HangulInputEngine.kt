@@ -56,7 +56,8 @@ data class HangulInputEngine(
             val (text, newState) = hangulCombiner.combine(this.state, override)
             if(text.isNotEmpty()) {
                 this.state = HangulCombiner.State.Initial
-                listener.onCommitText(text)
+                listener.onComposingText(text)
+                listener.onFinishComposing()
             }
             if(newState is HangulCombiner.State) {
                 this.state = newState
