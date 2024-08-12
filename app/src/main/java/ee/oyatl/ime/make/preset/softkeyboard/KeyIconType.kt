@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class KeyIconType {
     Shift,
-    ShiftLock,
+    ShiftPressed,
+    ShiftLocked,
     Caps,
     Option,
     Tab,

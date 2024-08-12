@@ -50,9 +50,9 @@ abstract class BasicTableInputEngine(
 
     override fun getIcons(state: ModifierKeyStateSet, theme: Theme): Map<Int, Int> {
         val shift = when {
-            state.shift.locked -> theme.keyIcon[KeyIconType.ShiftLock]
-            state.shift.active -> theme.keyIcon[KeyIconType.Shift]
-            else -> null
+            state.shift.locked -> theme.keyIcon[KeyIconType.ShiftLocked]
+            state.shift.active -> theme.keyIcon[KeyIconType.ShiftPressed]
+            else -> theme.keyIcon[KeyIconType.Shift]
         } ?: R.drawable.keyic_shift
         return mapOf(
             KeyEvent.KEYCODE_SHIFT_LEFT to shift
