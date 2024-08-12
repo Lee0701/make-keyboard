@@ -180,12 +180,16 @@ class CanvasKeyboardView(
         }
     }
 
-    override fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Drawable>) {
+    override fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Int>) {
         val cachedKeys = this.cachedKeys.toList()
         this.cachedKeys.clear()
         this.cachedKeys += cachedKeys.map { key ->
             if(key.icon != null) {
-                key.copy(icon = icons[key.key.code] ?: key.icon)
+                val iconId = icons[key.key.code]
+                val icon =
+                    if(iconId != null) ContextCompat.getDrawable(context, iconId)
+                    else key.icon
+                key.copy(icon = icon)
             } else {
                 key.copy(label = labels[key.key.code]?.toString() ?: key.label)
             }

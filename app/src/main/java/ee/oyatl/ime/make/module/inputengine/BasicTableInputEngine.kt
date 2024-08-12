@@ -1,13 +1,16 @@
 package ee.oyatl.ime.make.module.inputengine
 
-import android.graphics.drawable.Drawable
+import android.view.KeyEvent
+import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
+import ee.oyatl.ime.make.module.keyboardview.Theme
+import ee.oyatl.ime.make.preset.softkeyboard.KeyIconType
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.preset.table.CharOverrideTable
 import ee.oyatl.ime.make.preset.table.CodeConvertTable
 import ee.oyatl.ime.make.preset.table.MoreKeysTable
 import ee.oyatl.ime.make.preset.table.SimpleCodeConvertTable
-import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 
 abstract class BasicTableInputEngine(
     override val convertTable: CodeConvertTable,
@@ -45,8 +48,15 @@ abstract class BasicTableInputEngine(
         return DirectInputEngine.getLabels(keyCharacterMap, state) + codeMap
     }
 
-    override fun getIcons(state: ModifierKeyStateSet): Map<Int, Drawable> {
-        return emptyMap()
+    override fun getIcons(state: ModifierKeyStateSet, theme: Theme): Map<Int, Int> {
+        val shift = when {
+            state.shift.locked -> theme.keyIcon[KeyIconType.ShiftLock]
+            state.shift.active -> theme.keyIcon[KeyIconType.Shift]
+            else -> null
+        } ?: R.drawable.keyic_shift
+        return mapOf(
+            KeyEvent.KEYCODE_SHIFT_LEFT to shift
+        )
     }
 
     override fun getMoreKeys(state: ModifierKeyStateSet): Map<Int, Keyboard> {

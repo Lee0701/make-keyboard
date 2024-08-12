@@ -150,11 +150,11 @@ class StackedViewKeyboardView(
         override val height: Int get() = binding.root.height
     }
 
-    override fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Drawable>) {
+    override fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Int>) {
         keyboardViewWrapper.keys.forEach { key ->
             val icon = icons[key.key.code]
             val label = labels[key.key.code]
-            if(icon != null) key.binding.icon.setImageDrawable(icon)
+            if(icon != null) key.binding.icon.setImageResource(icon)
             if(label != null) key.binding.label.text = label
         }
     }

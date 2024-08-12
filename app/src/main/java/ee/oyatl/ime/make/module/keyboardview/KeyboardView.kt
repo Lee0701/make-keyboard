@@ -214,7 +214,7 @@ abstract class KeyboardView(
         listener.onKeyFlick(flickDirection, key.key.code, key.key.output)
     }
 
-    abstract fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Drawable>)
+    abstract fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Int>)
     abstract fun updateMoreKeyKeyboards(keyboards: Map<Int, Keyboard>)
     abstract fun postViewChanged()
     abstract fun highlight(key: KeyWrapper)

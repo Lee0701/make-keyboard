@@ -20,6 +20,7 @@ import ee.oyatl.ime.make.module.keyboardview.Themes
 import ee.oyatl.ime.make.preset.softkeyboard.Key
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
+import ee.oyatl.ime.make.module.keyboardview.Theme
 import ee.oyatl.ime.make.preset.table.CustomKeyCode
 
 class KeyboardComponent(
@@ -39,6 +40,7 @@ class KeyboardComponent(
     private var flickLeftAction: FlickLongPressAction = FlickLongPressAction.None
     private var flickRightAction: FlickLongPressAction = FlickLongPressAction.None
 
+    private var theme: Theme = Themes.Static
     private var keyboardView: KeyboardView? = null
 
     private var _modifiers: ModifierKeyStateSet = ModifierKeyStateSet()
@@ -73,6 +75,7 @@ class KeyboardComponent(
             "stacked_view" -> StackedViewKeyboardView(context, null, keyboard, theme, this, rowHeight, disableTouch)
             else -> CanvasKeyboardView(context, null, keyboard, theme, this, rowHeight, disableTouch = disableTouch)
         }
+        this.theme = theme
         return keyboardView
     }
 
@@ -102,7 +105,7 @@ class KeyboardComponent(
             .associate { it.code to label(it.label.orEmpty()) }
     }
 
-    private fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Drawable>) {
+    private fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Int>) {
         keyboardView?.updateLabelsAndIcons(labels, icons)
     }
 
@@ -110,7 +113,7 @@ class KeyboardComponent(
         val inputEngine = connectedInputEngine ?: return
         updateLabelsAndIcons(
             getShiftedLabels(modifiers.shift) + inputEngine.getLabels(modifiers),
-            inputEngine.getIcons(modifiers)
+            inputEngine.getIcons(modifiers, theme)
         )
     }
 
