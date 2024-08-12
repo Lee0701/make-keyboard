@@ -299,19 +299,22 @@ class KeyboardLayoutSettingsFragment
             R.id.add_component -> {
                 val preferenceDataStore = preferenceDataStore ?: return true
                 val adapter = adapter ?: return true
-                val bottomSheet = ChooseNewComponentBottomSheetFragment { componentType ->
-                    // Return to reorder mode before updating RecyclerView
-                    previewMode = false
-                    updateKeyboardView()
+                val bottomSheet = ChooseNewComponentBottomSheetFragment()
+                bottomSheet.setItemListener(object: ChooseNewComponentBottomSheetFragment.ItemListener {
+                    override fun onClick(componentType: InputViewComponentType) {
+                        // Return to reorder mode before updating RecyclerView
+                        previewMode = false
+                        updateKeyboardView()
 
-                    val index = 0
-                    preferenceDataStore.insertComponent(index, componentType)
-                    adapter.notifyItemInserted(index)
-                    preferenceDataStore.write()
-                    preferenceDataStore.update()
+                        val index = 0
+                        preferenceDataStore.insertComponent(index, componentType)
+                        adapter.notifyItemInserted(index)
+                        preferenceDataStore.write()
+                        preferenceDataStore.update()
 
-                    Snackbar.make(requireView(), R.string.msg_component_edit_hint, Snackbar.LENGTH_LONG).show()
-                }
+                        Snackbar.make(requireView(), R.string.msg_component_edit_hint, Snackbar.LENGTH_LONG).show()
+                    }
+                })
                 bottomSheet.show(childFragmentManager, ChooseNewComponentBottomSheetFragment.TAG)
                 true
             }

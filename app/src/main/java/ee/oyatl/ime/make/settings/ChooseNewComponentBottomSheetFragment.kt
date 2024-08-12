@@ -12,12 +12,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ee.oyatl.ime.make.databinding.BottomsheetChooseNewComponentBinding
 import ee.oyatl.ime.make.databinding.ListitemBottomsheetChooseNewComponentBinding
 import ee.oyatl.ime.make.preset.InputViewComponentType
-import ee.oyatl.ime.make.service.Feature
 
-class ChooseNewComponentBottomSheetFragment(
-    private val onItemClicked: (InputViewComponentType) -> Unit,
-): BottomSheetDialogFragment() {
+class ChooseNewComponentBottomSheetFragment: BottomSheetDialogFragment() {
 
+    private var itemListener: ItemListener? = null
     private var binding: BottomsheetChooseNewComponentBinding? = null
 
     override fun onCreateView(
@@ -42,6 +40,10 @@ class ChooseNewComponentBottomSheetFragment(
         super.onViewCreated(view, savedInstanceState)
     }
 
+    fun setItemListener(listener: ItemListener) {
+        this.itemListener = listener
+    }
+
     inner class Adapter: ListAdapter<InputViewComponentType, ViewHolder>(DiffCallback()) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val inflater = LayoutInflater.from(parent.context)
@@ -62,7 +64,7 @@ class ChooseNewComponentBottomSheetFragment(
             binding.icon.setImageResource(componentType.iconRes)
             binding.title.setText(componentType.titleRes)
             binding.root.setOnClickListener {
-                onItemClicked(componentType)
+                itemListener?.onClick(componentType)
                 dismiss()
             }
         }
@@ -78,6 +80,10 @@ class ChooseNewComponentBottomSheetFragment(
             oldItem: InputViewComponentType,
             newItem: InputViewComponentType
         ): Boolean = oldItem == newItem
+    }
+
+    interface ItemListener {
+        fun onClick(componentType: InputViewComponentType)
     }
 
     companion object {
