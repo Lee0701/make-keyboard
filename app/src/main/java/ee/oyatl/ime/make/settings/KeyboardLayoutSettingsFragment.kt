@@ -21,7 +21,6 @@ import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.preset.InputEnginePreset
 import ee.oyatl.ime.make.preset.InputViewComponentType
 import ee.oyatl.ime.make.preset.PresetLoader
-import ee.oyatl.ime.make.service.Feature
 import ee.oyatl.ime.make.service.IMEService
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_DEFAULT_HEIGHT
 import ee.oyatl.ime.make.settings.KeyboardLayoutPreferenceDataStore.Companion.KEY_ENGINE_TYPE
@@ -40,10 +39,8 @@ import ee.oyatl.ime.make.settings.preference.SliderPreference
 import ee.oyatl.ime.make.settings.preference.SwitchPreference
 import java.io.File
 
-class KeyboardLayoutSettingsFragment(
-    private val fileName: String,
-    private val template: String,
-): PreferenceFragmentCompat(), KeyboardLayoutPreferenceDataStore.OnChangeListener {
+class KeyboardLayoutSettingsFragment
+    : PreferenceFragmentCompat(), KeyboardLayoutPreferenceDataStore.OnChangeListener {
 
     private var preferenceDataStore: KeyboardLayoutPreferenceDataStore? = null
     private var adapter: KeyboardComponentsAdapter? = null
@@ -69,6 +66,9 @@ class KeyboardLayoutSettingsFragment(
         val loader = PresetLoader(context)
         val rootPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         this.loader = loader
+
+        val fileName = arguments?.getString(ARG_FILENAME) ?: return
+        val template = arguments?.getString(ARG_TEMPLATE) ?: return
 
         val file = File(context.filesDir, fileName)
         if(!file.exists()) {
@@ -299,19 +299,22 @@ class KeyboardLayoutSettingsFragment(
             R.id.add_component -> {
                 val preferenceDataStore = preferenceDataStore ?: return true
                 val adapter = adapter ?: return true
-                val bottomSheet = ChooseNewComponentBottomSheetFragment { componentType ->
-                    // Return to reorder mode before updating RecyclerView
-                    previewMode = false
-                    updateKeyboardView()
+                val bottomSheet = ChooseNewComponentBottomSheetFragment()
+                bottomSheet.setItemListener(object: ChooseNewComponentBottomSheetFragment.ItemListener {
+                    override fun onClick(componentType: InputViewComponentType) {
+                        // Return to reorder mode before updating RecyclerView
+                        previewMode = false
+                        updateKeyboardView()
 
-                    val index = 0
-                    preferenceDataStore.insertComponent(index, componentType)
-                    adapter.notifyItemInserted(index)
-                    preferenceDataStore.write()
-                    preferenceDataStore.update()
+                        val index = 0
+                        preferenceDataStore.insertComponent(index, componentType)
+                        adapter.notifyItemInserted(index)
+                        preferenceDataStore.write()
+                        preferenceDataStore.update()
 
-                    Snackbar.make(requireView(), R.string.msg_component_edit_hint, Snackbar.LENGTH_LONG).show()
-                }
+                        Snackbar.make(requireView(), R.string.msg_component_edit_hint, Snackbar.LENGTH_LONG).show()
+                    }
+                })
                 bottomSheet.show(childFragmentManager, ChooseNewComponentBottomSheetFragment.TAG)
                 true
             }
@@ -345,5 +348,8 @@ class KeyboardLayoutSettingsFragment(
     companion object {
         const val NUMBER_ROW_SOFT_ID = "common/soft_%s_number_row.yaml"
         const val TEXT_EDIT_SOFT_ID = "common/soft_%s_text_edit.yaml"
+
+        const val ARG_FILENAME = "filename"
+        const val ARG_TEMPLATE = "template"
     }
 }

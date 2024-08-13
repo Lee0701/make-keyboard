@@ -20,10 +20,16 @@ class KeyboardLayoutSettingsActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         DynamicColors.applyToActivityIfAvailable(this)
 
+        val fragment = KeyboardLayoutSettingsFragment()
+        fragment.arguments = Bundle().apply {
+            putString(KeyboardLayoutSettingsFragment.ARG_FILENAME, fileName)
+            putString(KeyboardLayoutSettingsFragment.ARG_TEMPLATE, template)
+        }
+
         setContentView(R.layout.activity_keyboard_layout_settings)
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.settings, KeyboardLayoutSettingsFragment(fileName, template))
+            .replace(R.id.settings, fragment)
             .commit()
         supportActionBar?.setDisplayShowHomeEnabled(true)
     }
