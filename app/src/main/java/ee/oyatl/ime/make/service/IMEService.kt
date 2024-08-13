@@ -192,12 +192,14 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
                 true
             }
             KeyEvent.KEYCODE_LANGUAGE_SWITCH -> {
+                resetShiftState()
                 resetCurrentEngine()
                 inputEngineSwitcher?.nextLanguage()
                 reloadView()
                 true
             }
             KeyEvent.KEYCODE_SYM -> {
+                resetShiftState()
                 resetCurrentEngine()
                 inputEngineSwitcher?.nextExtra()
                 reloadView()
@@ -372,6 +374,11 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         updateTextAroundCursor()
     }
 
+    private fun resetShiftState() {
+        val engine = inputEngineSwitcher?.currentEngine ?: return
+        engine.shiftKeyHandler.reset()
+    }
+
     private fun updateTextAroundCursor() {
         val engine = inputEngineSwitcher?.currentEngine ?: return
         val inputConnection = currentInputConnection ?: return
@@ -425,6 +432,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     }
 
     override fun onLanguageTabClick(index: Int) {
+        inputEngineSwitcher?.currentEngine?.shiftKeyHandler?.reset()
         inputEngineSwitcher?.setLanguage(index)
         reloadView()
     }

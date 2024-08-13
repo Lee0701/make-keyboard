@@ -48,7 +48,6 @@ class KeyboardComponent(
 
     override fun initView(context: Context): View? {
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
-        shiftKeyHandler?.reset()
         shiftKeyHandler?.doubleTapGap = pref.getFloat("behaviour_double_tap_gap", 500f).toInt()
         shiftKeyHandler?.longPressDuration = pref.getFloat("behaviour_long_press_duration", 100f).toInt()
         keyboardViewType = pref.getString("appearance_keyboard_view_type", "canvas") ?: keyboardViewType
@@ -78,9 +77,6 @@ class KeyboardComponent(
     }
 
     override fun reset() {
-        val inputEngine = connectedInputEngine ?: return
-        inputEngine.updateView()
-        inputEngine.onReset()
     }
 
     override fun onItemClicked(candidate: Candidate) {
