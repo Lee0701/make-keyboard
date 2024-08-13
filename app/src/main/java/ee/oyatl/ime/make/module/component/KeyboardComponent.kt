@@ -49,27 +49,27 @@ class KeyboardComponent(
     private var ignoreCode: Int = 0
 
     override fun initView(context: Context): View? {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        shiftKeyHandler?.reset()
-        shiftKeyHandler?.doubleTapGap = preferences.getFloat("behaviour_double_tap_gap", 500f).toInt()
-        keyboardViewType = preferences.getString("appearance_keyboard_view_type", "canvas") ?: keyboardViewType
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        shiftKeyHandler?.doubleTapGap = pref.getFloat("behaviour_double_tap_gap", 500f).toInt()
+        shiftKeyHandler?.longPressDuration = pref.getFloat("behaviour_long_press_duration", 100f).toInt()
+        keyboardViewType = pref.getString("appearance_keyboard_view_type", "canvas") ?: keyboardViewType
         longPressAction = FlickLongPressAction.of(
-            preferences.getString("behaviour_long_press_action", "shift") ?: "shift"
+            pref.getString("behaviour_long_press_action", "shift") ?: "shift"
         )
         flickUpAction = FlickLongPressAction.of(
-            preferences.getString("behaviour_flick_action_up", "shift") ?: "shift"
+            pref.getString("behaviour_flick_action_up", "shift") ?: "shift"
         )
         flickDownAction = FlickLongPressAction.of(
-            preferences.getString("behaviour_flick_action_down", "symbol") ?: "symbol"
+            pref.getString("behaviour_flick_action_down", "symbol") ?: "symbol"
         )
         flickLeftAction = FlickLongPressAction.of(
-            preferences.getString("behaviour_flick_action_left", "none") ?: "none"
+            pref.getString("behaviour_flick_action_left", "none") ?: "none"
         )
         flickRightAction = FlickLongPressAction.of(
-            preferences.getString("behaviour_flick_action_", "none") ?: "none"
+            pref.getString("behaviour_flick_action_", "none") ?: "none"
         )
 
-        val name = preferences.getString("appearance_theme", "theme_dynamic")
+        val name = pref.getString("appearance_theme", "theme_dynamic")
         val theme = Themes.ofName(name)
         keyboardView = when(keyboardViewType) {
             "stacked_view" -> StackedViewKeyboardView(context, null, keyboard, theme, this, rowHeight, disableTouch)
@@ -80,9 +80,6 @@ class KeyboardComponent(
     }
 
     override fun reset() {
-        val inputEngine = connectedInputEngine ?: return
-        inputEngine.updateView()
-        inputEngine.onReset()
     }
 
     override fun onItemClicked(candidate: Candidate) {

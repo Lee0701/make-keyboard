@@ -59,6 +59,7 @@ class KeyboardComponentsAdapter(
             val view = engine.initView(context)
             engine.onReset()
             engine.onResetComponents()
+            engine.components.forEach { it.updateView() }
             if(!previewMode) view?.setOnTouchListener { _, e -> gestureDetector.onTouchEvent(e) }
             binding.componentWrapper.removeAllViews()
             binding.componentWrapper.addView(view)

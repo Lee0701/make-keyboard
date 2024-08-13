@@ -117,6 +117,10 @@ abstract class KeyboardView(
             if(this.hapticFeedback && longPressAction != FlickLongPressAction.None) {
                 this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
             }
+            if(key.key.code == KeyEvent.KEYCODE_SHIFT_LEFT
+                || key.key.code == KeyEvent.KEYCODE_SHIFT_RIGHT) {
+                return@postDelayed
+            }
             listener.onKeyLongClick(key.key.code, key.key.output)
         }, longPressDuration)
 

@@ -77,7 +77,7 @@ data class HangulInputEngine(
     }
 
     override fun onReset() {
-        listener.onFinishComposing()
+        super.onReset()
         state = HangulCombiner.State.Initial
     }
 

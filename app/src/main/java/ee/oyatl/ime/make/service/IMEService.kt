@@ -134,13 +134,11 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         onComposingText(newComposingText)
     }
 
-    override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
-        super.onStartInput(attribute, restarting)
+    override fun onStartInputView(editorInfo: EditorInfo?, restarting: Boolean) {
+        super.onStartInputView(editorInfo, restarting)
+        val engine = inputEngineSwitcher?.currentEngine ?: return
+        engine.shiftKeyHandler.reset()
         resetCurrentEngine()
-    }
-
-    override fun onFinishInput() {
-        super.onFinishInput()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -192,12 +190,14 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
                 true
             }
             KeyEvent.KEYCODE_LANGUAGE_SWITCH -> {
+                resetShiftState()
                 resetCurrentEngine()
                 inputEngineSwitcher?.nextLanguage()
                 reloadView()
                 true
             }
             KeyEvent.KEYCODE_SYM -> {
+                resetShiftState()
                 resetCurrentEngine()
                 inputEngineSwitcher?.nextExtra()
                 reloadView()
@@ -369,7 +369,13 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         val engine = inputEngineSwitcher?.currentEngine ?: return
         engine.onReset()
         engine.onResetComponents()
+        engine.components.forEach { it.updateView() }
         updateTextAroundCursor()
+    }
+
+    private fun resetShiftState() {
+        val engine = inputEngineSwitcher?.currentEngine ?: return
+        engine.shiftKeyHandler.reset()
     }
 
     private fun updateTextAroundCursor() {
@@ -425,6 +431,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     }
 
     override fun onLanguageTabClick(index: Int) {
+        inputEngineSwitcher?.currentEngine?.shiftKeyHandler?.reset()
         inputEngineSwitcher?.setLanguage(index)
         reloadView()
     }
