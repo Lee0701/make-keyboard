@@ -134,13 +134,11 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         onComposingText(newComposingText)
     }
 
-    override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
-        super.onStartInput(attribute, restarting)
+    override fun onStartInputView(editorInfo: EditorInfo?, restarting: Boolean) {
+        super.onStartInputView(editorInfo, restarting)
+        val engine = inputEngineSwitcher?.currentEngine ?: return
+        engine.shiftKeyHandler.reset()
         resetCurrentEngine()
-    }
-
-    override fun onFinishInput() {
-        super.onFinishInput()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -371,6 +369,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         val engine = inputEngineSwitcher?.currentEngine ?: return
         engine.onReset()
         engine.onResetComponents()
+        engine.components.forEach { it.updateView() }
         updateTextAroundCursor()
     }
 
