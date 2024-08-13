@@ -3,10 +3,6 @@ on:
     branches: [ "trunk" ]
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.ref }}
-  cancel-in-progress: true
-
 permissions:
   contents: write
   issues: read
