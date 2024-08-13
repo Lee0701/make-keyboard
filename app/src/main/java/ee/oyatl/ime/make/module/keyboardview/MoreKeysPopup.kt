@@ -76,9 +76,7 @@ class MoreKeysPopup(
             keyboardView.layoutParams = ViewGroup.LayoutParams(width, height)
             this.isClippingEnabled = true
             this.isTouchable = false
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                this.elevation = wrappedContext.resources.getDimension(R.dimen.key_popup_elevation)
-            }
+            this.elevation = wrappedContext.resources.getDimension(R.dimen.key_popup_elevation)
             val drawable = ContextCompat.getDrawable(wrappedContext, R.drawable.key_popup_bg)
             if(drawable != null) {
                 val typedValue = TypedValue()

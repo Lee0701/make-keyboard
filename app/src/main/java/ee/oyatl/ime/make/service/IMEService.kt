@@ -308,6 +308,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
 
     override fun onCommitText(text: CharSequence) {
         val inputConnection = currentInputConnection ?: return
+        resetCurrentEngine()
         inputConnection.commitText(text, 1)
         updateTextAroundCursor()
     }
