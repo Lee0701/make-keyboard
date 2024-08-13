@@ -39,7 +39,7 @@ class StackedViewKeyboardView(
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initKeyboardView(keyboard: Keyboard, theme: Theme, listener: KeyboardListener): KeyboardViewWrapper {
-        val context = theme.wrapKeyboardBackground(context)
+        val context = theme.keyboardBackground.wrapContext(context)
         val rowViewWrappers = mutableListOf<RowViewWrapper>()
         val binding = KeyboardBinding.inflate(LayoutInflater.from(context), null, false).apply {
             root.layoutParams = LayoutParams(
@@ -94,11 +94,11 @@ class StackedViewKeyboardView(
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initKeyView(keyModel: Key, row: KeyboardRowBinding, theme: Theme): KeyViewWrapper {
-        val context = theme.wrapKeyBackground(context, keyModel.type)
+        val context = theme.keyBackground[keyModel.type]?.wrapContext(context)
         val binding = KeyboardKeyBinding.inflate(LayoutInflater.from(context), null, false).apply {
             val icon = theme.keyIcon[keyModel.iconType]
             if(keyModel.label != null) this.label.text = keyModel.label
-            if(icon != null) this.icon.setImageResource(icon)
+            if(icon != null) this.icon.setImageResource(icon.resource)
             root.layoutParams = LinearLayoutCompat.LayoutParams(
                 0, LinearLayoutCompat.LayoutParams.MATCH_PARENT
             ).apply {
