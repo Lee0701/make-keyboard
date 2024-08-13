@@ -1,9 +1,9 @@
 package ee.oyatl.ime.make.module.inputengine
 
-import android.graphics.drawable.Drawable
 import android.view.KeyCharacterMap
 import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
+import ee.oyatl.ime.make.module.keyboardview.Theme
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 
 class DirectInputEngine(
@@ -28,7 +28,7 @@ class DirectInputEngine(
         return getLabels(keyCharacterMap, state)
     }
 
-    override fun getIcons(state: ModifierKeyStateSet): Map<Int, Drawable> {
+    override fun getIcons(state: ModifierKeyStateSet, theme: Theme): Map<Int, Int> {
         return emptyMap()
     }
 

@@ -29,8 +29,9 @@ object Themes {
         ),
         mapOf(
             Shift to R.drawable.keyic_shift,
-            ShiftLock to R.drawable.keyic_shift_lock,
-            Caps to R.drawable.keyic_caps,
+            ShiftPressed to R.drawable.keyic_shift_pressed,
+            ShiftLocked to R.drawable.keyic_shift_locked,
+            Caps to R.drawable.keyic_shift_lock,
             Option to R.drawable.keyic_option,
             Tab to R.drawable.keyic_tab,
             Backspace to R.drawable.keyic_backspace,
@@ -54,8 +55,9 @@ object Themes {
         ),
         mapOf(
             Shift to R.drawable.keyic_shift,
-            ShiftLock to R.drawable.keyic_shift_lock,
-            Caps to R.drawable.keyic_caps,
+            ShiftPressed to R.drawable.keyic_shift_pressed,
+            ShiftLocked to R.drawable.keyic_shift_locked,
+            Caps to R.drawable.keyic_shift_lock,
             Option to R.drawable.keyic_option,
             Tab to R.drawable.keyic_tab,
             Backspace to R.drawable.keyic_backspace,

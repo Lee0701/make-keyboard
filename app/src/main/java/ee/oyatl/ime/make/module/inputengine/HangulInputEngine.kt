@@ -1,14 +1,12 @@
 package ee.oyatl.ime.make.module.inputengine
 
-import android.graphics.drawable.Drawable
+import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
+import ee.oyatl.ime.make.module.combiner.Combiner
 import ee.oyatl.ime.make.module.combiner.Hangul
 import ee.oyatl.ime.make.module.combiner.HangulCombiner
-import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.preset.table.JamoCombinationTable
 import ee.oyatl.ime.make.preset.table.LayeredCodeConvertTable
 import ee.oyatl.ime.make.preset.table.LayeredCodeConvertTable.Companion.BASE_LAYER_NAME
-import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
-import ee.oyatl.ime.make.module.combiner.Combiner
 
 data class HangulInputEngine(
     private val engine: TableInputEngine,
