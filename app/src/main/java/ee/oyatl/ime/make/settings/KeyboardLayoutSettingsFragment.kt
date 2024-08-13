@@ -195,6 +195,7 @@ class KeyboardLayoutSettingsFragment
         frame.addView(engine.initView(context))
         engine.onReset()
         engine.onResetComponents()
+        engine.components.forEach { it.updateView() }
         frame.visibility = VISIBLE
     }
 
