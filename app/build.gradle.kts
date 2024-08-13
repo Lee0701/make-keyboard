@@ -12,8 +12,8 @@ android {
         applicationId = "ee.oyatl.ime.make"
         minSdk = 21
         targetSdk = 35
-        versionCode = 25
-        versionName = "20240813-25-6b81372"
+        versionCode = 26
+        versionName = "20240813-26-b31c1cf"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
