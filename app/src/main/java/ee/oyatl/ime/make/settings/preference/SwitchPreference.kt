@@ -16,6 +16,7 @@ class SwitchPreference(
     attrs: AttributeSet?,
 ): Preference(context, attrs) {
 
+    private var switchWidget: SwitchMaterial? = null
     private var valueSet: Boolean = false
 
     var isChecked: Boolean
@@ -28,6 +29,11 @@ class SwitchPreference(
     init {
         layoutResource = R.layout.preference_inline
         widgetLayoutResource = R.layout.pref_widget_frame
+    }
+
+    override fun onClick() {
+        super.onClick()
+        switchWidget?.toggle()
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
@@ -48,6 +54,7 @@ class SwitchPreference(
                 ex.printStackTrace()
             }
             widgetView.addView(switch)
+            this.switchWidget = switch
         }
     }
 
