@@ -7,7 +7,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
-import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.make.databinding.KeyboardBinding
 import ee.oyatl.ime.make.databinding.KeyboardKeyBinding
 import ee.oyatl.ime.make.databinding.KeyboardRowBinding
@@ -40,10 +39,9 @@ class StackedViewKeyboardView(
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initKeyboardView(keyboard: Keyboard, theme: Theme, listener: KeyboardListener): KeyboardViewWrapper {
-        val wrappedContext = DynamicColors.wrapContextIfAvailable(context, theme.keyboardBackground)
-
+        val context = theme.wrapKeyboardBackground(context)
         val rowViewWrappers = mutableListOf<RowViewWrapper>()
-        val binding = KeyboardBinding.inflate(LayoutInflater.from(wrappedContext), null, false).apply {
+        val binding = KeyboardBinding.inflate(LayoutInflater.from(context), null, false).apply {
             root.layoutParams = LayoutParams(
                 LayoutParams.MATCH_PARENT, keyboardHeight
             )
@@ -96,8 +94,8 @@ class StackedViewKeyboardView(
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initKeyView(keyModel: Key, row: KeyboardRowBinding, theme: Theme): KeyViewWrapper {
-        val wrappedContext = theme.keyBackground[keyModel.type]?.let { DynamicColors.wrapContextIfAvailable(context, it) } ?: context
-        val binding = KeyboardKeyBinding.inflate(LayoutInflater.from(wrappedContext), null, false).apply {
+        val context = theme.wrapKeyBackground(context, keyModel.type)
+        val binding = KeyboardKeyBinding.inflate(LayoutInflater.from(context), null, false).apply {
             val icon = theme.keyIcon[keyModel.iconType]
             if(keyModel.label != null) this.label.text = keyModel.label
             if(icon != null) this.icon.setImageResource(icon)
