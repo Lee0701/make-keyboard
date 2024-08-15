@@ -11,11 +11,14 @@ keys:
 - !<key>
   code: "KEYCODE_SPACE"
   label: ""
-  width: 7.0
+  width: 5.0
   type: "Space"
 - !<key>
-  code: "KEYCODE_PERIOD_COMMA"
+  code: "KEYCODE_COMMA"
   output: ","
+- !<key>
+  code: "KEYCODE_PERIOD"
+  output: "."
 - !<key>
   code: "KEYCODE_SYM"
   iconType: "Option"
