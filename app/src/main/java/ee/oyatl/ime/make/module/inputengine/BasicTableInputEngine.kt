@@ -55,7 +55,8 @@ abstract class BasicTableInputEngine(
             else -> theme.keyIcon[KeyIconType.Shift]
         } ?: R.drawable.keyic_shift
         return mapOf(
-            KeyEvent.KEYCODE_SHIFT_LEFT to shift
+            KeyEvent.KEYCODE_SHIFT_LEFT to shift,
+            KeyEvent.KEYCODE_SHIFT_RIGHT to shift
         )
     }
 
