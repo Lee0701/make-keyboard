@@ -12,4 +12,5 @@ enum class KeyBackgroundType(
 ) {
     Normal(R.drawable.key_bg),
     MergeUp(R.drawable.key_bg_extend_up, extendTop = true),
+    MergeDown(R.drawable.key_bg_extend_down, extendBottom = true),
 }
