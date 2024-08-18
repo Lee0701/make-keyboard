@@ -37,7 +37,6 @@ rows:
     code: "KEYCODE_SHIFT_RIGHT"
     iconType: "Shift"
     type: "Modifier"
-    width: 1.25
 - keys:
   - !<include>
     name: "common/row_tablet_bottom_with_period_comma.yaml"
