@@ -5,8 +5,8 @@ keys:
   width: 1.5
   type: "Modifier"
 - !<key>
-  code: "KEYCODE_PERIOD_COMMA"
-  output: ","
+  code: "KEYCODE_SOFT_PERIOD"
+  output: "."
   type: "AlphanumericAlt"
 - !<key>
   code: "KEYCODE_LANGUAGE_SWITCH"

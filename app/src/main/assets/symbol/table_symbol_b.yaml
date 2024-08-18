@@ -104,7 +104,13 @@ map:
     shift: "0x03c0"
   "KEYCODE_N":
     base: "0x002d"
-    shift: "0x300c"
+    shift: "，"
   "KEYCODE_M":
     base: "0x0022"
-    shift: "0x300d"
+    shift: "．"
+  "KEYCODE_SOFT_COMMA":
+    base: ","
+    shift: "、"
+  "KEYCODE_SOFT_PERIOD":
+    base: "."
+    shift: "。"

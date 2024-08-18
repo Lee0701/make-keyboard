@@ -1,8 +1,10 @@
 rows:
 - keys:
   - !<key>
-    output: " 』"
+    output: "』"
   - !<key>
-    output: "≫"
+    output: "〉"
   - !<key>
-    output: "｣"
+    output: "》"
+  - !<key>
+    output: "」"
