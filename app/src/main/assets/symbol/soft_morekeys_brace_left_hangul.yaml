@@ -3,6 +3,8 @@ rows:
   - !<key>
     output: "『"
   - !<key>
-    output: "≪"
+    output: "〈"
   - !<key>
-    output: "｢"
+    output: "《"
+  - !<key>
+    output: "「"
