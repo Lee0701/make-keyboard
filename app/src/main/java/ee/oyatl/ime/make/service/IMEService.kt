@@ -39,7 +39,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     private var composingText: CharSequence = ""
     private var cursorAnchorInfo: CursorAnchorInfo? = null
 
-    private var inputViewWrapper: ViewGroup? = null
     private val clipboard: ClipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
     private var inputEngineSwitcher: InputEngineSwitcher? = null
 
@@ -99,15 +98,9 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     }
 
     override fun onCreateInputView(): View {
-        val inputView = inputEngineSwitcher?.currentView
-            ?: inputEngineSwitcher?.initView(this)
-            ?: View(this)
-        if(inputViewWrapper == null) {
-            inputViewWrapper = LinearLayoutCompat(this).apply {
-                gravity = Gravity.CENTER_HORIZONTAL
-            }
-        } else {
-            inputViewWrapper?.removeAllViews()
+        val inputView = inputEngineSwitcher?.initView(this) ?: View(this)
+        val inputViewWrapper = LinearLayoutCompat(this).apply {
+            gravity = Gravity.CENTER_HORIZONTAL
         }
         if(screenMode == "television") {
             val width = resources.getDimensionPixelSize(R.dimen.input_view_width)
@@ -116,8 +109,8 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
         }
-        inputViewWrapper?.addView(inputView)
-        return inputViewWrapper ?: View(this)
+        inputViewWrapper.addView(inputView)
+        return inputViewWrapper
     }
 
     override fun onCandidates(list: List<Candidate>) {
