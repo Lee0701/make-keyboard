@@ -103,40 +103,6 @@ data class InputEnginePreset(
         return getInputEngine(rootListener)
     }
 
-    fun mutable(): Mutable {
-        return Mutable(
-            type = this.type,
-            size = size.mutable(),
-            layout = this.layout.mutable(),
-            hangul = this.hangul.mutable(),
-            hanja = this.hanja.mutable(),
-            components = this.components.toMutableList(),
-            autoUnlockShift = this.autoUnlockShift,
-        )
-    }
-
-    data class Mutable (
-        var type: Type = Type.Latin,
-        var size: Size.Mutable = Size.Mutable(),
-        var layout: Layout.Mutable = Layout.Mutable(),
-        var hangul: Hangul.Mutable = Hangul.Mutable(),
-        var hanja: Hanja.Mutable = Hanja.Mutable(),
-        var components: MutableList<InputViewComponentType> = mutableListOf(),
-        var autoUnlockShift: Boolean = true
-    ) {
-        fun commit(): InputEnginePreset {
-            return InputEnginePreset(
-                type = type,
-                size = size.commit(),
-                layout = layout.commit(),
-                hangul = hangul.commit(),
-                hanja = hanja.commit(),
-                components = components.toList(),
-                autoUnlockShift = autoUnlockShift,
-            )
-        }
-    }
-
     @Serializable
     enum class Type {
         Direct, Latin, Hangul, Symbol
@@ -147,29 +113,7 @@ data class InputEnginePreset(
         val unifyHeight: Boolean = false,
         val defaultHeight: Boolean = true,
         val rowHeight: Int = 55,
-    ) {
-        fun mutable(): Mutable {
-            return Mutable(
-                unifyHeight = unifyHeight,
-                defaultHeight = defaultHeight,
-                rowHeight = rowHeight,
-            )
-        }
-
-        data class Mutable(
-            var unifyHeight: Boolean = false,
-            var defaultHeight: Boolean = true,
-            var rowHeight: Int = 55,
-        ) {
-            fun commit(): Size {
-                return Size(
-                    unifyHeight = unifyHeight,
-                    defaultHeight = defaultHeight,
-                    rowHeight = rowHeight,
-                )
-            }
-        }
-    }
+    )
 
     @Serializable
     data class Layout(
@@ -178,83 +122,18 @@ data class InputEnginePreset(
         val codeConvertTable: List<String> = listOf(),
         val overrideTable: List<String> = listOf(),
         val combinationTable: List<String> = listOf(),
-    ) {
-        fun mutable(): Mutable {
-            return Mutable(
-                softKeyboard = softKeyboard,
-                moreKeysTable = moreKeysTable,
-                codeConvertTable = codeConvertTable,
-                overrideTable = overrideTable,
-                combinationTable = combinationTable,
-            )
-        }
-
-        data class Mutable(
-            var softKeyboard: List<String> = listOf(),
-            var moreKeysTable: List<String> = listOf(),
-            var codeConvertTable: List<String> = listOf(),
-            var overrideTable: List<String> = listOf(),
-            var combinationTable: List<String> = listOf(),
-        ) {
-            fun commit(): Layout {
-                return Layout(
-                    softKeyboard = softKeyboard,
-                    moreKeysTable = moreKeysTable,
-                    codeConvertTable = codeConvertTable,
-                    overrideTable = overrideTable,
-                    combinationTable = combinationTable,
-                )
-            }
-        }
-    }
+    )
 
     @Serializable
     data class Hangul(
         val correctOrders: Boolean = true,
-    ) {
-        fun mutable(): Mutable {
-            return Mutable(
-                correctOrders = correctOrders,
-            )
-        }
-
-        data class Mutable(
-            var correctOrders: Boolean = true,
-        ) {
-            fun commit(): Hangul {
-                return Hangul(
-                    correctOrders = correctOrders
-                )
-            }
-        }
-    }
+    )
 
     @Serializable
     data class Hanja(
         val conversion: Boolean = false,
         val additionalDictionaries: Set<String> = mutableSetOf(),
-    ) {
-        fun mutable(): Mutable {
-            return Mutable(
-                conversion = conversion,
-                additionalDictionaries = additionalDictionaries.toMutableSet(),
-            )
-        }
-
-        data class Mutable(
-            var conversion: Boolean = false,
-            var prediction: Boolean = false,
-            var sortByContext: Boolean = false,
-            var additionalDictionaries: MutableSet<String> = mutableSetOf(),
-        ) {
-            fun commit(): Hanja {
-                return Hanja(
-                    conversion = conversion,
-                    additionalDictionaries = additionalDictionaries,
-                )
-            }
-        }
-    }
+    )
 
     enum class Mode(
         val disableTouch: Boolean
