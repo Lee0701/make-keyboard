@@ -58,12 +58,4 @@ abstract class BasicTableInputEngine(
             KeyEvent.KEYCODE_SHIFT_LEFT to shift
         )
     }
-
-    override fun getMoreKeys(state: ModifierKeyStateSet): Map<Int, Keyboard> {
-        return moreKeysTable.map.mapNotNull { (code, value) ->
-            val key = convertTable.getReversed(code, SimpleCodeConvertTable.EntryKey.fromKeyboardState(state))
-            if(key == null) null
-            else key to value
-        }.toMap()
-    }
 }

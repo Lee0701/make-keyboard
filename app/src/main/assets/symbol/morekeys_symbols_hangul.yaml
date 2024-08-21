@@ -1,6 +1,6 @@
 map:
-  0x5b: symbol/soft_morekeys_brace_left_hangul.yaml
-  0x5d: symbol/soft_morekeys_brace_right_hangul.yaml
-  0x28: symbol/soft_morekeys_brace_left_hangul.yaml
-  0x29: symbol/soft_morekeys_brace_right_hangul.yaml
-  0x20a9: symbol/soft_morekeys_won.yaml
+  "[": symbol/soft_morekeys_brace_left_hangul.yaml
+  "]": symbol/soft_morekeys_brace_right_hangul.yaml
+  "(": symbol/soft_morekeys_brace_left_hangul.yaml
+  ")": symbol/soft_morekeys_brace_right_hangul.yaml
+  "₩": symbol/soft_morekeys_won.yaml

@@ -1,7 +1,6 @@
 package ee.oyatl.ime.make.module.component
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.KeyEvent
 import android.view.View
 import androidx.preference.PreferenceManager
@@ -20,6 +19,7 @@ import ee.oyatl.ime.make.module.keyboardview.Themes
 import ee.oyatl.ime.make.preset.softkeyboard.Key
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
+import ee.oyatl.ime.make.module.inputengine.TableInputEngine
 import ee.oyatl.ime.make.module.keyboardview.Theme
 import ee.oyatl.ime.make.preset.table.CustomKeyCode
 
@@ -114,13 +114,12 @@ class KeyboardComponent(
         )
     }
 
-    private fun updateMoreKeys(moreKeys: Map<Int, Keyboard>) {
-        keyboardView?.updateMoreKeyKeyboards(moreKeys)
-    }
-
     private fun updateMoreKeys() {
         val inputEngine = connectedInputEngine ?: return
-        updateMoreKeys(inputEngine.getMoreKeys(modifiers))
+        if(inputEngine is TableInputEngine) {
+            val keyboardView = keyboardView ?: return
+            keyboardView.updateMoreKeysKeyboards(inputEngine.moreKeysTable.map)
+        }
     }
 
     override fun onKeyDown(code: Int, output: String?) {

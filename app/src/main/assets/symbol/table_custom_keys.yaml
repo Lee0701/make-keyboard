@@ -1,6 +1,8 @@
 !<simple>
 map:
   "KEYCODE_SOFT_COMMA":
-    base: 0x002c
+    base: ","
+    shift: "<"
   "KEYCODE_SOFT_PERIOD":
-    base: 0x002e
+    base: "."
+    shift: ">"

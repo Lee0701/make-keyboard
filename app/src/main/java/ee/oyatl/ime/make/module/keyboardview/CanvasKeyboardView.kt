@@ -192,11 +192,6 @@ class CanvasKeyboardView(
         }
     }
 
-    override fun updateMoreKeyKeyboards(keyboards: Map<Int, Keyboard>) {
-        moreKeysKeyboards.clear()
-        moreKeysKeyboards += keyboards
-    }
-
     data class CachedKey(
         override val key: Key,
         override val x: Int,

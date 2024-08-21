@@ -31,7 +31,6 @@ interface InputEngine {
 
     fun getLabels(state: ModifierKeyStateSet): Map<Int, CharSequence>
     fun getIcons(state: ModifierKeyStateSet, theme: Theme): Map<Int, Int>
-    fun getMoreKeys(state: ModifierKeyStateSet): Map<Int, Keyboard>
 
     interface Listener {
         fun onComposingText(text: CharSequence)

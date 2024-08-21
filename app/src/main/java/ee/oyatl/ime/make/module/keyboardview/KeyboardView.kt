@@ -109,10 +109,7 @@ abstract class KeyboardView(
             if(key.key.repeatable || longPressAction == FlickLongPressAction.Repeat) {
                 repeater()
             } else if(showMoreKeys) {
-                val moreKeysResult = showMoreKeysPopup(key, pointerId)
-                // Call this once to initially point a key on popup
-                handler?.post { onTouchMove(key, pointerId, x, y) }
-                if(moreKeysResult) return@postDelayed
+                if(maybeShowMoreKeysPopup(key, pointerId, x, y)) return@postDelayed
             }
             if(this.hapticFeedback && longPressAction != FlickLongPressAction.None) {
                 this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
@@ -180,9 +177,7 @@ abstract class KeyboardView(
 
                     if(showMoreKeys) {
                         handler.postDelayed({
-                            showMoreKeysPopup(newKey, pointerId)
-                            // Call this once to initially point a key on popup
-                            handler?.post { onTouchMove(newKey, pointerId, x, y) }
+                            maybeShowMoreKeysPopup(newKey, pointerId, x, y)
                         }, longPressDuration)
                     }
 
@@ -218,8 +213,12 @@ abstract class KeyboardView(
         listener.onKeyFlick(flickDirection, key.key.code, key.key.output)
     }
 
+    fun updateMoreKeysKeyboards(keyboards: Map<Int, Keyboard>) {
+        moreKeysKeyboards.clear()
+        moreKeysKeyboards += keyboards
+    }
+
     abstract fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Int>)
-    abstract fun updateMoreKeyKeyboards(keyboards: Map<Int, Keyboard>)
     abstract fun postViewChanged()
     abstract fun highlight(key: KeyWrapper)
 
@@ -262,8 +261,15 @@ abstract class KeyboardView(
         }
     }
 
+    private fun maybeShowMoreKeysPopup(key: KeyWrapper, pointerId: Int, x: Int, y: Int): Boolean {
+        val result = showMoreKeysPopup(key, pointerId)
+        // Call this once to initially point a key on popup
+        handler?.post { onTouchMove(key, pointerId, x, y) }
+        return result
+    }
+
     private fun showMoreKeysPopup(key: KeyWrapper, pointerId: Int): Boolean {
-        val moreKeysKeyboard = moreKeysKeyboards[key.key.code] ?: return false
+        val moreKeysKeyboard = moreKeysKeyboards[key.key.moreKeys] ?: return false
         val keyPopup = MoreKeysPopup(context, key, moreKeysKeyboard, listener)
         popups[pointerId]?.cancel()
         popups[pointerId] = keyPopup

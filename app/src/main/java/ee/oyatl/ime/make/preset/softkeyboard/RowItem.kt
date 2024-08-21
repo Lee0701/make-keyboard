@@ -1,5 +1,6 @@
 package ee.oyatl.ime.make.preset.softkeyboard
 
+import ee.oyatl.ime.make.preset.serialization.CompoundKeyOutputSerializer
 import ee.oyatl.ime.make.preset.serialization.KeyCodeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -26,6 +27,7 @@ data class Key(
     override val width: Float = 1f,
     val repeatable: Boolean = false,
     val type: KeyType = KeyType.Alphanumeric,
+    @Serializable(with = CompoundKeyOutputSerializer::class) val moreKeys: Int? = null
 ): RowItem
 
 @SerialName("include")

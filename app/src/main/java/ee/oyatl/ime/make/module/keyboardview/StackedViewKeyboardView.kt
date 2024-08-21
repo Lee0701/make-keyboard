@@ -157,11 +157,6 @@ class StackedViewKeyboardView(
         }
     }
 
-    override fun updateMoreKeyKeyboards(keyboards: Map<Int, Keyboard>) {
-        moreKeysKeyboards.clear()
-        moreKeysKeyboards += keyboards
-    }
-
     override fun postViewChanged() {
         wrappedKeys.filterIsInstance<KeyViewWrapper>().forEach { key ->
             key.binding.root.isPressed = keyStates[key.key] == true
