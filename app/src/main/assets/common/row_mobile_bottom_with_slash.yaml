@@ -7,6 +7,7 @@ keys:
 - !<key>
   code: "KEYCODE_SOFT_PERIOD"
   output: "."
+  moreKeys: ","
   type: "AlphanumericAlt"
 - !<key>
   code: "KEYCODE_LANGUAGE_SWITCH"
@@ -20,6 +21,7 @@ keys:
 - !<key>
   code: "KEYCODE_SLASH"
   output: "/"
+  moreKeys: "."
   type: "AlphanumericAlt"
 - !<key>
   code: "KEYCODE_ENTER"

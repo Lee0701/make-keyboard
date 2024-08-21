@@ -6,11 +6,9 @@ import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import ee.oyatl.ime.make.module.keyboardview.Theme
 import ee.oyatl.ime.make.preset.softkeyboard.KeyIconType
-import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
 import ee.oyatl.ime.make.preset.table.CharOverrideTable
 import ee.oyatl.ime.make.preset.table.CodeConvertTable
 import ee.oyatl.ime.make.preset.table.MoreKeysTable
-import ee.oyatl.ime.make.preset.table.SimpleCodeConvertTable
 
 abstract class BasicTableInputEngine(
     override val convertTable: CodeConvertTable,
@@ -57,13 +55,5 @@ abstract class BasicTableInputEngine(
         return mapOf(
             KeyEvent.KEYCODE_SHIFT_LEFT to shift
         )
-    }
-
-    override fun getMoreKeys(state: ModifierKeyStateSet): Map<Int, Keyboard> {
-        return moreKeysTable.map.mapNotNull { (code, value) ->
-            val key = convertTable.getReversed(code, SimpleCodeConvertTable.EntryKey.fromKeyboardState(state))
-            if(key == null) null
-            else key to value
-        }.toMap()
     }
 }

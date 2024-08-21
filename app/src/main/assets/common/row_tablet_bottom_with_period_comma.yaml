@@ -16,9 +16,11 @@ keys:
 - !<key>
   code: "KEYCODE_SOFT_COMMA"
   output: ","
+  moreKeys: ","
 - !<key>
   code: "KEYCODE_SOFT_PERIOD"
   output: "."
+  moreKeys: "."
 - !<key>
   code: "KEYCODE_SYM"
   iconType: "Option"

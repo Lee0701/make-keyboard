@@ -32,10 +32,6 @@ class DirectInputEngine(
         return emptyMap()
     }
 
-    override fun getMoreKeys(state: ModifierKeyStateSet): Map<Int, Keyboard> {
-        return mapOf()
-    }
-
     companion object {
         fun getLabels(keyCharacterMap: KeyCharacterMap, state: ModifierKeyStateSet): Map<Int, CharSequence> {
             val range = 0 .. 304
