@@ -17,7 +17,7 @@
     <!-- Layout for a Preference in a PreferenceActivity. The
          Preference is able to place a specific widget for its particular
          type in the "widget_frame" layout. -->
-<androidx.appcompat.widget.LinearLayoutCompat
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/Preference"
@@ -27,7 +27,7 @@
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:layout_marginVertical="4dp">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
@@ -35,7 +35,7 @@
         android:paddingVertical="4dp"
         android:paddingHorizontal="16dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@android:id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@android:id/title"
                 tools:text="Title"
                 android:theme="@style/Theme.MakeKeyboard.Preference.Title"
@@ -57,7 +57,7 @@
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@android:id/summary"
                 tools:text="summary for this setting."
                 android:theme="@style/Theme.MakeKeyboard.Preference.Summary"
@@ -70,14 +70,14 @@
 
         </RelativeLayout>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
     <!-- Preference should place its actual preference widget here. -->
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:id="@android:id/widget_frame"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="vertical" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</LinearLayout>

@@ -10,7 +10,7 @@
     tools:layout_height="32dp"
     android:clipToPadding="false">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="?marginHorizontal"
@@ -18,18 +18,18 @@
         android:src="?background"
         app:tint="?backgroundTint" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/label"
         tools:text="A"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:tint="?iconTint" />
+        app:tint="?iconTint" />
 
 </FrameLayout>

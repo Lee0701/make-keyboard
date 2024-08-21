@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.widget.LinearLayoutCompat
+import android.widget.LinearLayout
 import ee.oyatl.ime.make.databinding.KeyboardBinding
 import ee.oyatl.ime.make.databinding.KeyboardKeyBinding
 import ee.oyatl.ime.make.databinding.KeyboardRowBinding
@@ -57,8 +57,8 @@ class StackedViewKeyboardView(
     private fun initRowView(row: Row, theme: Theme): RowViewWrapper {
         val wrappers = mutableListOf<RowItemViewWrapper>()
         val binding = KeyboardRowBinding.inflate(LayoutInflater.from(context), null, false).apply {
-            root.layoutParams = LinearLayoutCompat.LayoutParams(
-                LinearLayoutCompat.LayoutParams.MATCH_PARENT, 0
+            root.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0
             ).apply {
                 weight = 1f
             }
@@ -83,8 +83,8 @@ class StackedViewKeyboardView(
 
     private fun initSpacerView(spacerModel: Spacer): SpacerViewWrapper {
         val binding = KeyboardSpacerBinding.inflate(LayoutInflater.from(context), null, false).apply {
-            root.layoutParams = LinearLayoutCompat.LayoutParams(
-                0, LinearLayoutCompat.LayoutParams.MATCH_PARENT
+            root.layoutParams = LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.MATCH_PARENT
             ).apply {
                 weight = spacerModel.width
             }
@@ -99,8 +99,8 @@ class StackedViewKeyboardView(
             val icon = theme.keyIcon[keyModel.iconType]
             if(keyModel.label != null) this.label.text = keyModel.label
             if(icon != null) this.icon.setImageResource(icon.resource)
-            root.layoutParams = LinearLayoutCompat.LayoutParams(
-                0, LinearLayoutCompat.LayoutParams.MATCH_PARENT
+            root.layoutParams = LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.MATCH_PARENT
             ).apply {
                 weight = keyModel.width
             }

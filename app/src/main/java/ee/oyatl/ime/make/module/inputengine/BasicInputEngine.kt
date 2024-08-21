@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.KeyCharacterMap
 import android.view.View
 import android.view.ViewGroup.LayoutParams
-import androidx.appcompat.widget.LinearLayoutCompat
+import android.widget.LinearLayout
 import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import ee.oyatl.ime.make.module.component.InputViewComponent
@@ -18,9 +18,9 @@ abstract class BasicInputEngine(
 
     override fun initView(context: Context): View? {
         val componentViews = components.map { it.initView(context) }
-        view = LinearLayoutCompat(context).apply {
+        view = LinearLayout(context).apply {
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-            orientation = LinearLayoutCompat.VERTICAL
+            orientation = LinearLayout.VERTICAL
             componentViews.forEach { addView(it) }
         }
         return view

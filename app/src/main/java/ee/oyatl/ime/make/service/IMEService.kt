@@ -17,8 +17,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.preference.PreferenceManager
 import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.make.R
@@ -99,12 +99,13 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
 
     override fun onCreateInputView(): View {
         val inputView = inputEngineSwitcher?.initView(this) ?: View(this)
-        val inputViewWrapper = LinearLayoutCompat(this).apply {
+        val inputViewWrapper = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_HORIZONTAL
         }
         if(screenMode == "television") {
             val width = resources.getDimensionPixelSize(R.dimen.input_view_width)
-            inputView.layoutParams = LinearLayoutCompat.LayoutParams(
+            inputView.layoutParams = LinearLayout.LayoutParams(
                 width,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )

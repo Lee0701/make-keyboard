@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import androidx.annotation.StringRes
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.databinding.ComponentLanguageTabbarBinding

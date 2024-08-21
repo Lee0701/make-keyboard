@@ -35,14 +35,20 @@
         <item name="iconTint">@color/key_fg_dark</item>
     </style>
 
-    <style name="Theme.MakeKeyboard.TabBar" parent="Theme.MakeKeyboard.TabBar.Base">
+    <style name="Theme.MakeKeyboard.TabBar">
         <item name="background">@color/keyboard_bg_dark</item>
+        <item name="marginVertical">@dimen/margin_small</item>
     </style>
 
-    <style name="Theme.MakeKeyboard.Tab" parent="Theme.MakeKeyboard.Tab.Base">
+    <style name="Theme.MakeKeyboard.Tab">
         <item name="background">@drawable/tab_bg</item>
         <item name="backgroundTint">@color/tab_bg_static_dark</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/tab_fg_dark</item>
+        <item name="tabHeight">@dimen/tabbar_height</item>
+        <item name="tabMargin">@dimen/margin_smaller</item>
+        <item name="tabPaddingVertical">0dp</item>
+        <item name="tabPaddingHorizontal">@dimen/margin_small</item>
     </style>
 
     <style name="Theme.MakeKeyboard.Candidates">

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         tools:layout_height="200dp" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:id="@+id/menu_overlay"
         android:background="@color/transparent_background_tint"
         android:visibility="gone"
@@ -24,7 +24,7 @@
         android:layout_marginVertical="4dp"
         android:gravity="center">
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <ImageButton
             android:id="@+id/btn_move_up"
             android:src="@drawable/baseline_move_up_24"
             app:tint="@color/icon_tint"
@@ -32,7 +32,7 @@
             android:layout_height="48dp"
             android:layout_marginHorizontal="4dp" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <ImageButton
             android:id="@+id/btn_remove"
             android:src="@drawable/baseline_delete_24"
             app:tint="@color/icon_tint"
@@ -40,7 +40,7 @@
             android:layout_height="48dp"
             android:layout_marginHorizontal="4dp" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <ImageButton
             android:id="@+id/btn_edit"
             android:src="@drawable/baseline_edit_24"
             app:tint="@color/icon_tint"
@@ -48,7 +48,7 @@
             android:layout_height="48dp"
             android:layout_marginHorizontal="4dp" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
+        <ImageButton
             android:id="@+id/btn_move_down"
             android:src="@drawable/baseline_move_down_24"
             android:scaleX="-1"
@@ -57,6 +57,6 @@
             android:layout_height="48dp"
             android:layout_marginHorizontal="4dp" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
 </FrameLayout>

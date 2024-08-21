@@ -3,8 +3,8 @@ package ee.oyatl.ime.make.service
 import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.LinearLayoutCompat
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.decodeFromStream
@@ -25,8 +25,8 @@ class ImportExportActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val contentView = LinearLayoutCompat(this).apply {
-            orientation = LinearLayoutCompat.VERTICAL
+        val contentView = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
         }
 
         val tables = listOf(
