@@ -71,7 +71,6 @@ class PresetLoader(
     fun modSymbol(preset: InputEnginePreset, language: String): InputEnginePreset {
         val moreKeysTable = mutableListOf<String>()
         val overrideTable = mutableListOf<String>()
-        moreKeysTable += "symbol/morekeys_common.yaml"
         when(language) {
             "ko" -> {
                 moreKeysTable += "symbol/morekeys_symbols_hangul.yaml"
