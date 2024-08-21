@@ -7,4 +7,5 @@ interface KeyboardListener {
     fun onKeyDown(code: Int, output: String?)
     fun onKeyUp(code: Int, output: String?)
     fun onKeyFlick(direction: FlickDirection, code: Int, output: String?)
+    fun onMoreKeys(code: Int, output: String?): Int?
 }

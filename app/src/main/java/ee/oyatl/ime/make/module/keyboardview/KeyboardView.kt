@@ -175,11 +175,9 @@ abstract class KeyboardView(
                 if(newKey.key != key.key) {
                     handler.removeCallbacksAndMessages(null)
 
-                    if(showMoreKeys) {
-                        handler.postDelayed({
-                            maybeShowMoreKeysPopup(newKey, pointerId, x, y)
-                        }, longPressDuration)
-                    }
+                    if(showMoreKeys) handler.postDelayed({
+                        maybeShowMoreKeysPopup(newKey, pointerId, x, y)
+                    }, longPressDuration)
 
                     keyStates[key.key] = false
                     keyStates[newKey.key] = true
@@ -269,8 +267,10 @@ abstract class KeyboardView(
     }
 
     private fun showMoreKeysPopup(key: KeyWrapper, pointerId: Int): Boolean {
-        val moreKeysKeyboard = moreKeysKeyboards[key.key.moreKeys] ?: return false
-        val keyPopup = MoreKeysPopup(context, key, moreKeysKeyboard, listener)
+        val charId = listener.onMoreKeys(key.key.code, key.key.output)
+        val keyId = key.key.moreKeys
+        val keyboard = moreKeysKeyboards[charId] ?: moreKeysKeyboards[keyId] ?: return false
+        val keyPopup = MoreKeysPopup(context, key, keyboard, listener)
         popups[pointerId]?.cancel()
         popups[pointerId] = keyPopup
         val popupX = getPopupX(key)

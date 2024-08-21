@@ -110,6 +110,10 @@ class MoreKeysPopup(
     override fun onKeyFlick(direction: FlickDirection, code: Int, output: String?) {
     }
 
+    override fun onMoreKeys(code: Int, output: String?): Int? {
+        return null
+    }
+
     override fun touchMove(x: Int, y: Int) {
         val pointX = x
         val pointY = y - keyHeight.roundToInt()

@@ -50,6 +50,7 @@ class KeyboardLayoutSettingsActivity: AppCompatActivity() {
             override fun onKeyDown(code: Int, output: String?) = Unit
             override fun onKeyUp(code: Int, output: String?) = Unit
             override fun onKeyFlick(direction: FlickDirection, code: Int, output: String?) = Unit
+            override fun onMoreKeys(code: Int, output: String?): Int? = null
         }
 
         val emptyInputEngineListener = object: InputEngine.Listener {

@@ -200,6 +200,14 @@ class KeyboardComponent(
         onInput()
     }
 
+    override fun onMoreKeys(code: Int, output: String?): Int? {
+        val inputEngine = connectedInputEngine ?: return null
+        if(inputEngine is TableInputEngine) {
+            return inputEngine.convertTable.get(code, modifiers)
+        }
+        return null
+    }
+
     private fun onInput() {
         shiftKeyHandler?.onInput()
     }

@@ -19,11 +19,6 @@ class SimpleCodeConvertTable(
             value.explode().map { (entryKey, charCode) -> (charCode to entryKey) to key }
         }.toMap()
 
-    private val moreKeysMap: Map<Int, Int> = map
-        .filterValues { entry -> entry.moreKeys != null }
-        .mapValues { (_, value) -> value.moreKeys as Int }
-        .toMap()
-
     override fun get(keyCode: Int, state: ModifierKeyStateSet): Int? {
         return map[keyCode]?.withKeyboardState(state)
     }
@@ -36,10 +31,6 @@ class SimpleCodeConvertTable(
 
     override fun getReversed(charCode: Int, entryKey: EntryKey): Int? {
         return reversedMap[charCode to entryKey]
-    }
-
-    override fun getMoreKeysKey(charCode: Int): Int? {
-        return moreKeysMap[charCode]
     }
 
     override fun plus(table: CodeConvertTable): CodeConvertTable {
@@ -66,7 +57,7 @@ class SimpleCodeConvertTable(
         @Serializable(with = CompoundKeyOutputSerializer::class) val capsLock: Int? = shift,
         @Serializable(with = CompoundKeyOutputSerializer::class) val alt: Int? = base,
         @Serializable(with = CompoundKeyOutputSerializer::class) val altShift: Int? = shift,
-        @Serializable(with = CompoundKeyOutputSerializer::class) val moreKeys: Int? = null
+        @Serializable(with = CompoundKeyOutputSerializer::class) val moreKeys: Int? = base
     ) {
         fun withKeyboardState(modifiers: ModifierKeyStateSet): Int? {
             val shiftPressed = modifiers.shift.pressed || modifiers.shift.pressing

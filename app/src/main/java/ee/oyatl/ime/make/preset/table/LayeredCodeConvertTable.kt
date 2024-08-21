@@ -34,10 +34,6 @@ class LayeredCodeConvertTable(
         return get(BASE_LAYER_NAME)?.getReversed(charCode, entryKey)
     }
 
-    override fun getMoreKeysKey(charCode: Int): Int? {
-        return layers.values.firstNotNullOfOrNull { it.getMoreKeysKey(charCode) }
-    }
-
     fun getReversed(layerId: String, charCode: Int, entryKey: SimpleCodeConvertTable.EntryKey): Int? {
         return get(layerId)?.getReversed(charCode, entryKey)
     }
