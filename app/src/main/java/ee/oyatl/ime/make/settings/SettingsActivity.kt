@@ -17,11 +17,16 @@ class SettingsActivity: AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.settings, SettingsFragment())
+            .replace(R.id.settings, RootPreferencesFragment())
             .commit()
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false)
+        PreferenceManager.setDefaultValues(this, R.xml.preferences_root, true)
+        PreferenceManager.setDefaultValues(this, R.xml.preferences_method, true)
+        PreferenceManager.setDefaultValues(this, R.xml.preferences_appearance, true)
+        PreferenceManager.setDefaultValues(this, R.xml.preferences_layout, true)
+        PreferenceManager.setDefaultValues(this, R.xml.preferences_behaviour, true)
+        PreferenceManager.setDefaultValues(this, R.xml.preferences_about, true)
     }
 
     override fun onStop() {
@@ -29,9 +34,39 @@ class SettingsActivity: AppCompatActivity() {
         IMEService.sendReloadIntent(this)
     }
 
-    class SettingsFragment: PreferenceFragmentCompat() {
+    class RootPreferencesFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.root_preferences, rootKey)
+            setPreferencesFromResource(R.xml.preferences_root, rootKey)
+        }
+    }
+
+    class MethodPreferencesFragment: PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            setPreferencesFromResource(R.xml.preferences_method, rootKey)
+        }
+    }
+
+    class AppearancePreferencesFragment: PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            setPreferencesFromResource(R.xml.preferences_appearance, rootKey)
+        }
+    }
+
+    class LayoutPreferencesFragment: PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            setPreferencesFromResource(R.xml.preferences_layout, rootKey)
+        }
+    }
+
+    class BehaviourPreferencesFragment: PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            setPreferencesFromResource(R.xml.preferences_behaviour, rootKey)
+        }
+    }
+
+    class AboutPreferencesFragment: PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            setPreferencesFromResource(R.xml.preferences_about, rootKey)
         }
     }
 }

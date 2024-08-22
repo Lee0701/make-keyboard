@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="resource" format="reference" />
+
     <attr name="background" format="reference" />
     <attr name="backgroundTint" format="color" />
     <attr name="marginHorizontal" format="dimension" />

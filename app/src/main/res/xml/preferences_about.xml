@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ee.oyatl.ime.make.settings.preference.StartActivityPreference
+        android:title="@string/pref_about_app_info_title"
+        android:summary="@string/pref_about_app_info_summary" />
+
+    <ee.oyatl.ime.make.settings.preference.OpenStorePreference
+        android:title="@string/pref_about_more_apps_title"
+        android:summary="@string/pref_about_more_apps_summary"
+        uri="https://play.google.com/store/search?q=pub:%E6%9D%8E%EF%BC%81&amp;c=apps"/>
+
+    <ee.oyatl.ime.make.settings.preference.OssLicensesMenuPreference
+        android:title="@string/pref_about_oss_licenses_title" />
+
+</androidx.preference.PreferenceScreen>

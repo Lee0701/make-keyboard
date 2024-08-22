@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ee.oyatl.ime.make.settings.preference.Preference
+        app:title="@string/pref_header_method_title"
+        app:fragment="ee.oyatl.ime.make.settings.SettingsActivity$MethodPreferencesFragment" />
+
+    <ee.oyatl.ime.make.settings.preference.Preference
+        app:title="@string/pref_header_appearance_title"
+        app:fragment="ee.oyatl.ime.make.settings.SettingsActivity$AppearancePreferencesFragment" />
+
+    <ee.oyatl.ime.make.settings.preference.Preference
+        app:title="@string/pref_header_layout_title"
+        app:fragment="ee.oyatl.ime.make.settings.SettingsActivity$LayoutPreferencesFragment" />
+
+    <ee.oyatl.ime.make.settings.preference.Preference
+        app:title="@string/pref_header_behaviour_title"
+        app:fragment="ee.oyatl.ime.make.settings.SettingsActivity$BehaviourPreferencesFragment" />
+
+    <ee.oyatl.ime.make.settings.preference.Preference
+        app:title="@string/pref_header_about_title"
+        app:fragment="ee.oyatl.ime.make.settings.SettingsActivity$AboutPreferencesFragment" />
+
+</androidx.preference.PreferenceScreen>

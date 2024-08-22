@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ee.oyatl.ime.make.settings.preference.ListPreference
+        app:key="appearance_theme"
+        app:defaultValue="@string/pref_appearance_theme_default"
+        app:entries="@array/appearance_themes"
+        app:entryValues="@array/appearance_theme_values"
+        app:title="@string/pref_appearance_theme_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ee.oyatl.ime.make.settings.preference.SliderPreference
+        app:key="appearance_keyboard_height"
+        app:valueFrom="30.0"
+        app:valueTo="100.0"
+        app:stepSize="5.0"
+        app:defaultValue="@string/pref_appearance_keyboard_height_default"
+        app:title="@string/pref_appearance_keyboard_height_title"
+        app:useSimpleSummaryProvider="true"/>
+
+    <ee.oyatl.ime.make.settings.preference.SwitchPreference
+        app:key="appearance_unify_height"
+        app:defaultValue="false"
+        app:title="@string/pref_appearance_unify_height_title"
+        app:summary="@string/pref_appearance_unify_height_summary" />
+
+    <ee.oyatl.ime.make.settings.preference.ListPreference
+        app:key="appearance_keyboard_view_type"
+        app:defaultValue="canvas"
+        app:entries="@array/appearance_keyboard_view_types"
+        app:entryValues="@array/appearance_keyboard_view_type_values"
+        app:title="@string/pref_appearance_keyboard_view_type_title"
+        app:summary="@string/pref_appearance_keyboard_view_type_summary" />
+
+    <ee.oyatl.ime.make.settings.preference.SwitchPreference
+        app:key="appearance_haptic_feedback"
+        app:defaultValue="true"
+        app:title="@string/pref_appearance_haptic_feedback_title" />
+
+    <ee.oyatl.ime.make.settings.preference.SwitchPreference
+        app:key="appearance_sound_feedback"
+        app:defaultValue="true"
+        app:title="@string/pref_appearance_sound_feedback_title" />
+
+    <ee.oyatl.ime.make.settings.preference.SwitchPreference
+        app:key="appearance_show_popups"
+        app:defaultValue="true"
+        app:title="@string/pref_appearance_show_popups_title" />
+
+    <ee.oyatl.ime.make.settings.preference.SwitchPreference
+        app:key="appearance_show_more_keys"
+        app:defaultValue="true"
+        app:title="@string/pref_appearance_show_more_keys_title"
+        app:summary="@string/pref_appearance_show_more_keys_summary" />
+
+</androidx.preference.PreferenceScreen>
