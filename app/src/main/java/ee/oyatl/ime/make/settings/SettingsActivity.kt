@@ -2,23 +2,29 @@ package ee.oyatl.ime.make.settings
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.ActionOnlyNavDirections
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navOptions
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceFragmentCompat.OnPreferenceStartFragmentCallback
 import androidx.preference.PreferenceManager
 import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.service.IMEService
 
-class SettingsActivity: AppCompatActivity() {
+class SettingsActivity
+    : AppCompatActivity(), OnPreferenceStartFragmentCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DynamicColors.applyToActivityIfAvailable(this)
 
         setContentView(R.layout.activity_settings)
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.settings, RootPreferencesFragment())
-            .commit()
+        if(savedInstanceState == null) {
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
+        }
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences_root, true)
@@ -32,6 +38,28 @@ class SettingsActivity: AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         IMEService.sendReloadIntent(this)
+    }
+
+    override fun onPreferenceStartFragment(
+        caller: PreferenceFragmentCompat,
+        pref: Preference
+    ): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_container)
+        val destination = navController.graph.find { dest ->
+            pref.fragment?.endsWith(dest.label ?: "") == true
+        }
+        if(destination != null) {
+            val direction = ActionOnlyNavDirections(destination.id)
+            navController.navigate(direction, navOptions {
+                anim {
+                    enter = R.anim.slide_in_right
+                    exit = R.anim.slide_out_left
+                    popEnter = R.anim.slide_in_left
+                    popExit = R.anim.slide_out_right
+                }
+            })
+        }
+        return true
     }
 
     class RootPreferencesFragment: PreferenceFragmentCompat() {
