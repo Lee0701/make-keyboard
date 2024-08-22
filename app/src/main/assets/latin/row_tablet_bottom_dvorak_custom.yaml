@@ -1,0 +1,3 @@
+keys:
+  - !<include>
+    name: "common/row_tablet_bottom.yaml"
