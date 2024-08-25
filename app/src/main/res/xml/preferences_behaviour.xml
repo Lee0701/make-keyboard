@@ -86,9 +86,4 @@
         app:title="@string/pref_behaviour_flick_action_right_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ee.oyatl.ime.make.settings.preference.HotkeyDialogPreference
-        app:key="behaviour_hardware_lang_switch_hotkey"
-        app:defaultValue="1,62"
-        app:title="@string/pref_behaviour_hardware_lang_switch_hotkey_title" />
-
 </androidx.preference.PreferenceScreen>
