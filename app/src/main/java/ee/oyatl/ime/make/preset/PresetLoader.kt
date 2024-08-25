@@ -4,16 +4,39 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.TypedValue
 import androidx.preference.PreferenceManager
+import com.charleskorn.kaml.decodeFromStream
+import java.io.File
 import kotlin.math.roundToInt
 
 class PresetLoader(
-    val context: Context,
+    val context: Context
 ) {
     private val pref: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val screenMode: String = pref.getString("layout_screen_mode", "mobile") ?: "mobile"
 
     private val unifyHeight: Boolean = pref.getBoolean("appearance_unify_height", false)
     private val rowHeight: Int = pref.getFloat("appearance_keyboard_height", 55f).roundToInt()
+
+    fun load(fileName: String, defaultFileName: String): InputEnginePreset {
+        return loadFromFilesDir(fileName)
+            ?: loadFromAssets(fileName)
+            ?: loadFromAssets(defaultFileName)
+            ?: InputEnginePreset()
+    }
+
+    private fun loadFromFilesDir(fileName: String): InputEnginePreset? {
+        val result = kotlin.runCatching {
+            InputEnginePreset.yaml.decodeFromStream<InputEnginePreset>(File(context.filesDir, fileName).inputStream())
+        }
+        return result.getOrNull()
+    }
+
+    private fun loadFromAssets(fileName: String): InputEnginePreset? {
+        val fromAssets = kotlin.runCatching {
+            InputEnginePreset.yaml.decodeFromStream<InputEnginePreset>(context.assets.open(fileName))
+        }
+        return fromAssets.getOrNull()
+    }
 
     fun mod(preset: InputEnginePreset): InputEnginePreset {
         return preset.copy(
