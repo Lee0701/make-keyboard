@@ -37,7 +37,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     private var composingText: CharSequence = ""
     private var cursorAnchorInfo: CursorAnchorInfo? = null
 
-    private val presetLoader: PresetLoader by lazy { PresetLoader(this) }
     private val clipboard: ClipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
     private var inputEngineSwitcher: InputEngineSwitcher? = null
 
@@ -58,9 +57,10 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
 
     private fun reload() {
         val pref = PreferenceManager.getDefaultSharedPreferences(this)
+        val presetLoader = PresetLoader(this)
 
-        val presets = loadPresets()
-        val (latinPreset, hangulPreset, symbolPreset) = presets.take(3)
+        val presets = loadPresets(presetLoader)
+        val (latinPreset, hangulPreset, symbolPreset) = presets
 
         val latinModule = presetLoader.modPreset(latinPreset)
         val latinSymbolModule = presetLoader.modPreset(symbolPreset.copy(language = "en"))
@@ -449,7 +449,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         return true
     }
 
-    private fun loadPresets(): List<InputEnginePreset> {
+    private fun loadPresets(presetLoader: PresetLoader): List<InputEnginePreset> {
         val latinPreset: InputEnginePreset
         val hangulPreset: InputEnginePreset
         val symbolPreset: InputEnginePreset

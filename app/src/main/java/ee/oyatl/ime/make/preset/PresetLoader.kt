@@ -82,7 +82,7 @@ class PresetLoader(
                 }
             }
         }
-        val layout = InputEnginePreset.Layout(
+        val layout = preset.layout.copy(
             softKeyboard = modFilenames(preset.layout.softKeyboard),
             moreKeysTable = modFilenames(preset.layout.moreKeysTable) + moreKeysTable,
             codeConvertTable = modFilenames(preset.layout.codeConvertTable),
