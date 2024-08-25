@@ -28,6 +28,7 @@ import ee.oyatl.ime.make.module.inputengine.InputEngine
 import ee.oyatl.ime.make.preset.InputEnginePreset
 import ee.oyatl.ime.make.preset.PresetLoader
 import ee.oyatl.ime.make.preset.table.CustomKeyCode
+import ee.oyatl.ime.make.settings.SettingsActivity
 import ee.oyatl.ime.make.settings.preference.HotkeyDialogPreference
 import kotlin.math.abs
 
@@ -50,6 +51,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
 
     override fun onCreate() {
         super.onCreate()
+        SettingsActivity.setDefaultValues(this)
         reload()
     }
 

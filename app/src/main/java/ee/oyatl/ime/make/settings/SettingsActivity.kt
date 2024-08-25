@@ -1,5 +1,6 @@
 package ee.oyatl.ime.make.settings
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ActionOnlyNavDirections
@@ -26,13 +27,7 @@ class SettingsActivity
             val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
         }
         supportActionBar?.setDisplayShowHomeEnabled(true)
-
-        PreferenceManager.setDefaultValues(this, R.xml.preferences_root, true)
-        PreferenceManager.setDefaultValues(this, R.xml.preferences_method, true)
-        PreferenceManager.setDefaultValues(this, R.xml.preferences_appearance, true)
-        PreferenceManager.setDefaultValues(this, R.xml.preferences_layout, true)
-        PreferenceManager.setDefaultValues(this, R.xml.preferences_behaviour, true)
-        PreferenceManager.setDefaultValues(this, R.xml.preferences_about, true)
+        setDefaultValues(this)
     }
 
     override fun onStop() {
@@ -95,6 +90,17 @@ class SettingsActivity
     class AboutPreferencesFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.preferences_about, rootKey)
+        }
+    }
+
+    companion object {
+        fun setDefaultValues(context: Context) {
+            PreferenceManager.setDefaultValues(context, R.xml.preferences_root, true)
+            PreferenceManager.setDefaultValues(context, R.xml.preferences_method, true)
+            PreferenceManager.setDefaultValues(context, R.xml.preferences_appearance, true)
+            PreferenceManager.setDefaultValues(context, R.xml.preferences_layout, true)
+            PreferenceManager.setDefaultValues(context, R.xml.preferences_behaviour, true)
+            PreferenceManager.setDefaultValues(context, R.xml.preferences_about, true)
         }
     }
 }
