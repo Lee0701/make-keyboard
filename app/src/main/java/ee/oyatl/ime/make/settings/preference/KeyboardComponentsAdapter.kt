@@ -51,7 +51,7 @@ class KeyboardComponentsAdapter(
             val mode =
                 if(previewMode) InputEnginePreset.Mode.Preview
                 else InputEnginePreset.Mode.Edit
-            val engine = loader.mod(preset).inflate(
+            val engine = loader.modPreset(preset).inflate(
                 context = context,
                 rootListener = KeyboardLayoutSettingsActivity.emptyInputEngineListener,
                 mode = mode

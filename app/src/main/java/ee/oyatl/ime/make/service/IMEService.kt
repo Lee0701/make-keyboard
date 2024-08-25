@@ -59,10 +59,10 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         val presets = loadPresets()
         val (latinPreset, hangulPreset, symbolPreset) = presets.take(3)
 
-        val latinModule = presetLoader.modLatin(latinPreset)
-        val latinSymbolModule = presetLoader.modSymbol(symbolPreset, "en")
-        val hangulModule = presetLoader.modHangul(hangulPreset)
-        val hangulSymbolModule = presetLoader.modSymbol(symbolPreset, "ko")
+        val latinModule = presetLoader.modPreset(latinPreset)
+        val latinSymbolModule = presetLoader.modPreset(symbolPreset.copy(language = "en"))
+        val hangulModule = presetLoader.modPreset(hangulPreset)
+        val hangulSymbolModule = presetLoader.modPreset(symbolPreset.copy(language = "ko"))
 
         val latinInputEngine = latinModule.inflate(this, this)
         val latinSymbolInputEngine = latinSymbolModule.inflate(this, this)

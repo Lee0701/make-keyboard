@@ -189,7 +189,7 @@ class KeyboardLayoutSettingsFragment
         val context = context ?: return
         val frame = activity?.findViewById<FrameLayout>(R.id.preview_mode_frame) ?: return
         val preset = preferenceDataStore?.preset ?: return
-        val engine = loader?.mod(preset)?.inflate(
+        val engine = loader?.modPreset(preset)?.inflate(
             context, emptyInputEngineListener, InputEnginePreset.Mode.Preview) ?: return
         frame.removeAllViews()
         frame.addView(engine.initView(context))
