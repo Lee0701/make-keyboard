@@ -26,6 +26,7 @@ import ee.oyatl.ime.make.module.candidates.CandidateListener
 import ee.oyatl.ime.make.module.component.LanguageTabBarComponent
 import ee.oyatl.ime.make.module.inputengine.InputEngine
 import ee.oyatl.ime.make.preset.InputEnginePreset
+import ee.oyatl.ime.make.preset.InputViewComponentType
 import ee.oyatl.ime.make.preset.PresetLoader
 import ee.oyatl.ime.make.preset.table.CustomKeyCode
 import ee.oyatl.ime.make.settings.SettingsActivity
@@ -449,24 +450,32 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     }
 
     private fun loadPresets(): List<InputEnginePreset> {
-        if(!hardKeyboardHidden) {
-            val latinHardFileName = getString(R.string.preset_file_latin_hard)
-            val hangulHardFileName = getString(R.string.preset_file_hangul_hard)
+        val latinPreset: InputEnginePreset
+        val hangulPreset: InputEnginePreset
+        val symbolPreset: InputEnginePreset
 
-            val hardLatinPreset = presetLoader.load(latinHardFileName, "preset/preset_latin_qwerty.yaml")
-            val hardHangulPreset = presetLoader.load(hangulHardFileName, "preset/preset_3set_390.yaml")
-            return listOf(hardLatinPreset, hardHangulPreset, InputEnginePreset())
+        if(hardKeyboardHidden) {
+            val latinFileName = getString(R.string.preset_file_latin_soft)
+            val hangulFileName = getString(R.string.preset_file_hangul_soft)
+            val symbolFileName = getString(R.string.preset_file_symbol_soft)
+
+            latinPreset = presetLoader.load(latinFileName, "preset/preset_latin_qwerty.yaml")
+            hangulPreset = presetLoader.load(hangulFileName, "preset/preset_3set_390.yaml")
+            symbolPreset = presetLoader.load(symbolFileName, "preset/preset_symbol_g.yaml")
+        } else {
+            val latinFileName = getString(R.string.preset_file_latin_hard)
+            val hangulFileName = getString(R.string.preset_file_hangul_hard)
+
+            latinPreset = presetLoader.loadHardware(latinFileName, "preset/preset_latin_qwerty.yaml")
+            hangulPreset = presetLoader.loadHardware(hangulFileName, "preset/preset_3set_390.yaml")
+            symbolPreset = InputEnginePreset()
         }
 
-        val latinSoftFileName = getString(R.string.preset_file_latin_soft)
-        val hangulSoftFileName = getString(R.string.preset_file_hangul_soft)
-        val symbolSoftFileName = getString(R.string.preset_file_symbol_soft)
-
-        val latinPreset = presetLoader.load(latinSoftFileName, "preset/preset_latin_qwerty.yaml")
-        val hangulPreset = presetLoader.load(hangulSoftFileName, "preset/preset_3set_390.yaml")
-        val symbolPreset = presetLoader.load(symbolSoftFileName, "preset/preset_symbol_g.yaml")
-
-        return listOf(latinPreset, hangulPreset, symbolPreset)
+        return listOf(
+            latinPreset.copy(language = "en"),
+            hangulPreset.copy(language = "ko"),
+            symbolPreset
+        )
     }
 
     companion object {

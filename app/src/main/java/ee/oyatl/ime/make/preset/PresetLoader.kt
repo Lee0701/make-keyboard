@@ -24,6 +24,14 @@ class PresetLoader(
             ?: InputEnginePreset()
     }
 
+    fun loadHardware(fileName: String, defaultFileName: String): InputEnginePreset {
+        return loadFromFilesDir(fileName)
+            ?: loadFromAssets(fileName)
+            ?: loadFromAssets(defaultFileName)
+                ?.copy(components = listOf(InputViewComponentType.LanguageTabBar))
+            ?: InputEnginePreset()
+    }
+
     private fun loadFromFilesDir(fileName: String): InputEnginePreset? {
         val result = kotlin.runCatching {
             InputEnginePreset.yaml.decodeFromStream<InputEnginePreset>(File(context.filesDir, fileName).inputStream())

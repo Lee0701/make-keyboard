@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.INVISIBLE
 import androidx.recyclerview.widget.RecyclerView.VISIBLE
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.charleskorn.kaml.decodeFromStream
+import com.charleskorn.kaml.encodeToStream
 import com.google.android.material.snackbar.Snackbar
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.preset.InputEnginePreset
@@ -75,9 +77,10 @@ class KeyboardLayoutSettingsFragment
         val template = template ?: return
 
         val file = File(context.filesDir, fileName)
-        val create = !file.exists()
-        if(create) {
-            file.outputStream().write(context.assets.open(template).readBytes())
+        if(!file.exists()) {
+            var preset = InputEnginePreset.yaml.decodeFromStream<InputEnginePreset>(context.assets.open(template))
+            if(hardware) preset = preset.copy(components = listOf(InputViewComponentType.LanguageTabBar))
+            InputEnginePreset.yaml.encodeToStream(preset, file.outputStream())
         }
 
         keyboardViewType = rootPreferences.getString("appearance_keyboard_view_type", "canvas") ?: keyboardViewType
