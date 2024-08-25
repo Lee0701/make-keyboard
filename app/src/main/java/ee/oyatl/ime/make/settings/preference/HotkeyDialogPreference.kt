@@ -67,6 +67,11 @@ class HotkeyDialogPreference(
                 modifiers = parseModifiers(str)
                 keycode = parseKeycode(str)
             }
+            .setOnCancelListener {
+                val str = getPersistedString("")
+                modifiers = parseModifiers(str)
+                keycode = parseKeycode(str)
+            }
             .show()
         view.keycode.requestFocus()
     }
