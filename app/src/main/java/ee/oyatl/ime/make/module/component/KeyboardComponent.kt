@@ -43,9 +43,7 @@ class KeyboardComponent(
     private var theme: Theme = Themes.Static
     private var keyboardView: KeyboardView? = null
 
-    private var _modifiers: ModifierKeyStateSet = ModifierKeyStateSet()
-    private val modifiers: ModifierKeyStateSet
-        get() = _modifiers.copy(shift = connectedInputEngine?.shiftKeyHandler?.state ?: _modifiers.shift)
+    private var modifiers: ModifierKeyStateSet = ModifierKeyStateSet()
     private var ignoreCode: Int = 0
 
     override fun initView(context: Context): View? {

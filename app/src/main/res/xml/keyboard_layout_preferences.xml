@@ -12,7 +12,7 @@
         app:summary="@string/pref_layout_preset_summary" />
 
     <ee.oyatl.ime.make.settings.preference.PreferenceCategory
-        app:title="@string/pref_soft_keyboard_header_title">
+        app:title="@string/pref_layout_header_soft_keyboard_title">
 
         <ee.oyatl.ime.make.settings.preference.SwitchPreference
             app:key="soft_keyboard_default_height"
@@ -33,7 +33,7 @@
 
     <ee.oyatl.ime.make.settings.preference.PreferenceCategory
         android:key="input_layer"
-        android:title="@string/pref_header_input_title">
+        android:title="@string/pref_layout_header_input_title">
 
         <ee.oyatl.ime.make.settings.preference.SwitchPreference
             app:key="input_hangul_correct_orders"
