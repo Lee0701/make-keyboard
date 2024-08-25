@@ -62,7 +62,11 @@ class HotkeyDialogPreference(
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 persistString("$modifiers,$keycode")
             }
-            .setNegativeButton(android.R.string.cancel) { _, _ -> }
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                val str = getPersistedString("")
+                modifiers = parseModifiers(str)
+                keycode = parseKeycode(str)
+            }
             .show()
         view.keycode.requestFocus()
     }
