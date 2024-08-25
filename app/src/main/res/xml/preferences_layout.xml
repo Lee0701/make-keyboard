@@ -36,11 +36,13 @@
         <ee.oyatl.ime.make.settings.preference.EnterKeyboardSettingsPreference
             app:fileName="@string/preset_file_latin_hard"
             app:template="preset/preset_latin_qwerty.yaml"
+            app:hardware="true"
             app:title="@string/pref_layout_hard_latin_settings_title" />
 
         <ee.oyatl.ime.make.settings.preference.EnterKeyboardSettingsPreference
             app:fileName="@string/preset_file_hangul_hard"
             app:template="preset/preset_3set_390.yaml"
+            app:hardware="true"
             app:title="@string/pref_layout_hard_hangul_settings_title" />
 
     </ee.oyatl.ime.make.settings.preference.PreferenceCategory>

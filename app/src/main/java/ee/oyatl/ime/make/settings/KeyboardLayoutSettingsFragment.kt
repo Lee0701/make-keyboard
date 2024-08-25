@@ -49,6 +49,10 @@ class KeyboardLayoutSettingsFragment
     private var keyboardViewType: String = "canvas"
     private var themeName: String = "theme_dynamic"
 
+    private val fileName: String? by lazy { arguments?.getString(ARG_FILENAME) }
+    private val template: String? by lazy { arguments?.getString(ARG_TEMPLATE) }
+    private val hardware: Boolean by lazy { arguments?.getBoolean(ARG_HARDWARE) ?: false }
+
     private var previewMode: Boolean = false
 
     override fun onCreateView(
@@ -67,11 +71,12 @@ class KeyboardLayoutSettingsFragment
         val rootPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         this.loader = loader
 
-        val fileName = arguments?.getString(ARG_FILENAME) ?: return
-        val template = arguments?.getString(ARG_TEMPLATE) ?: return
+        val fileName = fileName ?: return
+        val template = template ?: return
 
         val file = File(context.filesDir, fileName)
-        if(!file.exists()) {
+        val create = !file.exists()
+        if(create) {
             file.outputStream().write(context.assets.open(template).readBytes())
         }
 
@@ -157,7 +162,7 @@ class KeyboardLayoutSettingsFragment
         val hasMainKeyboardComponent = preset.components.any { it == InputViewComponentType.MainKeyboard }
         val hasCandidatesComponent = preset.components.any { it == InputViewComponentType.Candidates }
         val hanjaConversionIsOn = preset.hanja.conversion
-        if(!hasMainKeyboardComponent) {
+        if(!hardware && !hasMainKeyboardComponent) {
             Snackbar.make(requireView(), R.string.msg_main_keyboard_component_missing, Snackbar.LENGTH_LONG)
                 .setAction(R.string.action_add_component) {
                     val pref = preferenceDataStore ?: return@setAction
@@ -352,5 +357,6 @@ class KeyboardLayoutSettingsFragment
 
         const val ARG_FILENAME = "filename"
         const val ARG_TEMPLATE = "template"
+        const val ARG_HARDWARE = "hardware"
     }
 }
