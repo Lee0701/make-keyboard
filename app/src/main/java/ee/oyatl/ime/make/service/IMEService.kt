@@ -3,7 +3,6 @@ package ee.oyatl.ime.make.service
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
@@ -17,10 +16,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.preference.PreferenceManager
-import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.modifiers.ModifierKeyState
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
@@ -29,16 +26,18 @@ import ee.oyatl.ime.make.module.candidates.CandidateListener
 import ee.oyatl.ime.make.module.component.LanguageTabBarComponent
 import ee.oyatl.ime.make.module.inputengine.InputEngine
 import ee.oyatl.ime.make.preset.InputEnginePreset
+import ee.oyatl.ime.make.preset.InputViewComponentType
 import ee.oyatl.ime.make.preset.PresetLoader
 import ee.oyatl.ime.make.preset.table.CustomKeyCode
+import ee.oyatl.ime.make.settings.SettingsActivity
 import ee.oyatl.ime.make.settings.preference.HotkeyDialogPreference
-import java.io.File
 import kotlin.math.abs
 
 class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener, LanguageTabBarComponent.Listener {
     private var composingText: CharSequence = ""
     private var cursorAnchorInfo: CursorAnchorInfo? = null
 
+    private val presetLoader: PresetLoader by lazy { PresetLoader(this) }
     private val clipboard: ClipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
     private var inputEngineSwitcher: InputEngineSwitcher? = null
 
@@ -46,22 +45,27 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     private var languageSwitchKeycode: Int = HotkeyDialogPreference.DEFAULT_KEYCODE
 
     private var screenMode: String = "mobile"
+    private val softKeyboardHidden
+        get() = resources.configuration.keyboardHidden == Configuration.KEYBOARDHIDDEN_YES
+    private val hardKeyboardHidden
+        get() = resources.configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES
 
     override fun onCreate() {
         super.onCreate()
+        SettingsActivity.setDefaultValues(this)
         reload()
     }
 
     private fun reload() {
         val pref = PreferenceManager.getDefaultSharedPreferences(this)
-        val loader = PresetLoader(this)
 
-        val (latinPreset, hangulPreset, symbolPreset) = loadPresets(this)
+        val presets = loadPresets()
+        val (latinPreset, hangulPreset, symbolPreset) = presets.take(3)
 
-        val latinModule = loader.modLatin(latinPreset)
-        val latinSymbolModule = loader.modSymbol(symbolPreset, "en")
-        val hangulModule = loader.modHangul(hangulPreset)
-        val hangulSymbolModule = loader.modSymbol(symbolPreset, "ko")
+        val latinModule = presetLoader.modPreset(latinPreset)
+        val latinSymbolModule = presetLoader.modPreset(symbolPreset.copy(language = "en"))
+        val hangulModule = presetLoader.modPreset(hangulPreset)
+        val hangulSymbolModule = presetLoader.modPreset(symbolPreset.copy(language = "ko"))
 
         val latinInputEngine = latinModule.inflate(this, this)
         val latinSymbolInputEngine = latinSymbolModule.inflate(this, this)
@@ -441,7 +445,37 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     }
 
     override fun onEvaluateInputViewShown(): Boolean {
-        return super.onEvaluateInputViewShown()
+        super.onEvaluateInputViewShown()
+        return true
+    }
+
+    private fun loadPresets(): List<InputEnginePreset> {
+        val latinPreset: InputEnginePreset
+        val hangulPreset: InputEnginePreset
+        val symbolPreset: InputEnginePreset
+
+        if(hardKeyboardHidden) {
+            val latinFileName = getString(R.string.preset_file_latin_soft)
+            val hangulFileName = getString(R.string.preset_file_hangul_soft)
+            val symbolFileName = getString(R.string.preset_file_symbol_soft)
+
+            latinPreset = presetLoader.load(latinFileName, "preset/preset_latin_qwerty.yaml")
+            hangulPreset = presetLoader.load(hangulFileName, "preset/preset_3set_390.yaml")
+            symbolPreset = presetLoader.load(symbolFileName, "preset/preset_symbol_g.yaml")
+        } else {
+            val latinFileName = getString(R.string.preset_file_latin_hard)
+            val hangulFileName = getString(R.string.preset_file_hangul_hard)
+
+            latinPreset = presetLoader.loadHardware(latinFileName, "preset/preset_latin_qwerty.yaml")
+            hangulPreset = presetLoader.loadHardware(hangulFileName, "preset/preset_3set_390.yaml")
+            symbolPreset = InputEnginePreset()
+        }
+
+        return listOf(
+            latinPreset.copy(language = "en"),
+            hangulPreset.copy(language = "ko"),
+            symbolPreset
+        )
     }
 
     companion object {
@@ -451,41 +485,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
             val intent = Intent(activity, IMEService::class.java)
             intent.putExtra(ACTION_RELOAD, true)
             activity.startService(intent)
-        }
-
-        fun loadPresets(context: Context): Triple<InputEnginePreset, InputEnginePreset, InputEnginePreset> {
-            fun showToast(fileName: String) {
-                val msg = context.getString(R.string.msg_preset_load_failed, fileName)
-                Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
-            }
-
-            val latinFileName = "preset_latin.yaml"
-            val hangulFileName = "preset_hangul.yaml"
-            val symbolFileName = "preset_symbol.yaml"
-
-            val latinPreset = loadPreset(context, latinFileName, "preset/preset_latin_qwerty.yaml")
-                ?: InputEnginePreset().apply { showToast(latinFileName) }
-            val hangulPreset = loadPreset(context, hangulFileName, "preset/preset_3set_390.yaml")
-                ?: InputEnginePreset().apply { showToast(hangulFileName) }
-            val symbolPreset = loadPreset(context, symbolFileName, "preset/preset_symbol_g.yaml")
-                ?: InputEnginePreset().apply { showToast(symbolFileName) }
-            return Triple(latinPreset, hangulPreset, symbolPreset)
-        }
-
-        private fun loadPreset(context: Context, fileName: String, defaultFilename: String): InputEnginePreset? {
-            val fromFilesDir = kotlin.runCatching {
-                InputEnginePreset.yaml.decodeFromStream<InputEnginePreset>(File(context.filesDir, fileName).inputStream())
-            }
-            if(fromFilesDir.isSuccess) return fromFilesDir.getOrNull()
-            val fromAssets = kotlin.runCatching {
-                InputEnginePreset.yaml.decodeFromStream<InputEnginePreset>(context.assets.open(fileName))
-            }
-            if(fromAssets.isSuccess) return fromAssets.getOrNull()
-            val defaultFromAssets = kotlin.runCatching {
-                InputEnginePreset.yaml.decodeFromStream<InputEnginePreset>(context.assets.open(defaultFilename))
-            }
-            if(defaultFromAssets.isSuccess) return defaultFromAssets.getOrNull()
-            return null
         }
     }
 }

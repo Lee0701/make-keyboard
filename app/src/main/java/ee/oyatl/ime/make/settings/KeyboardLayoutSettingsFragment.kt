@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.INVISIBLE
 import androidx.recyclerview.widget.RecyclerView.VISIBLE
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.charleskorn.kaml.decodeFromStream
+import com.charleskorn.kaml.encodeToStream
 import com.google.android.material.snackbar.Snackbar
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.preset.InputEnginePreset
@@ -49,6 +51,10 @@ class KeyboardLayoutSettingsFragment
     private var keyboardViewType: String = "canvas"
     private var themeName: String = "theme_dynamic"
 
+    private val fileName: String? by lazy { arguments?.getString(ARG_FILENAME) }
+    private val template: String? by lazy { arguments?.getString(ARG_TEMPLATE) }
+    private val hardware: Boolean by lazy { arguments?.getBoolean(ARG_HARDWARE) ?: false }
+
     private var previewMode: Boolean = false
 
     override fun onCreateView(
@@ -67,12 +73,14 @@ class KeyboardLayoutSettingsFragment
         val rootPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         this.loader = loader
 
-        val fileName = arguments?.getString(ARG_FILENAME) ?: return
-        val template = arguments?.getString(ARG_TEMPLATE) ?: return
+        val fileName = fileName ?: return
+        val template = template ?: return
 
         val file = File(context.filesDir, fileName)
         if(!file.exists()) {
-            file.outputStream().write(context.assets.open(template).readBytes())
+            var preset = InputEnginePreset.yaml.decodeFromStream<InputEnginePreset>(context.assets.open(template))
+            if(hardware) preset = preset.copy(components = listOf(InputViewComponentType.LanguageTabBar))
+            InputEnginePreset.yaml.encodeToStream(preset, file.outputStream())
         }
 
         keyboardViewType = rootPreferences.getString("appearance_keyboard_view_type", "canvas") ?: keyboardViewType
@@ -157,7 +165,7 @@ class KeyboardLayoutSettingsFragment
         val hasMainKeyboardComponent = preset.components.any { it == InputViewComponentType.MainKeyboard }
         val hasCandidatesComponent = preset.components.any { it == InputViewComponentType.Candidates }
         val hanjaConversionIsOn = preset.hanja.conversion
-        if(!hasMainKeyboardComponent) {
+        if(!hardware && !hasMainKeyboardComponent) {
             Snackbar.make(requireView(), R.string.msg_main_keyboard_component_missing, Snackbar.LENGTH_LONG)
                 .setAction(R.string.action_add_component) {
                     val pref = preferenceDataStore ?: return@setAction
@@ -189,7 +197,7 @@ class KeyboardLayoutSettingsFragment
         val context = context ?: return
         val frame = activity?.findViewById<FrameLayout>(R.id.preview_mode_frame) ?: return
         val preset = preferenceDataStore?.preset ?: return
-        val engine = loader?.mod(preset)?.inflate(
+        val engine = loader?.modPreset(preset)?.inflate(
             context, emptyInputEngineListener, InputEnginePreset.Mode.Preview) ?: return
         frame.removeAllViews()
         frame.addView(engine.initView(context))
@@ -352,5 +360,6 @@ class KeyboardLayoutSettingsFragment
 
         const val ARG_FILENAME = "filename"
         const val ARG_TEMPLATE = "template"
+        const val ARG_HARDWARE = "hardware"
     }
 }

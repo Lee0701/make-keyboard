@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.TypedValue
 import androidx.preference.PreferenceManager
+import com.charleskorn.kaml.decodeFromStream
+import java.io.File
 import kotlin.math.roundToInt
 
 class PresetLoader(
-    val context: Context,
+    val context: Context
 ) {
     private val pref: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val screenMode: String = pref.getString("layout_screen_mode", "mobile") ?: "mobile"
@@ -15,11 +17,33 @@ class PresetLoader(
     private val unifyHeight: Boolean = pref.getBoolean("appearance_unify_height", false)
     private val rowHeight: Int = pref.getFloat("appearance_keyboard_height", 55f).roundToInt()
 
-    fun mod(preset: InputEnginePreset): InputEnginePreset {
-        return preset.copy(
-            layout = modLayout(preset.layout),
-            size = InputEnginePreset.Size(rowHeight = modHeight(preset.size.rowHeight)),
-        )
+    fun load(fileName: String, defaultFileName: String): InputEnginePreset {
+        return loadFromFilesDir(fileName)
+            ?: loadFromAssets(fileName)
+            ?: loadFromAssets(defaultFileName)
+            ?: InputEnginePreset()
+    }
+
+    fun loadHardware(fileName: String, defaultFileName: String): InputEnginePreset {
+        return loadFromFilesDir(fileName)
+            ?: loadFromAssets(fileName)
+            ?: loadFromAssets(defaultFileName)
+                ?.copy(components = listOf(InputViewComponentType.LanguageTabBar))
+            ?: InputEnginePreset()
+    }
+
+    private fun loadFromFilesDir(fileName: String): InputEnginePreset? {
+        val result = kotlin.runCatching {
+            InputEnginePreset.yaml.decodeFromStream<InputEnginePreset>(File(context.filesDir, fileName).inputStream())
+        }
+        return result.getOrNull()
+    }
+
+    private fun loadFromAssets(fileName: String): InputEnginePreset? {
+        val fromAssets = kotlin.runCatching {
+            InputEnginePreset.yaml.decodeFromStream<InputEnginePreset>(context.assets.open(fileName))
+        }
+        return fromAssets.getOrNull()
     }
 
     private fun modHeight(height: Int): Int {
@@ -46,47 +70,28 @@ class PresetLoader(
         return fileNames.map { it.format(screenMode) }
     }
 
-    private fun modLayout(layout: InputEnginePreset.Layout): InputEnginePreset.Layout {
+    fun modPreset(preset: InputEnginePreset): InputEnginePreset {
         val moreKeysTable = mutableListOf<String>()
         val overrideTable = mutableListOf<String>()
         moreKeysTable += "symbol/morekeys_common.yaml"
-        return InputEnginePreset.Layout(
-            softKeyboard = modFilenames(layout.softKeyboard),
-            moreKeysTable = modFilenames(layout.moreKeysTable) + moreKeysTable,
-            codeConvertTable = modFilenames(layout.codeConvertTable),
-            overrideTable = modFilenames(layout.overrideTable) + overrideTable,
-            combinationTable = modFilenames(layout.combinationTable),
-        )
-    }
-
-    private fun modPreset(preset: InputEnginePreset): InputEnginePreset {
-        return preset.copy(
-            layout = modLayout(preset.layout),
-            size = modSize(preset.size),
-        )
-    }
-
-    fun modLatin(preset: InputEnginePreset): InputEnginePreset = modPreset(preset)
-    fun modHangul(preset: InputEnginePreset): InputEnginePreset = modPreset(preset)
-    fun modSymbol(preset: InputEnginePreset, language: String): InputEnginePreset {
-        val moreKeysTable = mutableListOf<String>()
-        val overrideTable = mutableListOf<String>()
-        when(language) {
-            "ko" -> {
-                moreKeysTable += "symbol/morekeys_symbols_hangul.yaml"
-                overrideTable += "symbol/override_currency_won.yaml"
+        if(preset.type == InputEnginePreset.Type.Symbol) {
+            when(preset.language) {
+                "ko" -> {
+                    moreKeysTable += "symbol/morekeys_symbols_hangul.yaml"
+                    overrideTable += "symbol/override_currency_won.yaml"
+                }
             }
         }
+        val layout = InputEnginePreset.Layout(
+            softKeyboard = modFilenames(preset.layout.softKeyboard),
+            moreKeysTable = modFilenames(preset.layout.moreKeysTable) + moreKeysTable,
+            codeConvertTable = modFilenames(preset.layout.codeConvertTable),
+            overrideTable = modFilenames(preset.layout.overrideTable) + overrideTable,
+            combinationTable = modFilenames(preset.layout.combinationTable),
+        )
         return preset.copy(
-            layout = preset.layout.copy(
-                softKeyboard = modFilenames(preset.layout.softKeyboard),
-                moreKeysTable = modFilenames(preset.layout.moreKeysTable) + moreKeysTable,
-                codeConvertTable = modFilenames(preset.layout.codeConvertTable),
-                overrideTable = modFilenames(preset.layout.overrideTable) + overrideTable,
-                combinationTable = modFilenames(preset.layout.combinationTable),
-            ),
+            layout = layout,
             size = modSize(preset.size),
         )
     }
-
 }

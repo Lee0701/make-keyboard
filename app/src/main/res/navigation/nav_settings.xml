@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_settings"
+    app:startDestination="@id/rootPreferencesFragment">
+
+    <fragment
+        android:id="@+id/rootPreferencesFragment"
+        android:name="ee.oyatl.ime.make.settings.SettingsActivity$RootPreferencesFragment"
+        android:label="RootPreferencesFragment" />
+    <fragment
+        android:id="@+id/methodPreferencesFragment"
+        android:name="ee.oyatl.ime.make.settings.SettingsActivity$MethodPreferencesFragment"
+        android:label="MethodPreferencesFragment" />
+    <fragment
+        android:id="@+id/appearancePreferencesFragment"
+        android:name="ee.oyatl.ime.make.settings.SettingsActivity$AppearancePreferencesFragment"
+        android:label="AppearancePreferencesFragment" />
+    <fragment
+        android:id="@+id/layoutPreferencesFragment"
+        android:name="ee.oyatl.ime.make.settings.SettingsActivity$LayoutPreferencesFragment"
+        android:label="LayoutPreferencesFragment" />
+    <fragment
+        android:id="@+id/behaviourPreferencesFragment"
+        android:name="ee.oyatl.ime.make.settings.SettingsActivity$BehaviourPreferencesFragment"
+        android:label="BehaviourPreferencesFragment" />
+    <fragment
+        android:id="@+id/aboutPreferencesFragment"
+        android:name="ee.oyatl.ime.make.settings.SettingsActivity$AboutPreferencesFragment"
+        android:label="AboutPreferencesFragment" />
+</navigation>

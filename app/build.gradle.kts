@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kaml)
     implementation(libs.play.services.oss.licenses)
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ee.oyatl.ime.make.settings.preference.Preference
+        app:title="@string/pref_screen_method_title"
+        app:fragment="ee.oyatl.ime.make.settings.SettingsActivity$MethodPreferencesFragment" />
+
+    <ee.oyatl.ime.make.settings.preference.Preference
+        app:title="@string/pref_screen_appearance_title"
+        app:fragment="ee.oyatl.ime.make.settings.SettingsActivity$AppearancePreferencesFragment" />
+
+    <ee.oyatl.ime.make.settings.preference.Preference
+        app:title="@string/pref_screen_layout_title"
+        app:fragment="ee.oyatl.ime.make.settings.SettingsActivity$LayoutPreferencesFragment" />
+
+    <ee.oyatl.ime.make.settings.preference.Preference
+        app:title="@string/pref_screen_behaviour_title"
+        app:fragment="ee.oyatl.ime.make.settings.SettingsActivity$BehaviourPreferencesFragment" />
+
+    <ee.oyatl.ime.make.settings.preference.Preference
+        app:title="@string/pref_screen_about_title"
+        app:fragment="ee.oyatl.ime.make.settings.SettingsActivity$AboutPreferencesFragment" />
+
+</androidx.preference.PreferenceScreen>

@@ -27,6 +27,7 @@ import kotlinx.serialization.modules.EmptySerializersModule
 @Serializable
 data class InputEnginePreset(
     val type: Type = Type.Latin,
+    val language: String = "en",
     val size: Size = Size(),
     val layout: Layout = Layout(),
     val hangul: Hangul = Hangul(),
