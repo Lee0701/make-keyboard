@@ -34,18 +34,21 @@
     <string name="pref_appearance_haptic_feedback_title">키 진동 효과</string>
     <string name="pref_appearance_sound_feedback_title">키 소리 효과</string>
 
+    <string name="pref_layout_header_soft_keyboard_title">화면 키보드</string>
+    <string name="pref_layout_header_hard_keyboard_title">외부 키보드</string>
+
     <string name="pref_screen_layout_title">키보드 배열</string>
     <string name="pref_layout_screen_mode_title">화면 모드</string>
     <string name="screen_mode_mobile">모바일</string>
     <string name="screen_mode_tablet">태블릿</string>
     <string name="screen_mode_television">텔레비전</string>
     <string name="screen_mode_full">풀사이즈</string>
-    <string name="pref_layout_hangul_preset_title">한글 키보드 배열</string>
-    <string name="pref_layout_latin_preset_title">로마자 키보드 배열</string>
-    <string name="pref_layout_symbol_preset_title">기호 키보드 배열</string>
     <string name="pref_layout_hangul_settings_title">한글 키보드 설정</string>
     <string name="pref_layout_latin_settings_title">로마자 키보드 설정</string>
     <string name="pref_layout_symbol_settings_title">기호 키보드 설정</string>
+    <string name="pref_layout_hard_hangul_settings_title">하드웨어 한글 키보드 설정</string>
+    <string name="pref_layout_hard_latin_settings_title">하드웨어 로마자 키보드 설정</string>
+
     <string name="layout_2set_ks5002">두벌식 KS 표준</string>
     <string name="layout_2set_old_hangul">두벌식 옛한글</string>
     <string name="layout_3set_390">세벌식 3–90</string>
@@ -61,7 +64,6 @@
     <string name="layout_symbol_b">기호 B</string>
     <string name="layout_symbol_g">기호 G</string>
 
-    <string name="pref_layout_header_soft_keyboard_title">화면 키보드</string>
     <string name="pref_layout_header_input_title">입력</string>
     <string name="pref_hangul_correct_orders_title">모아주기 사용</string>
     <string name="pref_hangul_correct_orders_summary">자모 입력 순서를 틀려도 자동으로 바로잡습니다.</string>
