@@ -45,6 +45,11 @@
             app:hardware="true"
             app:title="@string/pref_layout_hard_hangul_settings_title" />
 
+        <ee.oyatl.ime.make.settings.preference.HotkeyDialogPreference
+            app:key="behaviour_hardware_lang_switch_hotkey"
+            app:defaultValue="1,62"
+            app:title="@string/pref_behaviour_hardware_lang_switch_hotkey_title" />
+
     </ee.oyatl.ime.make.settings.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>
