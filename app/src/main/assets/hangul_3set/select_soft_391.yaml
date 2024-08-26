@@ -1,3 +1,4 @@
 mobile: "hangul_3set/soft_mobile_391.yaml"
 tablet: "hangul_3set/soft_tablet_391.yaml"
 television: "hangul_3set/soft_mobile_391.yaml"
+full: "common/soft_full_qwerty.yaml"

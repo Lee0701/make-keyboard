@@ -41,8 +41,8 @@
     <string name="pref_layout_screen_type_title">화면 종류</string>
     <string name="screen_type_mobile">모바일</string>
     <string name="screen_type_tablet">태블릿</string>
-    <string name="screen_type_television">텔레비전</string>
     <string name="screen_type_full">풀사이즈</string>
+    <string name="screen_type_television">텔레비전</string>
     <string name="pref_layout_hangul_settings_title">한글 키보드 설정</string>
     <string name="pref_layout_latin_settings_title">로마자 키보드 설정</string>
     <string name="pref_layout_symbol_settings_title">기호 키보드 설정</string>

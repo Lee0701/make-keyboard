@@ -38,8 +38,8 @@
     <string name="pref_layout_screen_type_title">Screen Type</string>
     <string name="screen_type_mobile">Mobile</string>
     <string name="screen_type_tablet">Tablet</string>
-    <string name="screen_type_television">Television</string>
     <string name="screen_type_full">Full</string>
+    <string name="screen_type_television">Television</string>
 
     <string name="pref_layout_header_soft_keyboard_title">On-screen Keyboard</string>
     <string name="pref_layout_header_hard_keyboard_title">Physical Keyboard</string>

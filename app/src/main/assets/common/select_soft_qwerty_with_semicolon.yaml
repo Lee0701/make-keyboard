@@ -1,3 +1,4 @@
 mobile: "common/soft_mobile_qwerty_with_semicolon.yaml"
 tablet: "common/soft_tablet_qwerty_with_semicolon.yaml"
 television: "common/soft_mobile_qwerty_with_semicolon.yaml"
+full: "common/soft_full_qwerty.yaml"

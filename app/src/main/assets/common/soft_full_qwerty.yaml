@@ -14,7 +14,7 @@ rows:
         width: 1.5
   - keys:
       - !<key>
-        code: "KEYCODE_TAB"
+        code: "KEYCODE_GRAVE"
         width: 0.5
       - !<include>
         name: "common/row_qwerty_alpha_1.yaml"
@@ -26,7 +26,9 @@ rows:
         code: "KEYCODE_BACKSLASH"
   - keys:
       - !<key>
-        code: "KEYCODE_CAPS"
+        code: "KEYCODE_CAPS_LOCK"
+        iconType: "Caps"
+        type: "Modifier"
       - !<include>
         name: "common/row_qwerty_alpha_2.yaml"
       - !<key>
