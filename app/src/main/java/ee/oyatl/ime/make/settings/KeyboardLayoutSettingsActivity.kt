@@ -38,7 +38,7 @@ class KeyboardLayoutSettingsActivity: AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        IMEService.sendReloadIntent(this)
+        IMEService.restartService()
     }
 
     override fun onDestroy() {

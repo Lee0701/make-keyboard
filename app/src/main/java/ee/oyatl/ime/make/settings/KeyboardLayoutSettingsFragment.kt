@@ -157,7 +157,7 @@ class KeyboardLayoutSettingsFragment
     override fun onStop() {
         super.onStop()
         checkPreferences()
-        IMEService.sendReloadIntent(activity ?: return)
+        IMEService.restartService()
     }
 
     private fun checkPreferences() {

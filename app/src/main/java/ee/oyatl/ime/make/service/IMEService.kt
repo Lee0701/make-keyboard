@@ -16,7 +16,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.widget.LinearLayoutCompat
+import android.widget.LinearLayout
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.modifiers.ModifierKeyState
@@ -50,6 +50,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
 
     override fun onCreate() {
         super.onCreate()
+        INSTANCE = this
         SettingsActivity.setDefaultValues(this)
         reload()
     }
@@ -96,18 +97,16 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         languageSwitchKeycode = HotkeyDialogPreference.parseKeycode(languageSwitchHotkey)
 
         screenType = pref.getString("layout_screen_type", screenType) ?: screenType
-
-        reloadView()
     }
 
     override fun onCreateInputView(): View {
         val inputView = inputEngineSwitcher?.initView(this) ?: View(this)
-        val inputViewWrapper = LinearLayoutCompat(this).apply {
+        val inputViewWrapper = LinearLayout(this).apply {
             gravity = Gravity.CENTER_HORIZONTAL
         }
         if(screenType == "television") {
             val width = resources.getDimensionPixelSize(R.dimen.input_view_width)
-            inputView.layoutParams = LinearLayoutCompat.LayoutParams(
+            inputView.layoutParams = LinearLayout.LayoutParams(
                 width,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
@@ -432,12 +431,6 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         reloadView()
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val reload = intent?.getBooleanExtra(ACTION_RELOAD, false) == true
-        if(reload) reload()
-        return START_STICKY
-    }
-
     override fun onEvaluateFullscreenMode(): Boolean {
         super.onEvaluateFullscreenMode()
         return false
@@ -478,12 +471,11 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     }
 
     companion object {
-        const val ACTION_RELOAD = "ee.oyatl.ime.make.IMEService.ACTION_RELOAD"
-
-        fun sendReloadIntent(activity: Activity) {
-            val intent = Intent(activity, IMEService::class.java)
-            intent.putExtra(ACTION_RELOAD, true)
-            activity.startService(intent)
+        private var INSTANCE: IMEService? = null
+        fun restartService() {
+            val instance = INSTANCE ?: return
+            instance.reload()
+            instance.reloadView()
         }
     }
 }

@@ -12,19 +12,13 @@ abstract class BasicInputEngine(
     override var components: List<InputViewComponent> = listOf(),
     override val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 ): InputEngine {
-    private var view: View? = null
 
     override fun initView(context: Context): View? {
-        val componentViews = components.map { it.initView(context) }
-        view = LinearLayoutCompat(context).apply {
+        val view = LinearLayoutCompat(context).apply {
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             orientation = LinearLayoutCompat.VERTICAL
-            componentViews.forEach { addView(it) }
+            components.forEach { addView(it.initView(context)) }
         }
-        return view
-    }
-
-    override fun getView(): View? {
         return view
     }
 
