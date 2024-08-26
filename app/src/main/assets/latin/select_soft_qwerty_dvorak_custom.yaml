@@ -1,0 +1,3 @@
+mobile: "latin/soft_mobile_qwerty_dvorak_custom.yaml"
+tablet: "latin/select_soft_tablet_qwerty_dvorak_custom.yaml"
+television: "latin/soft_mobile_qwerty_dvorak_custom.yaml"

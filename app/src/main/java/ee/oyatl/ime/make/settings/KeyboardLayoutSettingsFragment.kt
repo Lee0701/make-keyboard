@@ -355,8 +355,8 @@ class KeyboardLayoutSettingsFragment
     }
 
     companion object {
-        const val NUMBER_ROW_SOFT_ID = "common/soft_%s_number_row.yaml"
-        const val TEXT_EDIT_SOFT_ID = "common/soft_%s_text_edit.yaml"
+        const val NUMBER_ROW_SOFT_ID = "common/select_soft_number_row.yaml"
+        const val TEXT_EDIT_SOFT_ID = "common/select_soft_text_edit.yaml"
 
         const val ARG_FILENAME = "filename"
         const val ARG_TEMPLATE = "template"

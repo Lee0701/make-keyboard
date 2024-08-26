@@ -1,9 +1,7 @@
 package ee.oyatl.ime.make.service
 
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Intent
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.os.Build

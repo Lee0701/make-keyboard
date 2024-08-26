@@ -1,0 +1,3 @@
+mobile: "common/soft_mobile_qwerty_with_numbers.yaml"
+tablet: "common/soft_tablet_qwerty_with_numbers.yaml"
+television: "common/soft_mobile_qwerty_with_numbers.yaml"
