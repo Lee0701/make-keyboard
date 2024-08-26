@@ -32,7 +32,7 @@ class SettingsActivity
 
     override fun onStop() {
         super.onStop()
-        IMEService.sendReloadIntent(this)
+        IMEService.restartService()
     }
 
     override fun onPreferenceStartFragment(
