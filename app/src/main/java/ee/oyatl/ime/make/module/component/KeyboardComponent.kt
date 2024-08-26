@@ -9,18 +9,17 @@ import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.candidates.CandidateListener
 import ee.oyatl.ime.make.module.inputengine.InputEngine
+import ee.oyatl.ime.make.module.inputengine.TableInputEngine
 import ee.oyatl.ime.make.module.keyboardview.CanvasKeyboardView
 import ee.oyatl.ime.make.module.keyboardview.FlickDirection
 import ee.oyatl.ime.make.module.keyboardview.FlickLongPressAction
 import ee.oyatl.ime.make.module.keyboardview.KeyboardListener
 import ee.oyatl.ime.make.module.keyboardview.KeyboardView
 import ee.oyatl.ime.make.module.keyboardview.StackedViewKeyboardView
+import ee.oyatl.ime.make.module.keyboardview.Theme
 import ee.oyatl.ime.make.module.keyboardview.Themes
 import ee.oyatl.ime.make.preset.softkeyboard.Key
 import ee.oyatl.ime.make.preset.softkeyboard.Keyboard
-import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
-import ee.oyatl.ime.make.module.inputengine.TableInputEngine
-import ee.oyatl.ime.make.module.keyboardview.Theme
 import ee.oyatl.ime.make.preset.table.CustomKeyCode
 
 class KeyboardComponent(
@@ -30,7 +29,6 @@ class KeyboardComponent(
     private val disableTouch: Boolean = false,
 ): InputViewComponent, KeyboardListener, CandidateListener {
     var connectedInputEngine: InputEngine? = null
-    private val shiftKeyHandler: DefaultShiftKeyHandler? get() = connectedInputEngine?.shiftKeyHandler
 
     private var keyboardViewType: String = "canvas"
 
@@ -43,13 +41,13 @@ class KeyboardComponent(
     private var theme: Theme = Themes.Static
     private var keyboardView: KeyboardView? = null
 
-    private var modifiers: ModifierKeyStateSet = ModifierKeyStateSet()
+    private var _modifiers: ModifierKeyStateSet = ModifierKeyStateSet()
+    private val modifiers: ModifierKeyStateSet
+        get() = _modifiers.copy(shift = connectedInputEngine?.shiftKeyHandler?.state ?: _modifiers.shift)
     private var ignoreCode: Int = 0
 
     override fun initView(context: Context): View? {
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
-        shiftKeyHandler?.doubleTapGap = pref.getFloat("behaviour_double_tap_gap", 500f).toInt()
-        shiftKeyHandler?.longPressDuration = pref.getFloat("behaviour_long_press_duration", 100f).toInt()
         keyboardViewType = pref.getString("appearance_keyboard_view_type", "canvas") ?: keyboardViewType
         longPressAction = FlickLongPressAction.of(
             pref.getString("behaviour_long_press_action", "shift") ?: "shift"
@@ -123,7 +121,7 @@ class KeyboardComponent(
     override fun onKeyDown(code: Int, output: String?) {
         when(code) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
-                shiftKeyHandler?.onPress()
+                connectedInputEngine?.shiftKeyHandler?.onPress()
                 connectedInputEngine?.updateView()
             }
         }
@@ -132,7 +130,7 @@ class KeyboardComponent(
     override fun onKeyUp(code: Int, output: String?) {
         when(code) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
-                shiftKeyHandler?.onRelease()
+                connectedInputEngine?.shiftKeyHandler?.onRelease()
                 connectedInputEngine?.updateView()
             }
         }
@@ -148,7 +146,7 @@ class KeyboardComponent(
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
             }
             KeyEvent.KEYCODE_CAPS_LOCK -> {
-                shiftKeyHandler?.onLock()
+                connectedInputEngine?.shiftKeyHandler?.onLock()
             }
             else -> {
                 val standard = inputEngine.keyCharacterMap.isPrintingKey(code)
@@ -207,6 +205,6 @@ class KeyboardComponent(
     }
 
     private fun onInput() {
-        shiftKeyHandler?.onInput()
+        connectedInputEngine?.shiftKeyHandler?.onInput()
     }
 }
