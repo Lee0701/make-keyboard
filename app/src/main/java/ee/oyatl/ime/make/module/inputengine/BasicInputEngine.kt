@@ -5,15 +5,13 @@ import android.view.KeyCharacterMap
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import androidx.appcompat.widget.LinearLayoutCompat
-import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import ee.oyatl.ime.make.module.component.InputViewComponent
 
 abstract class BasicInputEngine(
     override var components: List<InputViewComponent> = listOf(),
-    override val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD),
+    override val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 ): InputEngine {
-    override var shiftKeyHandler: DefaultShiftKeyHandler = DefaultShiftKeyHandler()
     private var view: View? = null
 
     override fun initView(context: Context): View? {
