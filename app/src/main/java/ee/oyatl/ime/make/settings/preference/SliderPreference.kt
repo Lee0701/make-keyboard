@@ -5,7 +5,7 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.widget.LinearLayoutCompat
+import android.widget.LinearLayout
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import com.google.android.material.slider.Slider
@@ -44,7 +44,7 @@ class SliderPreference(
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
 
-        val widgetView = holder.itemView.findViewById<LinearLayoutCompat>(android.R.id.widget_frame)
+        val widgetView = holder.itemView.findViewById<LinearLayout>(android.R.id.widget_frame)
         if(widgetView is ViewGroup) {
             widgetView.removeAllViews()
             val slider = LayoutInflater.from(context).inflate(R.layout.pref_slider_widget_content, null, false) as Slider

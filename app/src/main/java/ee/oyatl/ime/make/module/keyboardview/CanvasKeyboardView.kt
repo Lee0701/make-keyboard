@@ -57,7 +57,7 @@ class CanvasKeyboardView(
         keyMarginHorizontal = resources.getDimension(R.dimen.key_margin_horizontal)
         keyMarginVertical = resources.getDimension(R.dimen.key_margin_vertical)
 
-        val keyboardContext = theme.wrapKeyboardBackground(context)
+        val keyboardContext = theme.keyboardBackground.wrapContext(context)
         keyboardContext.theme.resolveAttribute(R.attr.background, typedValue, true)
         val background = ContextCompat.getDrawable(keyboardContext, typedValue.resourceId) ?: ColorDrawable(Color.WHITE)
         keyboardContext.theme.resolveAttribute(R.attr.backgroundTint, typedValue, true)
@@ -65,8 +65,8 @@ class CanvasKeyboardView(
         DrawableCompat.setTint(background, backgroundTint)
         this.keyboardBackground = background
 
-        val keyContexts = theme.keyBackground.mapValues { (type, _) ->
-            theme.wrapKeyBackground(context, type)
+        val keyContexts = theme.keyBackground.mapValues { (_, theme) ->
+            theme.wrapContext(context)
         }
         keyBackgrounds = keyContexts.mapValues { (_, keyContext) ->
             keyContext.theme.resolveAttribute(R.attr.background, typedValue, true)
@@ -108,7 +108,12 @@ class CanvasKeyboardView(
                 when(key) {
                     is Key -> {
                         val label = key.label
-                        val icon = theme.keyIcon[key.iconType]?.let { ContextCompat.getDrawable(context, it) }
+                        val keyIcon = theme.keyIcon[key.iconType]
+                        val iconRes = keyIcon?.resource
+                        val context = keyIcon?.wrapContext(context)
+                        val icon =
+                            if(context != null && iconRes != null) ContextCompat.getDrawable(context, iconRes)
+                            else null
                         cachedKeys += CachedKey(key, x.roundToInt(), y, width.roundToInt(), height, label, icon)
                     }
                     else -> {}

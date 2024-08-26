@@ -1,52 +1,58 @@
 package ee.oyatl.ime.make.module.keyboardview
 
 import android.content.Context
+import androidx.annotation.DrawableRes
+import androidx.annotation.StyleRes
 import androidx.appcompat.view.ContextThemeWrapper
 import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.make.preset.softkeyboard.KeyIconType
 import ee.oyatl.ime.make.preset.softkeyboard.KeyType
 
 data class Theme(
-    val keyboardBackground: Int,
-    val keyBackground: Map<KeyType, Int> = mapOf(),
-    val keyIcon: Map<KeyIconType, Int> = mapOf(),
-    val popupBackground: Int,
-    val tabBarBackground: Int,
-    val tabBackground: Int
+    val keyboardBackground: StyleComponent,
+    val keyBackground: Map<KeyType, StyleComponent> = mapOf(),
+    val keyIcon: Map<KeyIconType, IconComponent> = mapOf(),
+    val popupBackground: StyleComponent,
+    val tabBarBackground: StyleComponent,
+    val tabBackground: StyleComponent
 ) {
-    fun wrapKeyboardBackground(context: Context): Context {
-        return wrapContext(context, keyboardBackground)
-    }
+    constructor(
+        @StyleRes keyboardBackground: Int,
+        keyBackground: Map<KeyType, Int>,
+        keyIcon: Map<KeyIconType, Int>,
+        @StyleRes popupBackground: Int,
+        @StyleRes tabBarBackground: Int,
+        @StyleRes tabBackground: Int
+    ): this(
+        keyboardBackground = StyleComponent(keyboardBackground),
+        keyBackground = keyBackground.mapValues { (_, v) -> StyleComponent(v) },
+        keyIcon = keyIcon.mapValues { (_, v) -> IconComponent(v) },
+        popupBackground = StyleComponent(popupBackground),
+        tabBarBackground = StyleComponent(tabBarBackground),
+        tabBackground = StyleComponent(tabBackground)
+    )
 
-    fun wrapKeyBackground(context: Context, type: KeyType): Context {
-        return wrapContext(context, keyBackground[type] ?: return context)
-    }
+    data class StyleComponent(
+        @StyleRes override val resource: Int
+    ): ThemeComponent()
 
-    fun wrapKeyIcon(context: Context, type: KeyIconType): Context {
-        return wrapContext(context, keyIcon[type] ?: return context)
-    }
+    data class IconComponent(
+        @DrawableRes override val resource: Int
+    ): ThemeComponent()
 
-    fun wrapKeyPopupBackground(context: Context): Context {
-        return wrapContext(context, popupBackground)
-    }
+    abstract class ThemeComponent {
+        abstract val resource: Int
 
-    fun wrapTabBarBackground(context: Context): Context {
-        return wrapContext(context, tabBarBackground)
-    }
+        fun wrapContext(context: Context): Context {
+            return wrapContextDynamic(wrapContextStatic(context))
+        }
 
-    fun wrapTabBackground(context: Context): Context {
-        return wrapContext(context, tabBackground)
-    }
+        private fun wrapContextDynamic(context: Context): Context {
+            return DynamicColors.wrapContextIfAvailable(context)
+        }
 
-    private fun wrapContext(context: Context, theme: Int): Context {
-        return wrapContextDynamic(wrapContextStatic(context, theme), theme)
-    }
-
-    private fun wrapContextDynamic(context: Context, theme: Int): Context {
-        return DynamicColors.wrapContextIfAvailable(context, theme)
-    }
-
-    private fun wrapContextStatic(context: Context, theme: Int): Context {
-        return ContextThemeWrapper(context, theme)
+        private fun wrapContextStatic(context: Context): Context {
+            return ContextThemeWrapper(context, resource)
+        }
     }
 }

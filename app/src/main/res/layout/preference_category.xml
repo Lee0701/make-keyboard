@@ -14,7 +14,7 @@
 -->
 
 <!-- Layout used for PreferenceCategory in a PreferenceActivity. -->
-<androidx.appcompat.widget.AppCompatTextView
+<com.google.android.material.textview.MaterialTextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:theme="@style/Theme.MakeKeyboard.PreferenceCategory.Title"
     android:id="@android:id/title"

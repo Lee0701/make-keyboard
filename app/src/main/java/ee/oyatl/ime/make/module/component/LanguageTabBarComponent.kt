@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import androidx.annotation.StringRes
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.databinding.ComponentLanguageTabbarBinding
@@ -27,7 +26,7 @@ class LanguageTabBarComponent(
         val name = preferences.getString("appearance_theme", "theme_dynamic")
         val theme = Themes.ofName(name)
 
-        val wrappedContext = ContextThemeWrapper(context, theme.tabBarBackground)
+        val wrappedContext = theme.tabBarBackground.wrapContext(context)
         val inflater = LayoutInflater.from(wrappedContext)
 
         val view = ComponentLanguageTabbarBinding.inflate(inflater, null, false)
@@ -36,7 +35,7 @@ class LanguageTabBarComponent(
         view.voiceBtn.setOnClickListener { listener?.onVoiceButtonClick() }
         this.view = view
 
-        tabInflater = LayoutInflater.from(theme.wrapTabBackground(context))
+        tabInflater = LayoutInflater.from(theme.tabBackground.wrapContext(context))
 
         val wrapper = TouchInterceptingFrameLayout(context, null, disableTouch)
         wrapper.addView(view.root)

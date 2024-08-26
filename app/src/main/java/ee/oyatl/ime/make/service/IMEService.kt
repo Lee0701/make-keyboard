@@ -100,6 +100,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     override fun onCreateInputView(): View {
         val inputView = inputEngineSwitcher?.initView(this) ?: View(this)
         val inputViewWrapper = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_HORIZONTAL
         }
         if(screenType == "television") {
