@@ -351,6 +351,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         reload()
+        reloadView()
     }
 
     override fun onComputeInsets(outInsets: Insets?) {
