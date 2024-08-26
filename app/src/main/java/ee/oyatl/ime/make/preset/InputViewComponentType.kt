@@ -43,6 +43,7 @@ enum class InputViewComponentType(
             }
             NumberRow -> {
                 val layouts = listOf(KeyboardLayoutSettingsFragment.NUMBER_ROW_SOFT_ID)
+                    .mapNotNull { presetLoader.resolveSoftKeyboardSelect(it) }
                 KeyboardComponent(
                     keyboard = InputEnginePreset.loadSoftKeyboards(context, layouts),
                     rowHeight = rowHeight,
@@ -60,6 +61,7 @@ enum class InputViewComponentType(
             }
             TextEdit -> {
                 val layouts = listOf(KeyboardLayoutSettingsFragment.TEXT_EDIT_SOFT_ID)
+                    .mapNotNull { presetLoader.resolveSoftKeyboardSelect(it) }
                 KeyboardComponent(
                     keyboard = InputEnginePreset.loadSoftKeyboards(context, layouts),
                     rowHeight = rowHeight,
