@@ -12,7 +12,7 @@ class PresetLoader(
     val context: Context
 ) {
     private val pref: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    private val screenMode: String = pref.getString("layout_screen_mode", "mobile") ?: "mobile"
+    private val screenType: String = pref.getString("layout_screen_type", "mobile") ?: "mobile"
 
     private val unifyHeight: Boolean = pref.getBoolean("appearance_unify_height", false)
     private val rowHeight: Int = pref.getFloat("appearance_keyboard_height", 55f).roundToInt()
@@ -63,11 +63,11 @@ class PresetLoader(
     }
 
     fun modFilenames(fileNames: List<String>): List<String> {
-        val screenMode = when(screenMode) {
+        val screenType = when(screenType) {
             "television" -> "mobile"
-            else -> screenMode
+            else -> screenType
         }
-        return fileNames.map { it.format(screenMode) }
+        return fileNames.map { it.format(screenType) }
     }
 
     fun modPreset(preset: InputEnginePreset): InputEnginePreset {

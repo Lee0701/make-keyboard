@@ -42,7 +42,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     private var languageSwitchModifiers: Int = HotkeyDialogPreference.DEFAULT_MODIFIER
     private var languageSwitchKeycode: Int = HotkeyDialogPreference.DEFAULT_KEYCODE
 
-    private var screenMode: String = "mobile"
+    private var screenType: String = "mobile"
     private val softKeyboardHidden
         get() = resources.configuration.keyboardHidden == Configuration.KEYBOARDHIDDEN_YES
     private val hardKeyboardHidden
@@ -96,7 +96,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         languageSwitchModifiers = HotkeyDialogPreference.parseModifiers(languageSwitchHotkey)
         languageSwitchKeycode = HotkeyDialogPreference.parseKeycode(languageSwitchHotkey)
 
-        screenMode = pref.getString("layout_screen_mode", screenMode) ?: screenMode
+        screenType = pref.getString("layout_screen_type", screenType) ?: screenType
     }
 
     override fun onCreateInputView(): View {
@@ -104,7 +104,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         val inputViewWrapper = LinearLayout(this).apply {
             gravity = Gravity.CENTER_HORIZONTAL
         }
-        if(screenMode == "television") {
+        if(screenType == "television") {
             val width = resources.getDimensionPixelSize(R.dimen.input_view_width)
             inputView.layoutParams = LinearLayout.LayoutParams(
                 width,

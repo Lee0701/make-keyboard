@@ -2,10 +2,11 @@ package ee.oyatl.ime.make.settings
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ActionOnlyNavDirections
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -21,12 +22,8 @@ class SettingsActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DynamicColors.applyToActivityIfAvailable(this)
-
         setContentView(R.layout.activity_settings)
-        if(savedInstanceState == null) {
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
-        }
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+
         setDefaultValues(this)
     }
 
@@ -57,37 +54,52 @@ class SettingsActivity
         return true
     }
 
-    class RootPreferencesFragment: PreferenceFragmentCompat() {
+    abstract class TitledPreferenceFragment: PreferenceFragmentCompat() {
+        @get:StringRes abstract val titleResId: Int
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            val activity = requireActivity() as AppCompatActivity
+            activity.supportActionBar?.setTitle(titleResId)
+        }
+    }
+
+    class RootPreferencesFragment: TitledPreferenceFragment() {
+        override val titleResId: Int = R.string.title_activity_settings
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.preferences_root, rootKey)
         }
     }
 
-    class MethodPreferencesFragment: PreferenceFragmentCompat() {
+    class MethodPreferencesFragment: TitledPreferenceFragment() {
+        override val titleResId: Int = R.string.pref_screen_method_title
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.preferences_method, rootKey)
         }
     }
 
-    class AppearancePreferencesFragment: PreferenceFragmentCompat() {
+    class AppearancePreferencesFragment: TitledPreferenceFragment() {
+        override val titleResId: Int = R.string.pref_screen_appearance_title
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.preferences_appearance, rootKey)
         }
     }
 
-    class LayoutPreferencesFragment: PreferenceFragmentCompat() {
+    class LayoutPreferencesFragment: TitledPreferenceFragment() {
+        override val titleResId: Int = R.string.pref_screen_layout_title
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.preferences_layout, rootKey)
         }
     }
 
-    class BehaviourPreferencesFragment: PreferenceFragmentCompat() {
+    class BehaviourPreferencesFragment: TitledPreferenceFragment() {
+        override val titleResId: Int = R.string.pref_screen_behaviour_title
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.preferences_behaviour, rootKey)
         }
     }
 
-    class AboutPreferencesFragment: PreferenceFragmentCompat() {
+    class AboutPreferencesFragment: TitledPreferenceFragment() {
+        override val titleResId: Int = R.string.pref_screen_about_title
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.preferences_about, rootKey)
         }
