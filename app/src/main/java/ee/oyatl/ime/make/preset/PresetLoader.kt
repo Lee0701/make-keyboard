@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.TypedValue
 import androidx.preference.PreferenceManager
+import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.decodeFromStream
 import java.io.File
 import kotlin.math.roundToInt
@@ -62,12 +63,20 @@ class PresetLoader(
         )
     }
 
-    fun modFilenames(fileNames: List<String>): List<String> {
-        val screenType = when(screenType) {
-            "television" -> "mobile"
-            else -> screenType
+    fun resolveSoftKeyboardSelect(fileName: String): String? {
+        val selector = kotlin.runCatching {
+            Yaml.default.decodeFromStream<SoftKeyboardSelector>(context.assets.open(fileName))
+        }.getOrNull() ?: kotlin.runCatching {
+            val file = File(context.filesDir, fileName)
+            Yaml.default.decodeFromStream<SoftKeyboardSelector>(file.inputStream())
+        }.getOrNull() ?: return null
+        return when(screenType) {
+            "mobile" -> selector.mobile
+            "tablet" -> selector.tablet
+            "full" -> selector.full
+            "television" -> selector.television
+            else -> selector.mobile
         }
-        return fileNames.map { it.format(screenType) }
     }
 
     fun modPreset(preset: InputEnginePreset): InputEnginePreset {
@@ -83,11 +92,11 @@ class PresetLoader(
             }
         }
         val layout = preset.layout.copy(
-            softKeyboard = modFilenames(preset.layout.softKeyboard),
-            moreKeysTable = modFilenames(preset.layout.moreKeysTable) + moreKeysTable,
-            codeConvertTable = modFilenames(preset.layout.codeConvertTable),
-            overrideTable = modFilenames(preset.layout.overrideTable) + overrideTable,
-            combinationTable = modFilenames(preset.layout.combinationTable),
+            softKeyboard = preset.layout.softKeyboard.mapNotNull { resolveSoftKeyboardSelect(it) },
+            moreKeysTable = preset.layout.moreKeysTable + moreKeysTable,
+            codeConvertTable = preset.layout.codeConvertTable,
+            overrideTable = preset.layout.overrideTable + overrideTable,
+            combinationTable = preset.layout.combinationTable,
         )
         return preset.copy(
             layout = layout,

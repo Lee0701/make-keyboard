@@ -172,7 +172,7 @@ data class InputEnginePreset(
                     .getOrNull()
                     ?: return@mapNotNull null
                 keyboard.copy(
-                    rows = keyboard.rows.map { it.copy(resolveSoftKeyIncludes(context, it)) }
+                    rows = keyboard.rows.map { it.copy(keys = resolveSoftKeyIncludes(context, it)) }
                 )
             }
             return resolved.fold(Keyboard()) { acc, input -> acc + input }

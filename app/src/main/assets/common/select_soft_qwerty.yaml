@@ -1,0 +1,4 @@
+mobile: "common/soft_mobile_qwerty.yaml"
+tablet: "common/soft_tablet_qwerty.yaml"
+television: "common/soft_mobile_qwerty.yaml"
+full: "common/soft_full_qwerty.yaml"

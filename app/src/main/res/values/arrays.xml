@@ -102,15 +102,15 @@
     <string-array name="layout_screen_types">
         <item>@string/screen_type_mobile</item>
         <item>@string/screen_type_tablet</item>
+        <item>@string/screen_type_full</item>
         <item>@string/screen_type_television</item>
-<!--        <item>@string/screen_type_full</item>-->
     </string-array>
 
     <string-array name="layout_screen_type_values">
         <item>mobile</item>
         <item>tablet</item>
+        <item>full</item>
         <item>television</item>
-<!--        <item>full</item>-->
     </string-array>
 
     <string-array name="preset_hangul_entries">

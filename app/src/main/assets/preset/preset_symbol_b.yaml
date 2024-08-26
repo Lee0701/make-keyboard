@@ -1,7 +1,7 @@
 type: "Symbol"
 layout:
   softKeyboard:
-  - "common/soft_%s_qwerty_with_numbers.yaml"
+  - "common/select_soft_qwerty_with_numbers.yaml"
   moreKeysTable:
   - "symbol/morekeys_symbols.yaml"
   codeConvertTable:

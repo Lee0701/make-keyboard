@@ -1,4 +1,0 @@
-rows:
-- keys:
-  - !<include>
-    name: "common/row_text_edit.yaml"

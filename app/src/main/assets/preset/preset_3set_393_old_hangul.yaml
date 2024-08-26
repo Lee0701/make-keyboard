@@ -1,7 +1,7 @@
 type: "Hangul"
 layout:
   softKeyboard:
-  - "hangul_3set/soft_%s_393.yaml"
+  - "hangul_3set/select_soft_393.yaml"
   codeConvertTable:
   - "symbol/table_custom_keys.yaml"
   - "symbol/table_number_row.yaml"

@@ -1,7 +1,7 @@
 type: "Hangul"
 layout:
   softKeyboard:
-  - "common/soft_%s_qwerty_with_slash.yaml"
+  - "common/select_soft_qwerty_with_slash.yaml"
   codeConvertTable:
   - "symbol/table_custom_keys.yaml"
   - "symbol/table_number_row.yaml"
