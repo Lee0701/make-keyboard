@@ -35,11 +35,11 @@
     <string name="pref_appearance_sound_feedback_title">Sound Feedback</string>
 
     <string name="pref_screen_layout_title">Keyboard Layout</string>
-    <string name="pref_layout_screen_mode_title">Screen Mode</string>
-    <string name="screen_mode_mobile">Mobile</string>
-    <string name="screen_mode_tablet">Tablet</string>
-    <string name="screen_mode_television">Television</string>
-    <string name="screen_mode_full">Full</string>
+    <string name="pref_layout_screen_type_title">Screen Type</string>
+    <string name="screen_type_mobile">Mobile</string>
+    <string name="screen_type_tablet">Tablet</string>
+    <string name="screen_type_television">Television</string>
+    <string name="screen_type_full">Full</string>
 
     <string name="pref_layout_header_soft_keyboard_title">On-screen Keyboard</string>
     <string name="pref_layout_header_hard_keyboard_title">Physical Keyboard</string>

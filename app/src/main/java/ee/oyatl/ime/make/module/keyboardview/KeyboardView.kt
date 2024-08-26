@@ -39,14 +39,14 @@ abstract class KeyboardView(
     open val keyboardWidth: Int = context.resources.displayMetrics.widthPixels
     open val keyboardHeight: Int = rowHeight * keyboard.rows.size
     open val shrinkWidth: Float get() {
-        return if(screenMode == "television")
+        return if(screenType == "television")
             resources.getDimensionPixelSize(R.dimen.input_view_width) / keyboardWidth.toFloat()
         else 1.0f
     }
 
     protected val typedValue = TypedValue()
 
-    private val screenMode = pref.getString("layout_screen_mode", null) ?: "mobile"
+    private val screenType = pref.getString("layout_screen_type", null) ?: "mobile"
     protected val showKeyPopups: Boolean = pref.getBoolean("appearance_show_popups", true)
     protected val showMoreKeys: Boolean = pref.getBoolean("appearance_show_more_keys", true)
     protected val longPressDuration: Long = pref.getFloat("behaviour_long_press_duration", 100f).toLong()
