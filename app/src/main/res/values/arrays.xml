@@ -99,14 +99,14 @@
     </string-array>
 
 
-    <string-array name="layout_screen_modes">
-        <item>@string/screen_mode_mobile</item>
-        <item>@string/screen_mode_tablet</item>
-        <item>@string/screen_mode_television</item>
-<!--        <item>@string/screen_mode_full</item>-->
+    <string-array name="layout_screen_types">
+        <item>@string/screen_type_mobile</item>
+        <item>@string/screen_type_tablet</item>
+        <item>@string/screen_type_television</item>
+<!--        <item>@string/screen_type_full</item>-->
     </string-array>
 
-    <string-array name="layout_screen_mode_values">
+    <string-array name="layout_screen_type_values">
         <item>mobile</item>
         <item>tablet</item>
         <item>television</item>

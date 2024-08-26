@@ -6,11 +6,11 @@
         app:title="@string/pref_layout_header_soft_keyboard_title">
 
         <ee.oyatl.ime.make.settings.preference.ListPreference
-            app:key="layout_screen_mode"
-            app:defaultValue="@string/pref_layout_screen_mode_default"
-            app:entries="@array/layout_screen_modes"
-            app:entryValues="@array/layout_screen_mode_values"
-            app:title="@string/pref_layout_screen_mode_title"
+            app:key="layout_screen_type"
+            app:defaultValue="@string/pref_layout_screen_type_default"
+            app:entries="@array/layout_screen_types"
+            app:entryValues="@array/layout_screen_type_values"
+            app:title="@string/pref_layout_screen_type_title"
             app:useSimpleSummaryProvider="true" />
 
         <ee.oyatl.ime.make.settings.preference.EnterKeyboardSettingsPreference

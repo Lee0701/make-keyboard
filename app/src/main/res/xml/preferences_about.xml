@@ -4,7 +4,11 @@
 
     <ee.oyatl.ime.make.settings.preference.StartActivityPreference
         android:title="@string/pref_about_app_info_title"
-        android:summary="@string/pref_about_app_info_summary" />
+        android:summary="@string/app_version" />
+
+    <ee.oyatl.ime.make.settings.preference.Preference
+        android:title="@string/pref_about_developer_contact_title"
+        android:summary="@string/pref_about_developer_contact_summary" />
 
     <ee.oyatl.ime.make.settings.preference.OpenStorePreference
         android:title="@string/pref_about_more_apps_title"

@@ -16,6 +16,8 @@ android {
         versionName = "20240826-33-13efe80"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        resValue("string", "app_version", versionName.orEmpty())
     }
 
     buildTypes {
