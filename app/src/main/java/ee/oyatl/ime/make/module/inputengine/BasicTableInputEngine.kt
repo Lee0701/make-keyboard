@@ -2,7 +2,7 @@ package ee.oyatl.ime.make.module.inputengine
 
 import android.view.KeyEvent
 import ee.oyatl.ime.make.R
-import ee.oyatl.ime.make.modifiers.DefaultShiftKeyHandler
+import ee.oyatl.ime.make.modifiers.ModifierKeyHandler
 import ee.oyatl.ime.make.modifiers.ModifierKeyStateSet
 import ee.oyatl.ime.make.module.keyboardview.Theme
 import ee.oyatl.ime.make.preset.softkeyboard.KeyIconType
@@ -14,7 +14,7 @@ abstract class BasicTableInputEngine(
     override val convertTable: CodeConvertTable,
     override val overrideTable: CharOverrideTable,
     override val moreKeysTable: MoreKeysTable,
-    override var shiftKeyHandler: DefaultShiftKeyHandler,
+    override val shiftKeyHandler: ModifierKeyHandler,
     override val listener: InputEngine.Listener,
 ): BasicInputEngine(), TableInputEngine {
     override var alternativeInputEngine: InputEngine? = null

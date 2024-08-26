@@ -2,5 +2,5 @@
 <resources>
     <string name="pref_appearance_theme_default" translatable="false">theme_static</string>
     <string name="pref_appearance_keyboard_height_default" translatable="false">55.0</string>
-    <string name="pref_layout_screen_mode_default" translatable="false">mobile</string>
+    <string name="pref_layout_screen_type_default" translatable="false">mobile</string>
 </resources>

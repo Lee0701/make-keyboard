@@ -15,6 +15,7 @@ class KeyboardLayoutSettingsActivity: AppCompatActivity() {
 
     private val fileName: String by lazy { intent.getStringExtra("fileName") ?: "default.yaml" }
     private val template: String by lazy { intent.getStringExtra("template") ?: "default.yaml" }
+    private val hardware: Boolean by lazy { intent.getBooleanExtra("hardware", false) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +25,7 @@ class KeyboardLayoutSettingsActivity: AppCompatActivity() {
         fragment.arguments = Bundle().apply {
             putString(KeyboardLayoutSettingsFragment.ARG_FILENAME, fileName)
             putString(KeyboardLayoutSettingsFragment.ARG_TEMPLATE, template)
+            putBoolean(KeyboardLayoutSettingsFragment.ARG_HARDWARE, hardware)
         }
 
         setContentView(R.layout.activity_keyboard_layout_settings)
@@ -36,7 +38,7 @@ class KeyboardLayoutSettingsActivity: AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        IMEService.sendReloadIntent(this)
+        IMEService.restartService()
     }
 
     override fun onDestroy() {

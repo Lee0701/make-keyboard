@@ -12,10 +12,12 @@ android {
         applicationId = "ee.oyatl.ime.make"
         minSdk = 21
         targetSdk = 35
-        versionCode = 30
-        versionName = "20240821-30-91ecaf4"
+        versionCode = 34
+        versionName = "20240826-34-cbe5285"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        resValue("string", "app_version", versionName.orEmpty())
     }
 
     buildTypes {
@@ -48,6 +50,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kaml)
     implementation(libs.play.services.oss.licenses)
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

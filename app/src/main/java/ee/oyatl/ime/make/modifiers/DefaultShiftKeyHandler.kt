@@ -1,9 +1,9 @@
 package ee.oyatl.ime.make.modifiers
 
 class DefaultShiftKeyHandler(
-    var doubleTapGap: Int = 500,
-    var longPressDuration: Int = 100,
-    var autoUnlock: Boolean = true
+    private val doubleTapGap: Int = 500,
+    private val longPressDuration: Int = 100,
+    private val autoUnlock: Boolean = true
 ): ModifierKeyHandler {
 
     override var state: ModifierKeyState = ModifierKeyState()

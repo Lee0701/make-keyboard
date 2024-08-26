@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:title="@string/pref_screen_method_title">
+
+    <ee.oyatl.ime.make.settings.preference.EnableInputMethodPreference
+        app:title="@string/pref_method_enable_title"
+        app:summary="@string/pref_method_enable_summary" />
+
+    <ee.oyatl.ime.make.settings.preference.ChooseInputMethodPreference
+        app:title="@string/pref_method_choose_title"
+        app:summary="@string/pref_method_choose_summary" />
+
+</androidx.preference.PreferenceScreen>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="resource" format="reference" />
+
     <attr name="background" format="reference" />
     <attr name="backgroundTint" format="color" />
     <attr name="marginHorizontal" format="dimension" />
@@ -49,6 +51,7 @@
     <declare-styleable name="EnterKeyboardSettingsPreference">
         <attr name="fileName" format="string" />
         <attr name="template" format="string" />
+        <attr name="hardware" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="TouchInterceptingFrameLayout">

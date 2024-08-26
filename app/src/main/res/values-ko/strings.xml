@@ -12,13 +12,13 @@
 
     <string name="title_activity_settings">make keyboard 설정</string>
 
-    <string name="pref_header_method_title">입력 방식</string>
+    <string name="pref_screen_method_title">입력 방식</string>
     <string name="pref_method_enable_title">입력 방식 활성화</string>
     <string name="pref_method_enable_summary">\'make keyboard\'를 선택해서 활성화해 주세요.</string>
     <string name="pref_method_choose_title">입력 방식 변경</string>
     <string name="pref_method_choose_summary">\'make keyboard\'를 선택해서 사용을 시작하세요.</string>
 
-    <string name="pref_header_appearance_title">외관</string>
+    <string name="pref_screen_appearance_title">외관</string>
     <string name="pref_appearance_theme_title">키보드 테마</string>
     <string name="theme_static">단색</string>
     <string name="theme_dynamic">다이나믹</string>
@@ -34,18 +34,21 @@
     <string name="pref_appearance_haptic_feedback_title">키 진동 효과</string>
     <string name="pref_appearance_sound_feedback_title">키 소리 효과</string>
 
-    <string name="pref_header_layout_title">키보드 배열</string>
-    <string name="pref_layout_screen_mode_title">화면 모드</string>
-    <string name="screen_mode_mobile">모바일</string>
-    <string name="screen_mode_tablet">태블릿</string>
-    <string name="screen_mode_television">텔레비전</string>
-    <string name="screen_mode_full">풀사이즈</string>
-    <string name="pref_layout_hangul_preset_title">한글 키보드 배열</string>
-    <string name="pref_layout_latin_preset_title">로마자 키보드 배열</string>
-    <string name="pref_layout_symbol_preset_title">기호 키보드 배열</string>
+    <string name="pref_layout_header_soft_keyboard_title">화면 키보드</string>
+    <string name="pref_layout_header_hard_keyboard_title">외부 키보드</string>
+
+    <string name="pref_screen_layout_title">키보드 배열</string>
+    <string name="pref_layout_screen_type_title">화면 종류</string>
+    <string name="screen_type_mobile">모바일</string>
+    <string name="screen_type_tablet">태블릿</string>
+    <string name="screen_type_television">텔레비전</string>
+    <string name="screen_type_full">풀사이즈</string>
     <string name="pref_layout_hangul_settings_title">한글 키보드 설정</string>
     <string name="pref_layout_latin_settings_title">로마자 키보드 설정</string>
     <string name="pref_layout_symbol_settings_title">기호 키보드 설정</string>
+    <string name="pref_layout_hard_hangul_settings_title">하드웨어 한글 키보드 설정</string>
+    <string name="pref_layout_hard_latin_settings_title">하드웨어 로마자 키보드 설정</string>
+
     <string name="layout_2set_ks5002">두벌식 KS 표준</string>
     <string name="layout_2set_old_hangul">두벌식 옛한글</string>
     <string name="layout_3set_390">세벌식 3–90</string>
@@ -61,7 +64,7 @@
     <string name="layout_symbol_b">기호 B</string>
     <string name="layout_symbol_g">기호 G</string>
 
-    <string name="pref_header_input_title">입력</string>
+    <string name="pref_layout_header_input_title">입력</string>
     <string name="pref_hangul_correct_orders_title">모아주기 사용</string>
     <string name="pref_hangul_correct_orders_summary">자모 입력 순서를 틀려도 자동으로 바로잡습니다.</string>
     <string name="pref_input_hanja_conversion_title">한자 변환</string>
@@ -73,7 +76,18 @@
     <string name="pref_input_engine_latin">로마자</string>
     <string name="pref_input_engine_hangul">한글</string>
 
-    <string name="pref_header_behaviour_title">작동</string>
+    <string name="pref_layout_preset_title">기본 키보드 배열</string>
+    <string name="pref_layout_preset_summary">미리 설정된 배열을 불러옵니다.</string>
+    <string name="pref_layout_preview_mode_title">미리보기</string>
+    <string name="pref_layout_reorder_mode_title">순서 변경</string>
+    <string name="pref_layout_add_component_title">구성 요소 추가</string>
+    <string name="pref_layout_component_main_keyboard_title">기본 키보드</string>
+    <string name="pref_layout_component_number_row_title">숫자열</string>
+    <string name="pref_layout_component_candidates_title">후보 단어 창</string>
+    <string name="pref_layout_component_text_edit_title">텍스트 편집 도구</string>
+    <string name="pref_layout_component_language_switcher_title">언어 전환 탭</string>
+
+    <string name="pref_screen_behaviour_title">작동</string>
     <string name="pref_behaviour_double_tap_gap_title">더블클릭 간격</string>
     <string name="pref_behaviour_long_press_duration_title">롱클릭 길이</string>
     <string name="pref_behaviour_long_press_action_title">롱클릭 동작</string>
@@ -102,23 +116,12 @@
     <string name="modifier_control">Control</string>
     <string name="modifier_meta">Meta</string>
 
-    <string name="pref_header_about_title">정보</string>
+    <string name="pref_screen_about_title">정보</string>
     <string name="pref_about_app_info_title">make keyboard</string>
-    <string name="pref_about_app_info_summary">개발자 연락처: hgl1002@naver.com</string>
+    <string name="pref_about_developer_contact_title">개발자 연락처</string>
+    <string name="pref_about_developer_contact_summary">hgl1002@naver.com</string>
     <string name="pref_about_more_apps_title">앱 더보기</string>
     <string name="pref_about_more_apps_summary">개발자의 다른 앱을 확인해 보세요.</string>
     <string name="pref_about_oss_licenses_title">오픈소스 라이선스</string>
 
-    <string name="pref_layout_preset_title">기본 키보드 배열</string>
-    <string name="pref_layout_preset_summary">미리 설정된 배열을 불러옵니다.</string>
-    <string name="pref_layout_preview_mode_title">미리보기</string>
-    <string name="pref_layout_reorder_mode_title">순서 변경</string>
-    <string name="pref_layout_add_component_title">구성 요소 추가</string>
-    <string name="pref_layout_component_main_keyboard_title">기본 키보드</string>
-    <string name="pref_layout_component_number_row_title">숫자열</string>
-    <string name="pref_layout_component_candidates_title">후보 단어 창</string>
-    <string name="pref_layout_component_text_edit_title">텍스트 편집 도구</string>
-    <string name="pref_layout_component_language_switcher_title">언어 전환 탭</string>
-
-    <string name="pref_soft_keyboard_header_title">화면 키보드</string>
 </resources>

@@ -1,6 +1,7 @@
 package ee.oyatl.ime.make.preset
 
 import android.content.Context
+import androidx.preference.PreferenceManager
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.decodeFromStream
@@ -27,6 +28,7 @@ import kotlinx.serialization.modules.EmptySerializersModule
 @Serializable
 data class InputEnginePreset(
     val type: Type = Type.Latin,
+    val language: String = "en",
     val size: Size = Size(),
     val layout: Layout = Layout(),
     val hangul: Hangul = Hangul(),
@@ -40,13 +42,21 @@ data class InputEnginePreset(
         rootListener: InputEngine.Listener,
         mode: Mode = Mode.Runtime
     ): InputEngine {
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+
         // Soft keyboards will be resolved later by components.
         val moreKeysTable = loadMoreKeysTable(context, names = layout.moreKeysTable)
         val convertTable = loadConvertTable(context, names = layout.codeConvertTable)
         val overrideTable = loadOverrideTable(context, names = layout.overrideTable)
         val combinationTable = loadCombinationTable(context, names = layout.combinationTable)
 
-        val shiftKeyHandler = DefaultShiftKeyHandler(autoUnlock = autoUnlockShift)
+        val doubleTapGap = pref.getFloat("behaviour_double_tap_gap", 500f).toInt()
+        val longPressDuration = pref.getFloat("behaviour_long_press_duration", 100f).toInt()
+        val shiftKeyHandler = DefaultShiftKeyHandler(
+            doubleTapGap = doubleTapGap,
+            longPressDuration = longPressDuration,
+            autoUnlock = autoUnlockShift
+        )
 
         fun inflateComponents(preset: InputEnginePreset): List<InputViewComponent> {
             val rows = this.components
