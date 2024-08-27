@@ -21,7 +21,9 @@ import ee.oyatl.ime.make.preset.softkeyboard.Spacer
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.pow
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 abstract class KeyboardView(
     context: Context,
@@ -229,6 +231,22 @@ abstract class KeyboardView(
             }
         }
         return null
+    }
+
+    fun findKeys(x: Int, y: Int, maxDist: Int): Map<KeyWrapper, Int> {
+        val result = mutableMapOf<KeyWrapper, Int>()
+        wrappedKeys.forEach { key ->
+            if(key !is KeyWrapper) return@forEach
+            val dist = distance(x to y, key.x + key.width/2 to key.y + key.height/2)
+            if(dist <= maxDist) result += key to dist
+        }
+        return result
+    }
+
+    private fun distance(a: Pair<Int, Int>, b: Pair<Int, Int>): Int {
+        val (x1, y1) = a
+        val (x2, y2) = b
+        return sqrt((x2 - x1).toDouble().pow(2) + (y2 - y1).toDouble().pow(2)).roundToInt()
     }
 
     private fun performSoundFeedback(keyCode: Int) {
