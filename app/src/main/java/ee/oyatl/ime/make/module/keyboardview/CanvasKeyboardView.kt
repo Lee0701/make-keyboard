@@ -10,11 +10,9 @@ import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
-import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.preset.softkeyboard.Key
 import ee.oyatl.ime.make.preset.softkeyboard.KeyType
@@ -49,8 +47,7 @@ class CanvasKeyboardView(
     private val keyLabelTextColors: Map<KeyType, Int>
     private val keyLabelTextSizes: Map<KeyType, Float>
 
-    private val cachedKeys: MutableList<CachedKey> = mutableListOf()
-    override val wrappedKeys: List<KeyWrapper> get() = cachedKeys.toList()
+    override val wrappedKeys: MutableList<CachedKey> = mutableListOf()
 
     init {
         textPaint.textAlign = Paint.Align.CENTER
@@ -94,7 +91,7 @@ class CanvasKeyboardView(
     }
 
     private fun cacheKeys() {
-        cachedKeys.clear()
+        wrappedKeys.clear()
         val rowHeight = keyboardHeight / max(keyboard.rows.size, 1)
         val shrinkWidth = shrinkWidth
         keyboard.rows.forEachIndexed { j, row ->
@@ -114,7 +111,7 @@ class CanvasKeyboardView(
                         val icon =
                             if(context != null && iconRes != null) ContextCompat.getDrawable(context, iconRes)
                             else null
-                        cachedKeys += CachedKey(key, x.roundToInt(), y, width.roundToInt(), height, label, icon)
+                        wrappedKeys += CachedKey(key, x.roundToInt(), y, width.roundToInt(), height, label, icon)
                     }
                     else -> {}
                 }
@@ -132,7 +129,7 @@ class CanvasKeyboardView(
         if(!rect.isEmpty) canvas.drawBitmap(keyboardBackground.toBitmap(rect.width(), rect.height()), 0f, 0f, bitmapPaint)
 
         // Draw key backgrounds
-        cachedKeys.forEach { key ->
+        wrappedKeys.forEach { key ->
             val keyBackgroundOverride = key.key.backgroundType?.resId?.let { ContextCompat.getDrawable(context, it) }
             val keyBackgroundInfo = keyBackgrounds[key.key.type]
             val pressed = keyStates[key.key] == true
@@ -158,7 +155,7 @@ class CanvasKeyboardView(
         }
 
         // Draw key foregrounds
-        cachedKeys.forEach { key ->
+        wrappedKeys.forEach { key ->
             val baseX = (key.x + key.width/2)
             val baseY = (key.y + key.height/2)
             val tint = keyIconTints[key.key.type]
@@ -182,9 +179,9 @@ class CanvasKeyboardView(
     }
 
     override fun updateLabelsAndIcons(labels: Map<Int, CharSequence>, icons: Map<Int, Int>) {
-        val cachedKeys = this.cachedKeys.toList()
-        this.cachedKeys.clear()
-        this.cachedKeys += cachedKeys.map { key ->
+        val wrappedKeys = this.wrappedKeys.toList()
+        this.wrappedKeys.clear()
+        this.wrappedKeys += wrappedKeys.map { key ->
             if(key.icon != null) {
                 val iconId = icons[key.key.code]
                 val icon =
