@@ -253,6 +253,11 @@ abstract class KeyboardView(
             if(key !is KeyWrapper) return@forEach
             val dist = distance(x to y, key.x + key.width/2 to key.y + key.height/2)
             if(dist <= maxDist) result += key to dist
+            if(x in key.x until key.x + key.width) {
+                if(y in key.y until key.y + key.height) {
+                    result += key to dist
+                }
+            }
         }
         return result
     }
