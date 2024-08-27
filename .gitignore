@@ -2,6 +2,7 @@
 # Project files
 whatsnew/
 
+proximity_correction.tsv
 
 # Compiled class file
 *.class

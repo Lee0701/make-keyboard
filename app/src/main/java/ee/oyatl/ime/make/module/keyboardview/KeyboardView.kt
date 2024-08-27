@@ -31,7 +31,7 @@ abstract class KeyboardView(
     protected val keyboard: Keyboard,
     protected val theme: Theme,
     protected val listener: KeyboardListener,
-    rowHeight: Int,
+    private val rowHeight: Int,
     private val disableTouch: Boolean = false,
 ): FrameLayout(context, attrs) {
 
@@ -70,6 +70,8 @@ abstract class KeyboardView(
     protected abstract val wrappedKeys: List<RowItemWrapper>
     protected val moreKeysKeyboards: MutableMap<Int, Keyboard> = mutableMapOf()
 
+    private val proximityCorrection = ProximityCorrection().apply { loadModel(context) }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if(disableTouch) return false
@@ -81,8 +83,20 @@ abstract class KeyboardView(
 
         when(event.actionMasked) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
-                val key = findKey(x, y) ?: return true
-                onTouchDown(key, pointerId, x, y)
+                val keys = findKeys(x, y, rowHeight/2)
+                val closest = keys.minByOrNull { it.value }?.key ?: return true
+                if(closest.label == null) {
+                    proximityCorrection.onReset()
+                    onTouchDown(closest, pointerId, x, y)
+                } else {
+                    val mappedKeys = keys
+                        .mapKeys { (key, _) -> key.label?.firstOrNull() }
+                        .map { (key, value) -> if(key == null) null else key to value }
+                        .filterNotNull().toMap()
+                    val result = proximityCorrection.onKey(mappedKeys)
+                    val key = keys.keys.find { it.label == result.toString() } ?: return true
+                    onTouchDown(key, pointerId, x, y)
+                }
                 postViewChanged()
             }
             MotionEvent.ACTION_MOVE -> {
