@@ -33,6 +33,7 @@
     <string name="keybaord_view_type_stacked_view">뷰 쌓기</string>
     <string name="pref_appearance_haptic_feedback_title">키 진동 효과</string>
     <string name="pref_appearance_sound_feedback_title">키 소리 효과</string>
+    <string name="pref_appearance_sound_feedback_volume_title">소리 효과 음량</string>
 
     <string name="pref_layout_header_soft_keyboard_title">화면 키보드</string>
     <string name="pref_layout_header_hard_keyboard_title">외부 키보드</string>

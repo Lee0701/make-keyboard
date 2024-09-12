@@ -16,8 +16,7 @@
         app:valueTo="100.0"
         app:stepSize="5.0"
         app:defaultValue="@string/pref_appearance_keyboard_height_default"
-        app:title="@string/pref_appearance_keyboard_height_title"
-        app:useSimpleSummaryProvider="true"/>
+        app:title="@string/pref_appearance_keyboard_height_title" />
 
     <ee.oyatl.ime.make.settings.preference.SwitchPreference
         app:key="appearance_unify_height"
@@ -42,6 +41,14 @@
         app:key="appearance_sound_feedback"
         app:defaultValue="true"
         app:title="@string/pref_appearance_sound_feedback_title" />
+
+    <ee.oyatl.ime.make.settings.preference.SliderPreference
+        app:key="appearance_sound_feedback_volume"
+        app:valueFrom="0.0"
+        app:valueTo="100.0"
+        app:stepSize="10.0"
+        app:defaultValue="100.0"
+        app:title="@string/pref_appearance_sound_feedback_volume_title" />
 
     <ee.oyatl.ime.make.settings.preference.SwitchPreference
         app:key="appearance_show_popups"
