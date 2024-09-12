@@ -28,4 +28,8 @@
         android:id="@+id/aboutPreferencesFragment"
         android:name="ee.oyatl.ime.make.settings.SettingsActivity$AboutPreferencesFragment"
         android:label="AboutPreferencesFragment" />
+    <fragment
+        android:id="@+id/headerFragment"
+        android:name="ee.oyatl.ime.make.settings.SettingsActivity$PreferenceHeaderFragment"
+        android:label="HeaderFragment" />
 </navigation>

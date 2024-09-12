@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <bool name="activity_settings_two_panel_layout">true</bool>
     <string name="pref_appearance_keyboard_height_default" translatable="false">65.0</string>
     <string name="pref_layout_screen_type_default" translatable="false">tablet</string>
 </resources>
