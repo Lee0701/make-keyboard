@@ -2,88 +2,98 @@
 <androidx.preference.PreferenceScreen
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ee.oyatl.ime.make.settings.preference.SliderPreference
-        app:key="behaviour_double_tap_gap"
-        app:valueFrom="100.0"
-        app:valueTo="1000.0"
-        app:stepSize="100.0"
-        app:defaultValue="500.0"
-        app:title="@string/pref_behaviour_double_tap_gap_title"
-        app:useSimpleSummaryProvider="true" />
+    <ee.oyatl.ime.make.settings.preference.PreferenceCategory
+        app:title="@string/pref_behaviour_header_basic_title">
 
-    <ee.oyatl.ime.make.settings.preference.SliderPreference
-        app:key="behaviour_long_press_duration"
-        app:valueFrom="100.0"
-        app:valueTo="1000.0"
-        app:stepSize="100.0"
-        app:defaultValue="500.0"
-        app:title="@string/pref_behaviour_long_press_duration_title"
-        app:useSimpleSummaryProvider="true" />
+        <ee.oyatl.ime.make.settings.preference.SliderPreference
+            app:key="behaviour_double_tap_gap"
+            app:valueFrom="100.0"
+            app:valueTo="1000.0"
+            app:stepSize="100.0"
+            app:defaultValue="500.0"
+            app:title="@string/pref_behaviour_double_tap_gap_title"
+            app:useSimpleSummaryProvider="true" />
 
-    <ee.oyatl.ime.make.settings.preference.ListPreference
-        app:key="behaviour_long_press_action"
-        app:defaultValue="shift"
-        app:entries="@array/long_press_actions"
-        app:entryValues="@array/long_press_action_values"
-        app:title="@string/pref_behaviour_long_press_action_title"
-        app:useSimpleSummaryProvider="true" />
+        <ee.oyatl.ime.make.settings.preference.SliderPreference
+            app:key="behaviour_long_press_duration"
+            app:valueFrom="100.0"
+            app:valueTo="1000.0"
+            app:stepSize="100.0"
+            app:defaultValue="500.0"
+            app:title="@string/pref_behaviour_long_press_duration_title"
+            app:useSimpleSummaryProvider="true" />
 
-    <ee.oyatl.ime.make.settings.preference.SliderPreference
-        app:key="behaviour_repeat_interval"
-        app:defaultValue="50.0"
-        app:valueFrom="10.0"
-        app:valueTo="200.0"
-        app:stepSize="10.0"
-        app:title="@string/pref_behaviour_repeat_interval_title"
-        app:useSimpleSummaryProvider="true" />
+        <ee.oyatl.ime.make.settings.preference.ListPreference
+            app:key="behaviour_long_press_action"
+            app:defaultValue="shift"
+            app:entries="@array/long_press_actions"
+            app:entryValues="@array/long_press_action_values"
+            app:title="@string/pref_behaviour_long_press_action_title"
+            app:useSimpleSummaryProvider="true" />
 
-    <ee.oyatl.ime.make.settings.preference.ListPreference
-        app:key="behaviour_slide_action"
-        app:defaultValue="flick"
-        app:entries="@array/slide_actions"
-        app:entryValues="@array/slide_action_values"
-        app:title="@string/pref_behaviour_slide_action_title"
-        app:useSimpleSummaryProvider="true" />
+        <ee.oyatl.ime.make.settings.preference.SliderPreference
+            app:key="behaviour_repeat_interval"
+            app:defaultValue="50.0"
+            app:valueFrom="10.0"
+            app:valueTo="200.0"
+            app:stepSize="10.0"
+            app:title="@string/pref_behaviour_repeat_interval_title"
+            app:useSimpleSummaryProvider="true" />
 
-    <ee.oyatl.ime.make.settings.preference.SliderPreference
-        app:key="behaviour_flick_sensitivity"
-        app:valueFrom="10.0"
-        app:valueTo="200.0"
-        app:stepSize="10.0"
-        app:defaultValue="60"
-        app:title="@string/pref_behaviour_flick_sensitivity_title"
-        app:useSimpleSummaryProvider="true" />
+        <ee.oyatl.ime.make.settings.preference.ListPreference
+            app:key="behaviour_slide_action"
+            app:defaultValue="flick"
+            app:entries="@array/slide_actions"
+            app:entryValues="@array/slide_action_values"
+            app:title="@string/pref_behaviour_slide_action_title"
+            app:useSimpleSummaryProvider="true" />
 
-    <ee.oyatl.ime.make.settings.preference.ListPreference
-        app:key="behaviour_flick_action_up"
-        app:defaultValue="shift"
-        app:entries="@array/flick_actions"
-        app:entryValues="@array/flick_action_values"
-        app:title="@string/pref_behaviour_flick_action_up_title"
-        app:useSimpleSummaryProvider="true" />
+    </ee.oyatl.ime.make.settings.preference.PreferenceCategory>
 
-    <ee.oyatl.ime.make.settings.preference.ListPreference
-        app:key="behaviour_flick_action_down"
-        app:defaultValue="symbol"
-        app:entries="@array/flick_actions"
-        app:entryValues="@array/flick_action_values"
-        app:title="@string/pref_behaviour_flick_action_down_title"
-        app:useSimpleSummaryProvider="true" />
+    <ee.oyatl.ime.make.settings.preference.PreferenceCategory
+        app:title="@string/pref_behaviour_header_flick_title">
 
-    <ee.oyatl.ime.make.settings.preference.ListPreference
-        app:key="behaviour_flick_action_left"
-        app:defaultValue="none"
-        app:entries="@array/flick_actions"
-        app:entryValues="@array/flick_action_values"
-        app:title="@string/pref_behaviour_flick_action_left_title"
-        app:useSimpleSummaryProvider="true" />
+        <ee.oyatl.ime.make.settings.preference.SliderPreference
+            app:key="behaviour_flick_sensitivity"
+            app:valueFrom="10.0"
+            app:valueTo="200.0"
+            app:stepSize="10.0"
+            app:defaultValue="60"
+            app:title="@string/pref_behaviour_flick_sensitivity_title"
+            app:useSimpleSummaryProvider="true" />
 
-    <ee.oyatl.ime.make.settings.preference.ListPreference
-        app:key="behaviour_flick_action_right"
-        app:defaultValue="none"
-        app:entries="@array/flick_actions"
-        app:entryValues="@array/flick_action_values"
-        app:title="@string/pref_behaviour_flick_action_right_title"
-        app:useSimpleSummaryProvider="true" />
+        <ee.oyatl.ime.make.settings.preference.ListPreference
+            app:key="behaviour_flick_action_up"
+            app:defaultValue="shift"
+            app:entries="@array/flick_actions"
+            app:entryValues="@array/flick_action_values"
+            app:title="@string/pref_behaviour_flick_action_up_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ee.oyatl.ime.make.settings.preference.ListPreference
+            app:key="behaviour_flick_action_down"
+            app:defaultValue="symbol"
+            app:entries="@array/flick_actions"
+            app:entryValues="@array/flick_action_values"
+            app:title="@string/pref_behaviour_flick_action_down_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ee.oyatl.ime.make.settings.preference.ListPreference
+            app:key="behaviour_flick_action_left"
+            app:defaultValue="none"
+            app:entries="@array/flick_actions"
+            app:entryValues="@array/flick_action_values"
+            app:title="@string/pref_behaviour_flick_action_left_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ee.oyatl.ime.make.settings.preference.ListPreference
+            app:key="behaviour_flick_action_right"
+            app:defaultValue="none"
+            app:entries="@array/flick_actions"
+            app:entryValues="@array/flick_action_values"
+            app:title="@string/pref_behaviour_flick_action_right_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </ee.oyatl.ime.make.settings.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>
