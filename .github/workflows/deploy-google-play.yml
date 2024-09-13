@@ -104,6 +104,16 @@ jobs:
           tag_exists_error: false
           message: ""
 
+      - name: Generate changelog
+        id: gen_changelog
+        uses: heinrichreimer/action-github-changelog-generator@v2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Write changelog
+        id: write_changelog
+        run: echo "${{ steps.gen_changelog.outputs.changelog }}" > whatsnew/whatsnew-en
+
       - name: Deploy to Play Store
         id: deploy_google_play
         uses: r0adkll/upload-google-play@v1.1.2
@@ -111,5 +121,6 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: ${{ env.PACKAGE_NAME }}
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          whatsNewDirectory: whatsnew
           track: internal
           status: draft
