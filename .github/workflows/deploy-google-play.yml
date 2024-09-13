@@ -45,6 +45,10 @@ jobs:
         id: get_version_code
         run: echo "VERSION_CODE=$(${{ github.workspace }}/gradlew -q printVersionCode)" >> $GITHUB_ENV
 
+      - name: Get version name from build.gradle.kts
+        id: get_version_name
+        run: echo "CURRENT_VERSION_NAME=$(${{ github.workspace }}/gradlew -q printVersionName)" >> $GITHUB_ENV
+
       - name: Increment version code
         id: increment_version_code
         run: echo "VERSION_CODE=$(expr ${{ env.VERSION_CODE }} + 1)" >> $GITHUB_ENV
@@ -110,9 +114,9 @@ jobs:
         id: gen_changelog
         uses: heinrichreimer/action-github-changelog-generator@v2.3
         with:
-          onlyLastTag: true
           stripHeaders: true
           stripGeneratorNotice: true
+          sinceTag: ${{ env.CURRENT_VERSION_NAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Write changelog
