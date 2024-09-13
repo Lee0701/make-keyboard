@@ -1,3 +1,4 @@
 mobile: "common/soft_mobile_number_row.yaml"
 tablet: "common/soft_tablet_number_row.yaml"
 television: "common/soft_mobile_number_row.yaml"
+full: "common/soft_mobile_number_row.yaml"

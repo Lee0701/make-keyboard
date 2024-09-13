@@ -261,7 +261,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     private fun deleteSelection(): Boolean {
         val inputConnection = currentInputConnection ?: return false
         val extractedText = inputConnection.getExtractedText(ExtractedTextRequest(), 0)
-        extractedText ?: return true
+        extractedText ?: return false
         val start = extractedText.startOffset + extractedText.selectionStart
         val end = extractedText.startOffset + extractedText.selectionEnd
         val selectionLength = abs(end - start)
@@ -309,7 +309,10 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
 
     override fun onDeleteText(beforeLength: Int, afterLength: Int) {
         val inputConnection = currentInputConnection ?: return
-        inputConnection.deleteSurroundingText(beforeLength, afterLength)
+        if(beforeLength == 1 && afterLength == 0) sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+        else if(beforeLength == 0 && afterLength == 1) sendDownUpKeyEvents(KeyEvent.KEYCODE_FORWARD_DEL)
+        else inputConnection.deleteSurroundingText(beforeLength, afterLength)
+        inputConnection.setComposingText("", 1)
     }
 
     override fun onUpdateSelection(
