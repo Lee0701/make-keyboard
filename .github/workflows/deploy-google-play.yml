@@ -121,7 +121,7 @@ jobs:
 
       - name: Write changelog
         id: write_changelog
-        run: echo "${{ steps.gen_changelog.outputs.changelog }}" > whatsnew/whatsnew-en
+        run: echo "${{ steps.gen_changelog.outputs.changelog }}" > whatsnew/whatsnew-en-GB
 
       - name: Deploy to Play Store
         id: deploy_google_play
