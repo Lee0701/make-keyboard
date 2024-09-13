@@ -45,12 +45,16 @@ jobs:
         id: get_version_code
         run: echo "VERSION_CODE=$(${{ github.workspace }}/gradlew -q printVersionCode)" >> $GITHUB_ENV
 
+      - name: Get version name from build.gradle.kts
+        id: get_version_name
+        run: echo "CURRENT_VERSION_NAME=$(${{ github.workspace }}/gradlew -q printVersionName)" >> $GITHUB_ENV
+
       - name: Increment version code
         id: increment_version_code
         run: echo "VERSION_CODE=$(expr ${{ env.VERSION_CODE }} + 1)" >> $GITHUB_ENV
 
-      - name: Add date and commit SHA to version name
-        id: commit_version_name
+      - name: Generate new version name with date and commit SHA
+        id: gen_version_name
         run: echo "VERSION_NAME=$(date +%Y%m%d)-${{ env.VERSION_CODE }}-$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
 
       - name: Override version name and code
@@ -110,6 +114,7 @@ jobs:
         id: gen_changelog
         uses: heinrichreimer/action-github-changelog-generator@v2.3
         with:
+          sinceTag: ${{ env.CURRENT_VERSION_NAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Write changelog
