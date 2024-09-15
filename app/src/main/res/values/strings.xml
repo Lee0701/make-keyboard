@@ -19,6 +19,9 @@
     <string name="pref_method_choose_summary">Choose \'make keyboard\' to start using.</string>
 
     <string name="pref_screen_appearance_title">Appearance</string>
+    <string name="pref_appearance_header_basic_title">Basic Appearance</string>
+    <string name="pref_appearance_header_feedback_title">Key Feedback</string>
+    <string name="pref_appearance_header_popup_title">Key Popup</string>
     <string name="pref_appearance_theme_title">Keyboard Theme</string>
     <string name="theme_static">Static</string>
     <string name="theme_dynamic">Dynamic</string>
@@ -33,6 +36,7 @@
     <string name="keybaord_view_type_stacked_view">Stacked View</string>
     <string name="pref_appearance_haptic_feedback_title">Haptic Feedback</string>
     <string name="pref_appearance_sound_feedback_title">Sound Feedback</string>
+    <string name="pref_appearance_sound_feedback_volume_title">Sound Volume</string>
 
     <string name="pref_screen_layout_title">Keyboard Layout</string>
     <string name="pref_layout_screen_type_title">Screen Type</string>
@@ -89,6 +93,8 @@
     <string name="pref_layout_component_language_switcher_title">Language Switcher</string>
 
     <string name="pref_screen_behaviour_title">Behaviour</string>
+    <string name="pref_behaviour_header_basic_title">Basic Behaviour</string>
+    <string name="pref_behaviour_header_flick_title">Flick</string>
     <string name="pref_behaviour_double_tap_gap_title">Double-tap Gap</string>
     <string name="pref_behaviour_long_press_duration_title">Long-press Duration</string>
     <string name="pref_behaviour_long_press_action_title">Long-press Action</string>
@@ -118,6 +124,7 @@
     <string name="modifier_meta">Meta</string>
 
     <string name="pref_screen_about_title">About</string>
+    <string name="pref_about_header_basic_title">Basic Information</string>
     <string name="pref_about_app_info_title">make keyboard</string>
     <string name="pref_about_developer_contact_title">Developer contact</string>
     <string name="pref_about_developer_contact_summary">hgl1002@naver.com</string>

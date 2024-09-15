@@ -60,6 +60,7 @@ abstract class KeyboardView(
 
     protected val hapticFeedback = pref.getBoolean("appearance_haptic_feedback", true)
     protected val soundFeedback = pref.getBoolean("appearance_sound_feedback", true)
+    protected val soundFeedbackVolume = pref.getFloat("appearance_sound_feedback_volume", 100f) / 100f
 
     protected val pointers: MutableMap<Int, TouchPointer> = mutableMapOf()
     protected val keyStates: MutableMap<Key, Boolean> = mutableMapOf()
@@ -239,7 +240,7 @@ abstract class KeyboardView(
             KeyEvent.KEYCODE_SPACE -> AudioManager.FX_KEYPRESS_SPACEBAR
             else -> AudioManager.FX_KEYPRESS_STANDARD
         }
-        audioManager.playSoundEffect(fx, 1f)
+        audioManager.playSoundEffect(fx, soundFeedbackVolume)
     }
 
     private fun dipToPixel(dip: Float): Float {

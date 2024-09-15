@@ -19,6 +19,9 @@
     <string name="pref_method_choose_summary">\'make keyboard\'를 선택해서 사용을 시작하세요.</string>
 
     <string name="pref_screen_appearance_title">외관</string>
+    <string name="pref_appearance_header_basic_title">기본</string>
+    <string name="pref_appearance_header_feedback_title">키 효과</string>
+    <string name="pref_appearance_header_popup_title">키 팝업</string>
     <string name="pref_appearance_theme_title">키보드 테마</string>
     <string name="theme_static">단색</string>
     <string name="theme_dynamic">다이나믹</string>
@@ -33,6 +36,7 @@
     <string name="keybaord_view_type_stacked_view">뷰 쌓기</string>
     <string name="pref_appearance_haptic_feedback_title">키 진동 효과</string>
     <string name="pref_appearance_sound_feedback_title">키 소리 효과</string>
+    <string name="pref_appearance_sound_feedback_volume_title">소리 효과 음량</string>
 
     <string name="pref_layout_header_soft_keyboard_title">화면 키보드</string>
     <string name="pref_layout_header_hard_keyboard_title">외부 키보드</string>
@@ -88,6 +92,8 @@
     <string name="pref_layout_component_language_switcher_title">언어 전환 탭</string>
 
     <string name="pref_screen_behaviour_title">작동</string>
+    <string name="pref_behaviour_header_basic_title">기본 동작</string>
+    <string name="pref_behaviour_header_flick_title">플릭</string>
     <string name="pref_behaviour_double_tap_gap_title">더블클릭 간격</string>
     <string name="pref_behaviour_long_press_duration_title">롱클릭 길이</string>
     <string name="pref_behaviour_long_press_action_title">롱클릭 동작</string>
@@ -117,6 +123,7 @@
     <string name="modifier_meta">Meta</string>
 
     <string name="pref_screen_about_title">정보</string>
+    <string name="pref_about_header_basic_title">기본 정보</string>
     <string name="pref_about_app_info_title">make keyboard</string>
     <string name="pref_about_developer_contact_title">개발자 연락처</string>
     <string name="pref_about_developer_contact_summary">hgl1002@naver.com</string>

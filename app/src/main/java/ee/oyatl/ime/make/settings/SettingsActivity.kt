@@ -11,6 +11,7 @@ import androidx.navigation.navOptions
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceFragmentCompat.OnPreferenceStartFragmentCallback
+import androidx.preference.PreferenceHeaderFragmentCompat
 import androidx.preference.PreferenceManager
 import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.make.R
@@ -23,6 +24,16 @@ class SettingsActivity
         super.onCreate(savedInstanceState)
         DynamicColors.applyToActivityIfAvailable(this)
         setContentView(R.layout.activity_settings)
+
+        if(savedInstanceState == null) {
+            // Enable two-panel layout on tablets
+            if(resources.getBoolean(R.bool.activity_settings_two_panel_layout)) {
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment_container, PreferenceHeaderFragment())
+                    .commit()
+            }
+        }
 
         setDefaultValues(this)
     }
@@ -54,12 +65,21 @@ class SettingsActivity
         return true
     }
 
+    class PreferenceHeaderFragment: PreferenceHeaderFragmentCompat() {
+        override fun onCreatePreferenceHeader(): PreferenceFragmentCompat {
+            return RootPreferencesFragment()
+        }
+    }
+
     abstract class TitledPreferenceFragment: PreferenceFragmentCompat() {
         @get:StringRes abstract val titleResId: Int
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-            val activity = requireActivity() as AppCompatActivity
-            activity.supportActionBar?.setTitle(titleResId)
+            // If not using two-panel layout, update title in the action bar
+            if(!resources.getBoolean(R.bool.activity_settings_two_panel_layout)) {
+                val activity = requireActivity() as AppCompatActivity
+                activity.supportActionBar?.setTitle(titleResId)
+            }
         }
     }
 
