@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.MenuProvider
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -42,7 +43,7 @@ import ee.oyatl.ime.make.settings.preference.SwitchPreference
 import java.io.File
 
 class KeyboardLayoutSettingsFragment
-    : PreferenceFragmentCompat(), KeyboardLayoutPreferenceDataStore.OnChangeListener {
+    : PreferenceFragmentCompat(), KeyboardLayoutPreferenceDataStore.OnChangeListener, MenuProvider {
 
     private var preferenceDataStore: KeyboardLayoutPreferenceDataStore? = null
     private var adapter: KeyboardComponentsAdapter? = null
@@ -62,7 +63,7 @@ class KeyboardLayoutSettingsFragment
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        setHasOptionsMenu(true)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -280,11 +281,11 @@ class KeyboardLayoutSettingsFragment
         updateKeyboardView()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_keyboard_layout_setting, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_keyboard_layout_setting, menu)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun onPrepareMenu(menu: Menu) {
         val previewMode = menu.findItem(R.id.preview_mode)
         val changeOrdersMode = menu.findItem(R.id.reorder_mode)
         previewMode.isVisible = false
@@ -293,8 +294,8 @@ class KeyboardLayoutSettingsFragment
         else previewMode.isVisible = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when(menuItem.itemId) {
             R.id.preview_mode -> {
                 previewMode = true
                 updateKeyboardView()
@@ -327,7 +328,7 @@ class KeyboardLayoutSettingsFragment
                 bottomSheet.show(childFragmentManager, ChooseNewComponentBottomSheetFragment.TAG)
                 true
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 
