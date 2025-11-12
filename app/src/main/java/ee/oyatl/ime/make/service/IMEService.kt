@@ -128,8 +128,8 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         onComposingText(newComposingText)
     }
 
-    override fun onStartInputView(editorInfo: EditorInfo?, restarting: Boolean) {
-        super.onStartInputView(editorInfo, restarting)
+    override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
+        super.onStartInput(attribute, restarting)
         val engine = inputEngineSwitcher?.currentEngine ?: return
         engine.shiftKeyHandler.reset()
         resetCurrentEngine()
@@ -138,8 +138,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         event ?: return false
         if(event.isSystem) return super.onKeyDown(keyCode, event)
-        val currentEngine = inputEngineSwitcher?.currentEngine
-        currentEngine ?: return super.onKeyDown(keyCode, event)
+        val currentEngine = inputEngineSwitcher?.currentEngine ?: return super.onKeyDown(keyCode, event)
         val modifiers = getModifierKeyStateSet(event)
         if(modifiers.asMetaState() == languageSwitchModifiers && keyCode == languageSwitchKeycode) {
             onNonPrintingKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH)
@@ -159,6 +158,8 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         event ?: return false
         if(event.isSystem) return super.onKeyUp(keyCode, event)
+        val modifiers = getModifierKeyStateSet(event)
+        if(modifiers.alt.active || modifiers.control.active || modifiers.meta.active) resetCurrentEngine()
         if(!event.isPrintingKey) return super.onKeyUp(keyCode, event)
         return true
     }
