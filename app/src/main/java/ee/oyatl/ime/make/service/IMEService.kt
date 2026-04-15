@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.os.Build
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
@@ -15,6 +16,9 @@ import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.modifiers.ModifierKeyState
@@ -23,6 +27,7 @@ import ee.oyatl.ime.make.module.candidates.Candidate
 import ee.oyatl.ime.make.module.candidates.CandidateListener
 import ee.oyatl.ime.make.module.component.LanguageTabBarComponent
 import ee.oyatl.ime.make.module.inputengine.InputEngine
+import ee.oyatl.ime.make.module.keyboardview.Themes
 import ee.oyatl.ime.make.preset.InputEnginePreset
 import ee.oyatl.ime.make.preset.PresetLoader
 import ee.oyatl.ime.make.preset.table.CustomKeyCode
@@ -31,6 +36,8 @@ import ee.oyatl.ime.make.settings.preference.HotkeyDialogPreference
 import kotlin.math.abs
 
 class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener, LanguageTabBarComponent.Listener {
+    private var inputView: View? = null
+
     private var composingText: CharSequence = ""
     private var cursorAnchorInfo: CursorAnchorInfo? = null
 
@@ -51,6 +58,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
         INSTANCE = this
         SettingsActivity.setDefaultValues(this)
         reload()
+        updateNavigationBar()
     }
 
     private fun reload() {
@@ -111,6 +119,7 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
             )
         }
         inputViewWrapper.addView(inputView)
+        this.inputView = inputView
         return inputViewWrapper
     }
 
@@ -471,6 +480,31 @@ class IMEService: InputMethodService(), InputEngine.Listener, CandidateListener,
             hangulPreset.copy(language = "ko"),
             symbolPreset
         )
+    }
+
+    private fun updateNavigationBar() {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) return
+        val window = window.window ?: return
+        val typedValue = TypedValue()
+        window.decorView.setOnApplyWindowInsetsListener { view, windowInsets ->
+            val insets = windowInsets.getInsets(
+                WindowInsetsCompat.Type.systemBars() and
+                        WindowInsetsCompat.Type.ime().inv()
+            )
+            val pref = PreferenceManager.getDefaultSharedPreferences(this)
+            val themeName = pref.getString("appearance_theme", null)
+            val theme = Themes.ofName(themeName).keyboardBackground.wrapContext(this).theme
+            theme.resolveAttribute(R.attr.background, typedValue, true)
+            val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+            view.setBackgroundColor(typedValue.data)
+            WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightNavigationBars = !darkMode
+            inputView?.apply {
+                setPadding(0, 0, 0, insets.bottom)
+                requestLayout()
+                requestApplyInsets()
+            }
+            windowInsets
+        }
     }
 
     companion object {
