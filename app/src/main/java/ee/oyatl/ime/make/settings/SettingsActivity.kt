@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.ActionOnlyNavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.navOptions
@@ -12,6 +15,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceFragmentCompat.OnPreferenceStartFragmentCallback
 import androidx.preference.PreferenceManager
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.service.IMEService
@@ -22,7 +26,17 @@ class SettingsActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DynamicColors.applyToActivityIfAvailable(this)
-        setContentView(R.layout.activity_settings)
+        val contentView: View = layoutInflater.inflate(R.layout.activity_settings, null, false)
+        setSupportActionBar(contentView.findViewById<MaterialToolbar>(R.id.toolbar))
+        setContentView(contentView)
+        ViewCompat.setOnApplyWindowInsetsListener(contentView) { view, insets ->
+            val bars = insets.getInsets(
+                        WindowInsetsCompat.Type.systemBars() or
+                        WindowInsetsCompat.Type.displayCutout()
+            )
+            view.updatePadding(bars.left, bars.top, bars.right, bars.bottom)
+            return@setOnApplyWindowInsetsListener WindowInsetsCompat.CONSUMED
+        }
 
         setDefaultValues(this)
     }
