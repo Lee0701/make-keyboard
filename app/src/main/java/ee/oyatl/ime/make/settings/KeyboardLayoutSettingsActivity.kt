@@ -2,6 +2,10 @@ package ee.oyatl.ime.make.settings
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.make.R
 import ee.oyatl.ime.make.module.candidates.Candidate
@@ -28,7 +32,18 @@ class KeyboardLayoutSettingsActivity: AppCompatActivity() {
             putBoolean(KeyboardLayoutSettingsFragment.ARG_HARDWARE, hardware)
         }
 
-        setContentView(R.layout.activity_keyboard_layout_settings)
+        val contentView = layoutInflater.inflate(R.layout.activity_keyboard_layout_settings, null, false)
+        setSupportActionBar(contentView.findViewById<MaterialToolbar>(R.id.toolbar))
+        setContentView(contentView)
+        ViewCompat.setOnApplyWindowInsetsListener(contentView) { view, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or
+                        WindowInsetsCompat.Type.displayCutout()
+            )
+            view.updatePadding(bars.left, bars.top, bars.right, bars.bottom)
+            return@setOnApplyWindowInsetsListener WindowInsetsCompat.CONSUMED
+        }
+
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.settings, fragment)
